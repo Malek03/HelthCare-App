@@ -1,0 +1,17 @@
+{
+  "name": "healthcare-platform-backend",
+  "version": "1.0.0",
+  "description": "Healthcare Platform Backend - Express.js + Prisma + Firebase",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:push": "npx prisma db push",
+    "prisma:studio": "npx prisma studio"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
