@@ -1,0 +1,114 @@
+/**
+ * Authentication and Doctor Application Logic
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. Login Logic
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const btn = document.getElementById('btnLogin');
+        
+        try {
+          btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> جاري التسجيل...';
+          btn.disabled = true;
+          
+          const res = await window.ApiService.login(email, password);
+          if (res.token) {
+            localStorage.setItem('token', res.token);
+            // Optionally fetch 'me' to get role and name
+            const meRes = await window.ApiService.getMe();
+            localStorage.setItem('name', meRes.data.name);
+            localStorage.setItem('role', meRes.data.role);
+            localStorage.setItem('userId', meRes.data.id);
+            
+            // Redirect based on role
+            if (meRes.data.role === 'DOCTOR') {
+                window.location.href = 'doctor-dashboard.html';
+            } else if (meRes.data.role === 'ADMIN') {
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+          }
+        } catch (err) {
+          alert('فشل تسجيل الدخول: ' + err.message);
+          btn.innerHTML = 'تسجيل الدخول';
+          btn.disabled = false;
+        }
+      });
+    }
+  
+    // 2. Register Logic
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const btn = document.getElementById('btnRegister');
+        
+        try {
+          btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> جاري الإنشاء...';
+          btn.disabled = true;
+          
+          await window.ApiService.register(name, email, password);
+          alert('تم إنشاء الحساب بنجاح، يمكنك الآن تسجيل الدخول');
+          window.location.href = 'login.html';
+        } catch (err) {
+          alert('فشل التسجيل: ' + err.message);
+          btn.innerHTML = 'إنشاء الحساب';
+          btn.disabled = false;
+        }
+      });
+    }
+  
+    // 3. Join Doctor App Logic
+    const joinForm = document.getElementById('joinDoctorForm');
+    if (joinForm) {
+      joinForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!localStorage.getItem('token')) {
+            alert('الرجاء تسجيل الدخول كمستخدم للتمكن من تقديم طلب الانضمام.');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        const btn = document.getElementById('btnJoinDoc');
+        const errBox = document.getElementById('joinError');
+        errBox.style.display = 'none';
+        
+        const data = {
+          full_name: document.getElementById('full_name').value,
+          specialty: document.getElementById('specialty').value,
+          qualifications: document.getElementById('qualifications').value,
+          experience_years: parseInt(document.getElementById('experience_years').value, 10),
+          phone: document.getElementById('phone').value,
+          location: document.getElementById('location').value,
+          documents_url: document.getElementById('documents_url').value,
+          bio: document.getElementById('bio').value
+        };
+        
+        try {
+          btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> جاري إرسال الطلب...';
+          btn.disabled = true;
+          
+          await window.ApiService.applyAsDoctor(data);
+          
+          btn.style.display = 'none';
+          document.getElementById('joinSuccess').style.display = 'block';
+        } catch (err) {
+          errBox.textContent = 'حدث خطأ: ' + err.message;
+          errBox.style.display = 'block';
+          btn.innerHTML = 'إرسال طلب الانضمام';
+          btn.disabled = false;
+        }
+      });
+    }
+  });

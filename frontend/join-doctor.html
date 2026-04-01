@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>طلب انضمام كطبيب | المنصة الطبية</title>
+  
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  
+  <style>
+    .join-container {
+      padding: var(--sys-spacing-88) var(--sys-spacing-24);
+      background: var(--sys-color-surface-container-lowest);
+      min-height: calc(100vh - 80px); /* Account for navbar */
+    }
+    .join-card {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <div class="join-container">
+    <div class="card join-card glass-panel">
+      <div class="text-center mb-4">
+        <h1 class="display-text" style="color: var(--sys-color-primary);">طلب الانضمام كطبيب</h1>
+        <p class="body-md">نرحب بانضمامك لشبكة أطبائنا المعتمدين لخدمة المرضى وتقديم رعاية صحية أفضل.</p>
+      </div>
+
+      <form id="joinDoctorForm">
+        <div class="grid grid-cols-2">
+          
+          <div class="form-group">
+            <label for="full_name" class="form-label">الاسم الكامل المطابق للهوية</label>
+            <input type="text" id="full_name" class="form-control" placeholder="مثال: د. أحمد محمد صالح" required>
+          </div>
+
+          <div class="form-group">
+            <label for="specialty" class="form-label">التخصص الدقيق</label>
+            <input type="text" id="specialty" class="form-control" placeholder="مثال: استشاري أمراض قلب" required>
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">رقم الهاتف (للتواصل الإداري)</label>
+            <input type="tel" id="phone" class="form-control" placeholder="05XXXXXXXX" required>
+          </div>
+
+          <div class="form-group">
+            <label for="experience_years" class="form-label">سنوات الخبرة كأخصائي أو استشاري</label>
+            <input type="number" id="experience_years" class="form-control" min="0" placeholder="مثال: 5" required>
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="location" class="form-label">موقع العيادة أو المستشفى الأساسي</label>
+            <input type="text" id="location" class="form-control" placeholder="أدخل اسم وعنوان المستشفى" required>
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="qualifications" class="form-label">المؤهلات العلمية</label>
+            <textarea id="qualifications" class="form-control" rows="3" style="height:auto; padding:12px;" placeholder="أذكر درجاتك العلمية ومصادرها" required></textarea>
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="documents_url" class="form-label">رابط المرفقات الثبوتية (Google Drive, Dropbox, etc)</label>
+            <input type="url" id="documents_url" class="form-control" placeholder="رابط يضم السيرة الذاتية ونسخة من الشهادات" required>
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="bio" class="form-label">نبذة مهنية عنك (ستظهر للمرضى)</label>
+            <textarea id="bio" class="form-control" rows="4" style="height:auto; padding:12px;" placeholder="اكتب نبذة مختصرة عن رؤيتك وخبراتك" required></textarea>
+          </div>
+
+        </div>
+
+        <div class="mt-4 pb-4">
+          <div id="joinError" class="text-danger mb-4" style="display:none; text-align:center;"></div>
+          <div id="joinSuccess" class="text-center" style="display:none;">
+            <i class="ph-fill ph-check-circle" style="color:#2E7D32; font-size: 3rem;"></i>
+            <h3 style="color:#2E7D32; margin-top:8px;">تم إرسال طلبك بنجاح!</h3>
+            <p class="body-md">سيقوم فريقنا بمراجعة وثائقك والتواصل معك قريباً.</p>
+            <a href="index.html" class="btn btn-outline mt-4">العودة للرئيسية</a>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-large" style="width: 100%;" id="btnJoinDoc">
+            إرسال طلب الانضمام
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="./js/api.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./js/auth.js"></script>
+</body>
+</html>

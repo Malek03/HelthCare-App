@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="bmi.html" class="nav-link ${currentPath === 'bmi.html' ? 'active' : ''}">حاسبة BMI</a></li>
             <li><a href="articles.html" class="nav-link ${currentPath === 'articles.html' ? 'active' : ''}">المقالات الموثوقة</a></li>
             <li>
-              <a href="apply-doctor.html" class="doctor-join-btn">
+              <a href="join-doctor.html" class="doctor-join-btn">
                 <i class="ph ph-stethoscope"></i> انضم كطبيب
               </a>
             </li>
