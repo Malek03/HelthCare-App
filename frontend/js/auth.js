@@ -84,22 +84,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const errBox = document.getElementById('joinError');
         errBox.style.display = 'none';
         
-        const data = {
-          full_name: document.getElementById('full_name').value,
-          specialty: document.getElementById('specialty').value,
-          qualifications: document.getElementById('qualifications').value,
-          experience_years: parseInt(document.getElementById('experience_years').value, 10),
-          phone: document.getElementById('phone').value,
-          location: document.getElementById('location').value,
-          documents_url: document.getElementById('documents_url').value,
-          bio: document.getElementById('bio').value
-        };
+        const formData = new FormData();
+        formData.append('full_name', document.getElementById('full_name').value);
+        formData.append('specialty', document.getElementById('specialty').value);
+        formData.append('qualifications', document.getElementById('qualifications').value);
+        formData.append('experience_years', document.getElementById('experience_years').value);
+        formData.append('phone', document.getElementById('phone').value);
+        formData.append('location', document.getElementById('location').value);
+        formData.append('bio', document.getElementById('bio').value);
+
+        const personalPhotoInput = document.getElementById('personal_photo');
+        if (personalPhotoInput.files[0]) {
+            formData.append('personal_photo', personalPhotoInput.files[0]);
+        }
+
+        const documentsInput = document.getElementById('documents');
+        if (documentsInput.files[0]) {
+            formData.append('documents', documentsInput.files[0]);
+        }
         
         try {
           btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> جاري إرسال الطلب...';
           btn.disabled = true;
           
-          await window.ApiService.applyAsDoctor(data);
+          await window.ApiService.applyAsDoctor(formData);
           
           btn.style.display = 'none';
           document.getElementById('joinSuccess').style.display = 'block';
@@ -111,4 +119,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
-  });
+    
+    // 4. File Input Name Display Logic
+    const fileInputs = ['documents', 'personal_photo'];
+    fileInputs.forEach(id => {
+        const input = document.getElementById(id);
+        const nameDisplay = document.getElementById(id + '-name');
+        if (input && nameDisplay) {
+            input.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    nameDisplay.textContent = e.target.files[0].name;
+                    nameDisplay.style.color = 'var(--sys-color-primary)';
+                    nameDisplay.style.fontWeight = '700';
+                } else {
+                    nameDisplay.textContent = 'لم يتم اختيار ملف';
+                    nameDisplay.style.color = 'var(--sys-color-on-surface-variant)';
+                    nameDisplay.style.fontWeight = '400';
+                }
+            });
+        }
+    });
+});

@@ -155,6 +155,7 @@ model DoctorApplication {
   phone            String
   location         String?
   documents_url    String?           @db.Text
+  personal_photo   String?           @db.Text
   bio              String?           @db.Text
   status           ApplicationStatus @default(PENDING)
   admin_notes      String?           @db.Text

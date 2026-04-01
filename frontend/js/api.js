@@ -13,9 +13,12 @@ class ApiService {
     const token = localStorage.getItem('token');
     
     const headers = {
-      'Content-Type': 'application/json',
       ...options.headers,
     };
+
+    if (!(options.body instanceof FormData) && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
     
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
@@ -73,10 +76,10 @@ class ApiService {
     return this.request(`/doctors/profile/${id}`, { method: 'GET' });
   }
 
-  static async applyAsDoctor(data) {
+  static async applyAsDoctor(formData) {
     return this.request('/doctors/apply', {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: formData
     });
   }
 

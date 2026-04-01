@@ -11,13 +11,17 @@ const {
 } = require('../controllers/doctor.controller');
 const { authenticate } = require('../middleware/auth');
 const { authorize } = require('../middleware/role');
+const upload = require('../middleware/upload');
 
 // Public routes
 router.get('/', listDoctors);
 router.get('/profile/:id', getDoctorProfile);
 
 // User routes (must be logged in)
-router.post('/apply', authenticate, applyAsDoctor);
+router.post('/apply', authenticate, upload.fields([
+  { name: 'personal_photo', maxCount: 1 },
+  { name: 'documents', maxCount: 1 }
+]), applyAsDoctor);
 router.get('/application-status', authenticate, getApplicationStatus);
 
 // Doctor-only routes

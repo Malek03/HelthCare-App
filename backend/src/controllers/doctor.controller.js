@@ -106,13 +106,25 @@ const applyAsDoctor = async (req, res) => {
       return res.status(400).json({ success: false, message: 'أنت طبيب بالفعل' });
     }
 
-    const { full_name, specialty, qualifications, experience_years, phone, location, bio, documents_url } = req.body;
+    const { full_name, specialty, qualifications, experience_years, phone, location, bio } = req.body;
 
     if (!full_name || !specialty || !qualifications || !experience_years || !phone) {
       return res.status(400).json({
         success: false,
         message: 'الحقول المطلوبة: الاسم الكامل، التخصص، المؤهلات، سنوات الخبرة، الهاتف',
       });
+    }
+
+    let personal_photo_url = null;
+    let documents_url = null;
+
+    if (req.files) {
+      if (req.files.personal_photo && req.files.personal_photo[0]) {
+        personal_photo_url = '/uploads/personal_photo/' + req.files.personal_photo[0].filename;
+      }
+      if (req.files.documents && req.files.documents[0]) {
+        documents_url = '/uploads/documents/' + req.files.documents[0].filename;
+      }
     }
 
     const application = await prisma.doctorApplication.create({
@@ -125,7 +137,8 @@ const applyAsDoctor = async (req, res) => {
         phone,
         location,
         bio,
-        documents_url,
+        personal_photo: personal_photo_url,
+        documents_url: documents_url,
       },
     });
 

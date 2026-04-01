@@ -20,6 +20,72 @@
       max-width: 800px;
       margin: 0 auto;
     }
+
+    /* Custom File Upload Styling */
+    .upload-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--sys-spacing-24);
+      grid-column: span 2;
+    }
+
+    .file-upload-wrapper {
+      position: relative;
+    }
+
+    .file-input {
+      position: absolute;
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .file-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sys-spacing-32) var(--sys-spacing-16);
+      background-color: var(--sys-color-surface-container-lowest);
+      border: 2px dashed rgba(193, 198, 214, 0.4);
+      border-radius: var(--sys-radius-lg);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: center;
+      min-height: 160px;
+    }
+
+    .file-label:hover {
+      border-color: var(--sys-color-primary);
+      background-color: var(--sys-color-surface-container-low);
+      transform: translateY(-2px);
+    }
+
+    .upload-icon {
+      font-size: 2.5rem;
+      color: var(--sys-color-primary);
+      margin-bottom: var(--sys-spacing-12);
+      opacity: 0.8;
+    }
+
+    .file-name-text {
+      font-size: 0.875rem;
+      color: var(--sys-color-on-surface-variant);
+      margin-top: 8px;
+      word-break: break-all;
+    }
+
+    .upload-title {
+      font-weight: 700;
+      color: var(--sys-color-on-surface);
+      font-size: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .upload-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -67,9 +133,29 @@
             <textarea id="qualifications" class="form-control" rows="3" style="height:auto; padding:12px;" placeholder="أذكر درجاتك العلمية ومصادرها" required></textarea>
           </div>
 
-          <div class="form-group" style="grid-column: span 2;">
-            <label for="documents_url" class="form-label">رابط المرفقات الثبوتية (Google Drive, Dropbox, etc)</label>
-            <input type="url" id="documents_url" class="form-control" placeholder="رابط يضم السيرة الذاتية ونسخة من الشهادات" required>
+          <!-- Custom Upload Section -->
+          <div class="upload-grid">
+            <div class="form-group file-upload-wrapper">
+              <label class="form-label">المرفقات الثبوتية (CV/شهادات)</label>
+              <input type="file" id="documents" class="file-input" accept=".pdf,.doc,.docx,image/*" required>
+              <label for="documents" class="file-label">
+                <i class="ph ph-file-pdf upload-icon"></i>
+                <span class="upload-title">ارفع السيرة الذاتية</span>
+                <span class="body-md">PDF, DOC (الحد الأقصى 5MB)</span>
+                <span id="documents-name" class="file-name-text">لم يتم اختيار ملف</span>
+              </label>
+            </div>
+
+            <div class="form-group file-upload-wrapper">
+              <label class="form-label">الصورة الشخصية</label>
+              <input type="file" id="personal_photo" class="file-input" accept="image/*">
+              <label for="personal_photo" class="file-label">
+                <i class="ph ph-user-circle upload-icon"></i>
+                <span class="upload-title">ارفع صورتك الشخصية</span>
+                <span class="body-md">JPG, PNG, WebP</span>
+                <span id="personal_photo-name" class="file-name-text">لم يتم اختيار ملف</span>
+              </label>
+            </div>
           </div>
 
           <div class="form-group" style="grid-column: span 2;">
