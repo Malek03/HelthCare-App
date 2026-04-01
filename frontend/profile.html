@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حسابي | المنصة الطبية</title>
+  
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/profile.css">
+  
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-low">
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container d-flex align-center gap-4 py-4">
+      <div class="user-avatar-lg">
+        <i class="ph-fill ph-user"></i>
+      </div>
+      <div>
+        <h1 class="display-text mb-0" style="color:white; margin:0;" id="userName">مرحباً...</h1>
+        <p class="body-md mt-2 text-white-90" id="userEmail">يتم التحميل...</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="section pt-4">
+    <div class="container container-split">
+      
+      <!-- Right Sidebar (Controls) -->
+      <div class="profile-sidebar">
+        <div class="card p-0 overflow-hidden">
+          <ul class="sidebar-menu">
+            <li><a href="#" class="active"><i class="ph ph-activity"></i> تتبع الصحة اليومي</a></li>
+            <li><a href="#appointments"><i class="ph ph-calendar"></i> مواعيدي</a></li>
+            <li><a href="#consultations"><i class="ph ph-chats"></i> استشاراتي السابقة</a></li>
+            <li><a href="#" onclick="logout(); return false;" class="text-danger"><i class="ph ph-sign-out"></i> تسجيل الخروج</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="profile-main">
+        
+        <!-- Health Tracking Module -->
+        <h2 class="headline-md mb-4">تتبع الأهداف الصحية لليوم</h2>
+        <div class="grid grid-cols-3 mb-5">
+          
+          <!-- Water Tracking -->
+          <div class="card text-center health-card">
+            <div class="health-icon bg-blue"><i class="ph ph-drop"></i></div>
+            <h3 class="headline-sm mt-3">الماء</h3>
+            <p class="body-md" id="waterCount">0 / 8 أكواب</p>
+            
+            <div class="water-cups mt-3" id="waterCups">
+              <!-- Rendered via JS -->
+            </div>
+            
+            <button class="btn btn-outline w-100 mt-4" onclick="addWater()">
+              <i class="ph ph-plus"></i> إضافة كوب
+            </button>
+          </div>
+
+          <!-- Sleep Tracking -->
+          <div class="card text-center health-card">
+            <div class="health-icon bg-indigo"><i class="ph ph-moon"></i></div>
+            <h3 class="headline-sm mt-3">النوم</h3>
+            <p class="body-md" id="sleepStatus">لم يسجل لليوم</p>
+            
+            <div class="mt-4">
+              <input type="number" id="sleepInput" class="form-control text-center" placeholder="عدد الساعات">
+              <button class="btn btn-outline w-100 mt-2" onclick="logSleep()">حفظ</button>
+            </div>
+          </div>
+
+          <!-- Walk Tracking -->
+          <div class="card text-center health-card">
+            <div class="health-icon bg-green"><i class="ph ph-sneaker"></i></div>
+            <h3 class="headline-sm mt-3">المشي</h3>
+            <p class="body-md" id="walkStatus">الهدف: 30 دقيقة يومياً</p>
+            
+            <button class="btn btn-primary w-100 mt-4" id="btnWalk" onclick="toggleWalk()">
+              <i class="ph ph-check-circle mr-2"></i> تأكيد المشي
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Appointments Section -->
+        <h2 class="headline-md mb-4" id="appointments">مواعيدي القادمة</h2>
+        <div class="card p-0 mb-5 overflow-auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>الطبيب</th>
+                <th>التاريخ</th>
+                <th>الوقت</th>
+                <th>حالة الحجز</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="appointmentsTable">
+              <!-- JS rendered -->
+              <tr><td colspan="5" class="text-center py-4 text-muted">جاري تحميل المواعيد...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="./js/api.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./components/footer.js"></script>
+  <script src="./js/profile.js"></script>
+</body>
+</html>

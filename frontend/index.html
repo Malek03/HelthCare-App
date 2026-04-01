@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المنصة الطبية | Medical Platform</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/home.css">
+  
+  <!-- Icons (Phosphor Icons - clean and modern) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <!-- Navbar Component Container -->
+  <div id="navbar-container"></div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg-slider" id="heroSlider">
+      <!-- Background images injected via CSS/JS -->
+      <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')"></div>
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="container hero-content">
+      <h1 class="display-lg hero-title">استشارتك الطبية<br> تبدأ من هنا</h1>
+      <p class="headline-md hero-subtitle">احجز موعدك مع أفضل الأطباء واحصل على نصائح صحية يومية</p>
+      
+      <div class="hero-actions">
+        <a href="doctors.html" class="btn btn-primary btn-large">
+          <i class="ph ph-stethoscope"></i> تصفح الأطباء
+        </a>
+        <a href="bmi.html" class="btn btn-secondary btn-large">
+          <i class="ph ph-calculator"></i> احسب كتلة جسمك
+        </a>
+      </div>
+      
+      <div class="slider-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section bg-low">
+    <div class="container">
+      <h2 class="display-text text-center section-title">مميزات المنصة</h2>
+      
+      <div class="grid grid-cols-4 mt-4 features-grid">
+        <!-- Feature 1 -->
+        <div class="card feature-card text-center">
+          <div class="feature-icon-wrapper">
+            <i class="ph ph-stethoscope feature-icon"></i>
+          </div>
+          <h3 class="headline-sm">استشارات طبية</h3>
+          <p class="body-md">حجز مواعيد والتواصل المباشر مع أطباء متخصصين معتمدين</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card feature-card text-center">
+          <div class="feature-icon-wrapper">
+            <i class="ph ph-drop feature-icon"></i>
+          </div>
+          <h3 class="headline-sm">تتبع صحتك</h3>
+          <p class="body-md">سجل يومي دقيق لشرب الماء، جودة النوم، والنشاط البدني</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card feature-card text-center">
+          <div class="feature-icon-wrapper">
+            <i class="ph ph-article feature-icon"></i>
+          </div>
+          <h3 class="headline-sm">مقالات طبية</h3>
+          <p class="body-md">محتوى طبي غني وموثوق مكتوب ومراجع من قِبل خبراء الصحة</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card feature-card text-center">
+          <div class="feature-icon-wrapper">
+            <i class="ph ph-bell-ringing feature-icon"></i>
+          </div>
+          <h3 class="headline-sm">تنبيهات صحية</h3>
+          <p class="body-md">نصائح وتذكيرات يومية ذكية للحفاظ على نمط حياة صحي</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section bg-lowest">
+    <div class="container about-grid">
+      <div class="about-content">
+        <h2 class="display-text">عن المنصة الطبية الشاملة</h2>
+        <p class="body-md mb-4">
+          نحن نوفر لك بيئة طبية متطورة "The Clinical Sanctuary" تجمع بين دقة المعلومات الطبية والسهولة المطلقة في الوصول للرعاية الصحية. هدفنا هو بناء مجتمع صحي واعي من خلال توفير استشارات موثوقة ونظام تتبع صحي متكامل.
+        </p>
+        <p class="body-md mb-4">
+          سواء كنت تبحث عن استشارة عاجلة، أو رغبت في متابعة تقدمك الصحي اليومي، فالمنصة توفر لك كل الأدوات بخطوات بسيطة وواجهة عصرية تعتمد على أحدث تقنيات الويب PWA.
+        </p>
+        
+        <div class="stats-bar d-flex justify-between mt-4">
+          <div class="stat-item">
+            <span class="headline-md color-primary">+500</span>
+            <span class="label">طبيب معتمد</span>
+          </div>
+          <div class="stat-item">
+            <span class="headline-md color-primary">+10,000</span>
+            <span class="label">مستخدم نشط</span>
+          </div>
+          <div class="stat-item">
+            <span class="headline-md color-primary">+3,000</span>
+            <span class="label">استشارة ناجحة</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="about-image-wrapper">
+        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="طب حديث" class="about-image">
+        <!-- Floating Glass Stat -->
+        <div class="floating-stat glass-panel">
+          <i class="ph-fill ph-check-circle color-success"></i>
+          <div>
+            <strong>دقة وأمان</strong>
+            <p class="body-md">بياناتك مشفرة ومحمية</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Videos Section -->
+  <section class="section bg-low overflow-hidden">
+    <div class="container">
+      <div class="d-flex justify-between align-center mb-4">
+        <h2 class="display-text">مكتبة الفيديوهات الطبية</h2>
+        <a href="#" class="btn btn-outline">عرض الكل <i class="ph ph-arrow-left"></i></a>
+      </div>
+      
+      <div class="video-scroller d-flex" id="videoList">
+        <!-- Videos rendered via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Articles Section -->
+  <section class="section bg-lowest">
+    <div class="container">
+      <h2 class="display-text text-center mb-4">أحدث المقالات المضافة</h2>
+      
+      <div class="grid grid-cols-3" id="articleGrid">
+        <!-- Skeleton Loaders -->
+        <div class="card article-skeleton"><div class="skel-img"></div><div class="skel-text"></div></div>
+        <div class="card article-skeleton"><div class="skel-img"></div><div class="skel-text"></div></div>
+        <div class="card article-skeleton"><div class="skel-img"></div><div class="skel-text"></div></div>
+      </div>
+      
+      <div class="text-center mt-4">
+        <a href="#" class="btn btn-primary">عرض جميع المقالات</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Component Container -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script src="./js/api.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./components/footer.js"></script>
+  <script src="./js/home.js"></script>
+</body>
+</html>

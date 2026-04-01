@@ -1,0 +1,123 @@
+/* Doctor Profile Styles */
+
+.profile-header {
+  padding-top: 100px; /* Accounts for fixed nav */
+  background: var(--sys-color-surface-container-low);
+  border-bottom: 1px solid var(--sys-color-surface-variant);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sys-color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.back-link:hover { opacity: 0.8; }
+
+.pt-4 { padding-top: var(--sys-spacing-32); }
+.py-3 { padding: var(--sys-spacing-16) 0; }
+.mt-5 { margin-top: var(--sys-spacing-48); }
+.text-muted { color: var(--sys-color-outline); }
+
+/* Layout Grid */
+.container-split {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: var(--sys-spacing-32);
+  align-items: start;
+}
+
+/* Info Column */
+.doc-header-card { padding: var(--sys-spacing-32); }
+.gap-4 { gap: var(--sys-spacing-32); }
+.align-start { align-items: flex-start; }
+
+.doc-img-lg-wrapper {
+  width: 140px; height: 140px;
+  border-radius: var(--sys-radius-full);
+  overflow: hidden;
+  border: 4px solid var(--sys-color-surface-container-lowest);
+  box-shadow: var(--sys-elevation-1);
+}
+
+.doc-img-lg {
+  width: 100%; height: 100%; object-fit: cover;
+}
+
+.doc-rating-lg {
+  display: flex; align-items: center; gap: 8px;
+  background: #FFF8E1; color: #FFB300;
+  padding: 8px 16px; border-radius: var(--sys-radius-full);
+  font-weight: 700; font-size: 1.125rem;
+}
+
+.doc-badges {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 16px;
+  background: var(--sys-color-surface-container-low);
+  color: var(--sys-color-on-surface);
+  border-radius: var(--sys-radius-md);
+  font-size: 0.85rem; font-weight: 500;
+}
+
+/* Booking Widget */
+.booking-widget {
+  position: sticky;
+  top: 100px; /* Stay below navbar */
+  /* Re-enforce glassmorphism for widget feel */
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.slot {
+  text-align: center;
+  padding: 10px 0;
+  border: 1px solid var(--sys-color-outline-variant);
+  border-radius: var(--sys-radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem; font-weight: 600;
+  transition: all 0.2s;
+  color: var(--sys-color-on-surface);
+}
+
+.slot:hover:not(.disabled) {
+  border-color: var(--sys-color-primary);
+  color: var(--sys-color-primary);
+}
+
+.slot.active {
+  background: var(--sys-color-primary-container);
+  color: var(--sys-color-on-primary-container);
+  border-color: var(--sys-color-primary-container);
+}
+
+.slot.disabled {
+  background: var(--sys-color-surface-container);
+  color: var(--sys-color-outline-variant);
+  cursor: not-allowed;
+  border-color: var(--sys-color-surface-variant);
+  text-decoration: line-through;
+}
+
+@media (max-width: 992px) {
+  .container-split { grid-template-columns: 1fr; }
+  .booking-widget { position: relative; top: 0; }
+}
+@media (max-width: 576px) {
+  .doc-header-card { flex-direction: column; text-align: center; align-items: center; }
+  .doc-img-lg-wrapper { margin: 0 auto; }
+  .time-slots { grid-template-columns: repeat(2, 1fr); }
+}

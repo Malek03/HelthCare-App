@@ -1,0 +1,98 @@
+/* BMI Page Styles */
+
+.page-header {
+  padding: 120px 0 60px; /* Account for fixed nav */
+  background: var(--sys-gradient-primary);
+  color: white;
+  margin-bottom: var(--sys-spacing-48);
+}
+
+.page-header .display-text { outline: none; color: white;}
+.page-header .body-md { color: rgba(255, 255, 255, 0.9); }
+
+.pt-0 { padding-top: 0; }
+.w-100 { width: 100%; justify-content: center; }
+
+.bmi-container {
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sys-spacing-48);
+  margin-top: -60px; /* Pull UI up into the header slightly */
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .bmi-container {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.bmi-info-col {
+  padding-top: var(--sys-spacing-32);
+}
+
+.bmi-info-col .headline-md {
+  color: var(--sys-color-on-surface);
+}
+
+.info-block {
+  padding: var(--sys-spacing-16);
+  background: var(--sys-color-surface-container-lowest);
+  border-radius: var(--sys-radius-md);
+  box-shadow: var(--sys-elevation-1);
+}
+
+.info-block .headline-sm {
+  margin-bottom: var(--sys-spacing-8);
+}
+
+/* Icons inside inputs */
+.input-icon-wrapper {
+  position: relative;
+}
+
+.form-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sys-color-primary);
+  font-size: 1.25rem;
+  z-index: 2;
+}
+
+.pl-icon {
+  padding-right: 48px; /* Room for icon on RTL */
+}
+
+/* Result specific styling */
+.result-number-container {
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  border: 8px solid var(--sys-color-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: border-color 0.5s ease;
+}
+
+.result-number-container .display-lg {
+  margin-bottom: 0;
+  color: var(--sys-color-on-surface);
+}
+
+.category-underweight { color: #0288D1; background: #E1F5FE; }
+.category-normal { color: #2E7D32; background: #E8F5E9; border-color: #2E7D32; }
+.category-overweight { color: #F57C00; background: #FFF3E0; }
+.category-obese { color: var(--sys-color-error); background: var(--sys-color-error-container); }
+
+.result-category .label {
+  padding: 6px 16px;
+  border-radius: var(--sys-radius-full);
+  display: inline-block;
+  font-size: 0.85rem;
+}

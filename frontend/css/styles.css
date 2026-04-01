@@ -1,0 +1,197 @@
+/* 
+  Global Styles - The Clinical Sanctuary 
+  Adhering strictly to No-Line, Glassmorphism & Font rules
+*/
+@import './variables.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--sys-color-surface);
+  color: var(--sys-color-on-surface);
+  font-family: var(--sys-font-body);
+  direction: rtl; /* RTL Support */
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography */
+h1, h2, h3, h4, .display-text {
+  font-family: var(--sys-font-headline);
+  font-weight: 700;
+  color: var(--sys-color-on-surface);
+  margin-bottom: var(--sys-spacing-16);
+}
+
+.display-lg { font-size: 3.5rem; line-height: 1.2; }
+.headline-md { font-size: 1.75rem; line-height: 1.3; }
+.headline-sm { font-size: 1.25rem; font-weight: 600; }
+.body-md { font-size: 0.875rem; color: var(--sys-color-on-surface-variant); }
+.label { font-family: var(--sys-font-label); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
+
+/* 
+  SURFACE LOGIC
+  The no-line rule dictates that we use color shifts rather than borders 
+*/
+.bg-lowest { background-color: var(--sys-color-surface-container-lowest); }
+.bg-low { background-color: var(--sys-color-surface-container-low); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  padding: 0 var(--sys-spacing-24);
+  height: 48px;
+  border-radius: var(--sys-radius-xl);
+  font-family: var(--sys-font-headline);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--sys-gradient-primary);
+  color: var(--sys-color-on-primary);
+  box-shadow: 0 4px 12px rgba(0, 91, 191, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 91, 191, 0.3);
+}
+
+.btn-secondary {
+  background-color: var(--sys-color-surface-container-high);
+  color: var(--sys-color-on-surface-variant);
+}
+
+.btn-secondary:hover {
+  background-color: var(--sys-color-surface-container-highest);
+  color: var(--sys-color-on-surface);
+}
+
+.btn-outline {
+  /* The Ghost border fallback */
+  background: transparent;
+  color: var(--sys-color-primary);
+  border: 1px solid rgba(193, 198, 214, 0.4); /* outline-variant */
+}
+
+.btn-outline:hover {
+  border-color: var(--sys-color-primary);
+}
+
+.btn-large {
+  padding: var(--sys-spacing-24) var(--sys-spacing-32);
+  font-size: var(--sys-font-headline-sm);
+  height: auto;
+}
+
+/* Glassmorphism */
+.glass-panel {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: var(--sys-elevation-glass);
+}
+
+/* Navbar specific */
+.glass-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(249, 249, 255, 0.85); /* surface @ 85% */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Cards */
+.card {
+  background-color: var(--sys-color-surface-container-lowest);
+  border-radius: var(--sys-radius-lg);
+  padding: var(--sys-spacing-24);
+  box-shadow: var(--sys-elevation-1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sys-elevation-2);
+}
+
+/* Inputs */
+.form-group {
+  margin-bottom: var(--sys-spacing-16);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--sys-spacing-8);
+  color: var(--sys-color-on-surface);
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--sys-spacing-16);
+  background-color: var(--sys-color-surface-container-lowest);
+  border: 1px solid rgba(193, 198, 214, 0.15); /* 15% opacity ghost border */
+  border-radius: var(--sys-radius-md);
+  font-family: var(--sys-font-body);
+  font-size: 1rem;
+  color: var(--sys-color-on-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--sys-color-primary);
+  box-shadow: 0 0 0 3px var(--sys-color-surface-container);
+}
+
+/* Layout Utilites */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--sys-spacing-24);
+}
+
+.section {
+  padding: var(--sys-spacing-88) 0;
+}
+
+.grid {
+  display: grid;
+  gap: var(--sys-spacing-24);
+}
+
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) {
+  .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Helpers */
+.text-center { text-align: center; }
+.d-flex { display: flex; }
+.align-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.mt-4 { margin-top: var(--sys-spacing-16); }
+.mb-4 { margin-bottom: var(--sys-spacing-16); }

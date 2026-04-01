@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الأطباء المعتمدين | المنصة الطبية</title>
+  
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/doctors.css">
+  
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-surface">
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Page Header -->
+  <div class="page-header text-center">
+    <div class="container">
+      <h1 class="display-text">الأطباء المعتمدين</h1>
+      <p class="body-md mt-4 text-white-90">نخبة من الأطباء والمتخصصين في مختلف المجالات الطبية لتقديم الرعاية الأفضل لك</p>
+      
+      <!-- Search & Filters -->
+      <div class="search-container mt-4">
+        <div class="search-box">
+          <i class="ph ph-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" class="form-control" placeholder="ابحث عن طبيب أو تخصص...">
+          <button class="btn btn-primary search-btn" onclick="filterDoctors()">بحث</button>
+        </div>
+        
+        <div class="filter-pills mt-4" id="specialtyFilters">
+          <button class="pill active" data-specialty="">الكل</button>
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section pt-0">
+    <div class="container">
+      
+      <!-- Loading State -->
+      <div id="loadingState" class="grid grid-cols-4">
+        <div class="card doc-skeleton"><div class="skel-img"></div><div class="skel-text w-50"></div><div class="skel-text"></div></div>
+        <div class="card doc-skeleton"><div class="skel-img"></div><div class="skel-text w-50"></div><div class="skel-text"></div></div>
+        <div class="card doc-skeleton"><div class="skel-img"></div><div class="skel-text w-50"></div><div class="skel-text"></div></div>
+        <div class="card doc-skeleton"><div class="skel-img"></div><div class="skel-text w-50"></div><div class="skel-text"></div></div>
+      </div>
+      
+      <!-- Error / Empty State -->
+      <div id="emptyState" class="text-center py-4" style="display: none;">
+        <i class="ph ph-users" style="font-size: 4rem; color: var(--sys-color-outline-variant);"></i>
+        <h3 class="headline-md mt-4">لا يوجد أطباء مطابقين للبحث</h3>
+        <button class="btn btn-outline mt-4" onclick="resetFilters()">تصفير الفلاتر</button>
+      </div>
+
+      <!-- Doctors Grid -->
+      <div class="grid grid-cols-4 doctors-grid" id="doctorsGrid" style="display: none;">
+        <!-- Injected via JS -->
+      </div>
+      
+      <!-- Pagination -->
+      <div class="pagination mt-4 d-flex justify-between align-center" id="paginationControls" style="display: none;">
+        <button class="btn btn-secondary" id="prevBtn" onclick="changePage(-1)"><i class="ph ph-arrow-right mr-2"></i> السابق</button>
+        <span class="label" id="pageIndicator">صفحة 1 من 1</span>
+        <button class="btn btn-secondary" id="nextBtn" onclick="changePage(1)">التالي <i class="ph ph-arrow-left ml-2"></i></button>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="./js/api.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./components/footer.js"></script>
+  <script src="./js/doctors.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حاسبة كتلة الجسم (BMI) | المنصة الطبية</title>
+  
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/bmi.css">
+  
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-low">
+
+  <!-- Navbar Component Container -->
+  <div id="navbar-container"></div>
+
+  <!-- Page Header -->
+  <div class="page-header text-center">
+    <div class="container">
+      <h1 class="display-text">حاسبة مؤشر كتلة الجسم (BMI)</h1>
+      <p class="body-md mt-4">أداة سريعة لمعرفة مدى صحة وزنك ومتابعة تقدمك</p>
+    </div>
+  </div>
+
+  <section class="section pt-0">
+    <div class="container bmi-container">
+      
+      <!-- Right Side: Info Text (From Stitch HTML) -->
+      <div class="bmi-info-col">
+        <h2 class="headline-md mb-4">تفاصيل حاسبة الكتلة</h2>
+        <p class="body-md mb-4">ستظهر هنا تفاصيل كتلة جسمك وتصنيفها الصحي بناءً على القيم المدخلة.</p>
+        
+        <div class="info-block mt-4">
+          <h3 class="headline-sm color-primary">ما هو الـ BMI؟</h3>
+          <p class="body-md">هو مقياس عالمي يستخدم لتحديد ما إذا كان الشخص ضمن نطاق الوزن الصحي بالنسبة لطوله، مما يساعد في تقييم المخاطر الصحية المحتملة.</p>
+        </div>
+        
+        <div class="info-block mt-4">
+          <h3 class="headline-sm color-primary">توصيات مخصصة</h3>
+          <p class="body-md">بعد الحساب، سنقدم لك نصائح غذائية ورياضية تناسب وضعك الصحي الحالي بناءً على تصنيفك.</p>
+        </div>
+        
+        <div class="info-block mt-4">
+          <h3 class="headline-sm color-primary">دقة النتائج</h3>
+          <p class="body-md">تعتمد الحاسبة على معادلة Quetelet المعتمدة من منظمة الصحة العالمية لنتائج موثوقة دائمًا.</p>
+        </div>
+      </div>
+
+      <!-- Left Side: Calculator Box -->
+      <div class="bmi-calc-col">
+        <!-- Calculator Card -->
+        <div class="card bmi-card">
+          <h2 class="headline-md mb-4 text-center">أدخل بياناتك للبدء</h2>
+          
+          <form id="bmiForm">
+            <div class="form-group">
+              <label class="form-label" for="weight">الوزن (كيلوجرام)</label>
+              <div class="input-icon-wrapper">
+                <i class="ph ph-barbell form-icon"></i>
+                <input type="number" id="weight" class="form-control pl-icon" placeholder="مثال: 75" required min="20" max="300" step="0.1">
+              </div>
+            </div>
+            
+            <div class="form-group mb-4">
+              <label class="form-label" for="height">الطول (سنتيمتر)</label>
+              <div class="input-icon-wrapper">
+                <i class="ph ph-ruler form-icon"></i>
+                <input type="number" id="height" class="form-control pl-icon" placeholder="مثال: 175" required min="50" max="250" step="1">
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large w-100">
+              <i class="ph ph-calculator mr-2"></i> احسب النتيجة
+            </button>
+          </form>
+        </div>
+
+        <!-- Result Card (Hidden by default) -->
+        <div class="card result-card mt-4" id="resultCard" style="display: none;">
+          <h2 class="headline-md mb-4 text-center">نتيجتك</h2>
+          
+          <div class="result-number-container">
+            <span class="display-lg" id="bmiValue">--</span>
+          </div>
+          
+          <div class="result-category text-center mt-4">
+            <span class="label" id="bmiCategoryBadge">--</span>
+            <h3 class="headline-sm mt-4" id="bmiStatusText">--</h3>
+            <p class="body-md mt-4" id="bmiAdviceText">--</p>
+          </div>
+          
+          <div class="mt-4 text-center">
+            <button class="btn btn-outline w-100" onclick="resetBMI()">
+              <i class="ph ph-arrow-counter-clockwise mr-2"></i> إعادة الحساب
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer Component Container -->
+  <div id="footer-container"></div>
+
+  <script src="./js/api.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./components/footer.js"></script>
+  <script src="./js/bmi.js"></script>
+</body>
+</html>

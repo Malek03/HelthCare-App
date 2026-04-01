@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملف الطبيب | المنصة الطبية</title>
+  
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/doctor-profile.css">
+  
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-surface">
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Breadcrumb / Small Header -->
+  <div class="profile-header">
+    <div class="container py-3">
+      <a href="doctors.html" class="back-link">
+        <i class="ph ph-arrow-right"></i> العودة لقائمة الأطباء
+      </a>
+    </div>
+  </div>
+
+  <section class="section pt-4">
+    <div class="container container-split">
+      
+      <!-- Right Side: Details -->
+      <div class="doc-details-col">
+        <!-- Main Info Card -->
+        <div class="card doc-header-card d-flex gap-4 align-start mb-4">
+          <div class="doc-img-lg-wrapper">
+            <img src="../backend/src/media/doc1.avif" alt="صورة الطبيب" class="doc-img-lg" id="docImg">
+          </div>
+          
+          <div class="doc-header-info flex-1">
+            <div class="d-flex justify-between align-start">
+              <div>
+                <span class="label color-primary" id="docSpecialty">جاري التحميل...</span>
+                <h1 class="display-text mt-2" id="docName">الطبيب...</h1>
+              </div>
+              <div class="doc-rating-lg">
+                <i class="ph-fill ph-star"></i> <span id="docRating">--</span>
+              </div>
+            </div>
+            
+            <p class="body-md mt-4" id="docBio">نبذة مهنية عن الطبيب وخبراته...</p>
+            
+            <div class="doc-badges mt-4">
+              <span class="badge"><i class="ph ph-certificate"></i> بورد عربي</span>
+              <span class="badge"><i class="ph ph-map-pin"></i> <span id="docLocation">...</span></span>
+              <span class="badge"><i class="ph ph-briefcase"></i> <span id="docExp">...</span> سنوات خبرة</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Articles Section -->
+        <h3 class="headline-md mt-5 mb-4">مقالات وحالات شاركها الطبيب</h3>
+        <div class="grid grid-cols-2" id="docArticles">
+          <!-- Filled via JS -->
+          <div class="body-md text-center py-4 text-muted w-100" style="grid-column: span 2;">لا توجد مقالات منشورة حالياً</div>
+        </div>
+
+      </div>
+
+      <!-- Left Side: Sticky Booking Widget -->
+      <div class="booking-col">
+        <div class="card booking-widget glass-panel">
+          <h3 class="headline-sm mb-4">حجز موعد استشارة</h3>
+          
+          <form id="bookingForm">
+            <!-- Date Picker -->
+            <div class="form-group">
+              <label class="form-label">اختر اليوم المتاح</label>
+              <input type="date" id="bookDate" class="form-control" required min="">
+            </div>
+
+            <!-- Time Slots -->
+            <div class="form-group mt-4">
+              <label class="form-label">اختر الوقت</label>
+              <div class="time-slots" id="timeSlots">
+                <!-- JS slots -->
+                <div class="slot">09:00 ص</div>
+                <div class="slot active">10:00 ص</div>
+                <div class="slot">11:30 ص</div>
+                <div class="slot disabled">02:00 م</div>
+                <div class="slot">04:00 م</div>
+              </div>
+              <input type="hidden" id="selectedSlot" value="10:00 ص" required>
+            </div>
+            
+            <!-- Type of Consultation -->
+            <div class="form-group mt-4">
+              <label class="form-label">سبب الاستشارة (اختياري)</label>
+              <textarea id="bookReason" class="form-control" rows="3" placeholder="نبذة موجزة عن حالتك..." style="height: auto; padding: 12px;"></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100 mt-2" id="btnBook">
+              <i class="ph ph-calendar-check mr-2"></i> تأكيد الحجز المبدئي
+            </button>
+            <p class="body-md text-center mt-3 text-muted" style="font-size: 0.75rem;">
+              سيتم إرسال طلبك للطبيب للموافقة. ستتلقى إشعاراً في حال التأكيد.
+            </p>
+          </form>
+          
+          <!-- Success State -->
+          <div id="bookingSuccess" class="text-center" style="display: none; padding: 32px 0;">
+            <i class="ph-fill ph-check-circle color-primary" style="font-size: 4rem;"></i>
+            <h4 class="headline-sm mt-3">تم إرسال الطلب بنجاح</h4>
+            <p class="body-md mt-2">يرجى متابعة صفحة مواعيدك بانتظار رد الطبيب.</p>
+            <a href="profile.html" class="btn btn-outline w-100 mt-4">متابعة مواعيدي</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="./js/api.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./components/footer.js"></script>
+  <script src="./js/doctor-profile.js"></script>
+</body>
+</html>

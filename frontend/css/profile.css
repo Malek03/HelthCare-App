@@ -1,0 +1,126 @@
+/* Profile Styles */
+
+.page-header {
+  padding: 100px 0 40px; /* Accounts for fixed nav */
+  background: var(--sys-gradient-primary);
+  color: white;
+  margin-bottom: var(--sys-spacing-48);
+}
+
+.user-avatar-lg {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; color: white;
+}
+
+.text-white-90 { color: rgba(255,255,255,0.9); }
+.pt-4 { padding-top: var(--sys-spacing-32); }
+.mb-5 { margin-bottom: var(--sys-spacing-48); }
+.gap-4 { gap: var(--sys-spacing-24); }
+
+/* Layout Grid */
+.container-split {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--sys-spacing-32);
+  align-items: start;
+}
+
+/* Sidebar Menu */
+.sidebar-menu { list-style: none; margin: 0; padding: 0; }
+.sidebar-menu li {
+  border-bottom: 1px solid var(--sys-color-surface-variant);
+}
+.sidebar-menu li:last-child { border-bottom: none; }
+
+.sidebar-menu a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 24px;
+  color: var(--sys-color-on-surface);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.sidebar-menu a i { font-size: 1.25rem; color: var(--sys-color-primary); }
+.sidebar-menu a:hover { background: var(--sys-color-surface-container); }
+.sidebar-menu a.active {
+  background: var(--sys-color-primary-container);
+  color: var(--sys-color-on-primary-container);
+  border-right: 4px solid var(--sys-color-primary); /* RTL border */
+}
+.sidebar-menu a.active i { color: var(--sys-color-on-primary-container); }
+.sidebar-menu a.text-danger { color: var(--sys-color-error); }
+.sidebar-menu a.text-danger i { color: var(--sys-color-error); }
+
+/* Health Cards */
+.health-card {
+  padding: var(--sys-spacing-24);
+}
+.health-icon {
+  width: 56px; height: 56px; margin: 0 auto;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: white;
+}
+.bg-blue { background: #0288D1; }
+.bg-indigo { background: #512DA8; }
+.bg-green { background: #388E3C; }
+
+/* Water tracking visual */
+.water-cups {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.cup {
+  width: 24px; height: 32px;
+  border-radius: 4px 4px 8px 8px;
+  border: 2px solid #0288D1;
+  background: transparent;
+  transition: all 0.3sease;
+}
+.cup.filled { background: #0288D1; }
+
+.text-muted { color: var(--sys-color-outline); }
+.overflow-auto { overflow-x: auto; }
+.overflow-hidden { overflow: hidden; }
+
+/* Data Table (Appointments) */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+}
+
+.data-table th {
+  background: var(--sys-color-surface-container-low);
+  padding: 16px;
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--sys-color-on-surface-variant);
+  border-bottom: 2px solid var(--sys-color-surface-variant);
+}
+
+.data-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--sys-color-surface-variant);
+  font-size: 0.875rem;
+}
+
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--sys-color-surface); }
+
+.status-badge {
+  display: inline-block; padding: 4px 12px; border-radius: var(--sys-radius-full);
+  font-size: 0.75rem; font-weight: 700;
+}
+.status-pending { background: #FFF3E0; color: #F57C00; }
+.status-approved { background: #E8F5E9; color: #2E7D32; }
+.status-cancelled { background: var(--sys-color-error-container); color: var(--sys-color-on-error-container); }
+
+@media (max-width: 992px) {
+  .container-split { grid-template-columns: 1fr; }
+  .grid-cols-3 { grid-template-columns: 1fr; }
+}
