@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 1. Login Logic
+  // 1. Login Logic
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
       loginForm.addEventListener('submit', async (e) => {
@@ -17,32 +17,45 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> جاري التسجيل...';
           btn.disabled = true;
           
+          // إرسال الطلب للباك إند
           const res = await window.ApiService.login(email, password);
-          if (res.token) {
-            localStorage.setItem('token', res.token);
-            // Optionally fetch 'me' to get role and name
-            const meRes = await window.ApiService.getMe();
-            localStorage.setItem('name', meRes.data.name);
-            localStorage.setItem('role', meRes.data.role);
-            localStorage.setItem('userId', meRes.data.id);
+          
+          // التحقق من نجاح العملية ووجود التوكن بناءً على كود الباك إند الخاص بك
+          if (res.success && res.data && res.data.token) {
             
-            // Redirect based on role
-            if (meRes.data.role === 'DOCTOR') {
+            // 1. حفظ التوكن
+            localStorage.setItem('token', res.data.token);
+            
+            // 2. استخراج بيانات المستخدم المرفقة وتخزينها مباشرة
+            const user = res.data.user;
+            localStorage.setItem('name', user.name);
+            localStorage.setItem('role', user.role);
+            localStorage.setItem('userId', user.id);
+            if (user.avatar) localStorage.setItem('avatar', user.avatar); // حفظ الصورة إن وجدت
+            
+            // 3. التوجيه السريع بناءً على الصلاحية
+            if (user.role === 'DOCTOR') {
                 window.location.href = 'doctor-dashboard.html';
-            } else if (meRes.data.role === 'ADMIN') {
+            } else if (user.role === 'ADMIN') {
                 window.location.href = 'admin-dashboard.html';
             } else {
                 window.location.href = 'index.html';
             }
+            
+          } else {
+             // في حالة وجود خطأ في البيانات (مثل كلمة مرور خاطئة)
+             alert(res.message || 'بيانات الدخول غير صحيحة.');
+             btn.innerHTML = 'تسجيل الدخول';
+             btn.disabled = false;
           }
         } catch (err) {
+          // في حالة انقطاع الاتصال بالسيرفر
           alert('فشل تسجيل الدخول: ' + err.message);
           btn.innerHTML = 'تسجيل الدخول';
           btn.disabled = false;
         }
       });
     }
-  
     // 2. Register Logic
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {

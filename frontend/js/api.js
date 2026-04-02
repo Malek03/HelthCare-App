@@ -25,11 +25,15 @@ class ApiService {
     }
 
     try {
+      console.log(`API Request: ${endpoint}`, { method: options.method || 'GET', headers, body: options.body });
+      
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         ...options,
         headers,
       });
 
+      console.log(`API Response: ${endpoint}`, { status: response.status, statusText: response.statusText });
+      
       const data = await response.json();
       
       if (!response.ok) {

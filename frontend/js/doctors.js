@@ -64,8 +64,8 @@ async function loadDoctors() {
 
   try {
     const res = await window.ApiService.getDoctors(currentPage, limit, searchStr, currentSpecialty);
-    const doctors = res.data || [];
-    const pagInfo = res.pagination || { page: currentPage, totalPages: 1 };
+    const doctors = (res.data && res.data.doctors) || [];
+    const pagInfo = (res.data && res.data.pagination) || { page: currentPage, totalPages: 1 };
 
     loading.style.display = 'none';
 

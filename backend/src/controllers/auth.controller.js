@@ -54,7 +54,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -64,6 +63,7 @@ const login = async (req, res) => {
 
     // Find user
     const user = await prisma.user.findUnique({ where: { email } });
+    
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -81,6 +81,7 @@ const login = async (req, res) => {
 
     // Verify password
     const isValidPassword = await bcrypt.compare(password, user.password);
+    
     if (!isValidPassword) {
       return res.status(401).json({
         success: false,

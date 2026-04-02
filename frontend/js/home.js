@@ -67,12 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadMockVideos() {
     const container = document.getElementById('videoList');
     if (!container) return;
-  
-    try {
-      const resp = await window.ApiService.getVideos();
-      const videos = resp.data || [];
-      let html = '';
-      videos.forEach(v => {
+try {
+    const resp = await window.ApiService.getVideos();
+    
+    // 👈 الوصول للمصفوفة الصحيحة بناءً على هيكل الباك إند الخاص بك
+    const videos = (resp.data && resp.data.videos) || []; 
+    
+    let html = '';
+    
+    if (videos.length === 0) {
+        container.innerHTML = '<p>لا توجد فيديوهات حالياً.</p>';
+        return;
+    }
+
+    videos.forEach(v => {
         html += `
           <div class="card video-card">
             <div class="video-thumb">
@@ -85,9 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
         `;
-      });
-      container.innerHTML = html;
-    } catch(e) {
+    });
+    
+    container.innerHTML = html;
+}catch(e) {
       console.error("Error loading videos:", e);
       container.innerHTML = '<p class="text-center w-100" style="color:var(--sys-color-error);">تعذر تحميل المقاطع حالياً.</p>';
     }
