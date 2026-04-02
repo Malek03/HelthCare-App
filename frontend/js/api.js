@@ -140,6 +140,10 @@ class ApiService {
     // date format: YYYY-MM-DD
     return this.request(`/health/daily-summary/${date}`, { method: 'GET' });
   }
+
+  static async getWeeklySummary() {
+    return this.request('/health/weekly-summary', { method: 'GET' });
+  }
   
   // ==========================================
   // Articles & Videos API

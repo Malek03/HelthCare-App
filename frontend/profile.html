@@ -105,8 +105,38 @@
               </tr>
             </thead>
             <tbody id="appointmentsTable">
-              <!-- JS rendered -->
               <tr><td colspan="5" class="text-center py-4 text-muted">جاري تحميل المواعيد...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Weekly Health Progress -->
+        <h2 class="headline-md mb-4"> تقدمك الصحي خلال الأسبوع</h2>
+        <div class="card mb-5 weekly-progress-card">
+          <div class="weekly-legend">
+            <span class="legend-item"><i class="ph ph-drop" style="color:#0288D1"></i> الماء (8 أكواب)</span>
+            <span class="legend-item"><i class="ph ph-moon" style="color:#512DA8"></i> النوم (8 ساعات)</span>
+            <span class="legend-item"><i class="ph ph-sneaker" style="color:#388E3C"></i> المشي</span>
+          </div>
+          <div class="weekly-progress-grid" id="weeklyProgressGrid">
+            <p class="text-muted text-center" style="grid-column:1/-1;">جاري تحميل البيانات...</p>
+          </div>
+        </div>
+
+        <!-- Consultations Section -->
+        <h2 class="headline-md mb-4" id="consultations"> استشاراتي السابقة</h2>
+        <div class="card p-0 mb-5 overflow-auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>الطبيب</th>
+                <th>السؤال</th>
+                <th>التاريخ</th>
+                <th>الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="consultationsTable">
+              <tr><td colspan="4" class="text-center py-4 text-muted">جاري تحميل الاستشارات...</td></tr>
             </tbody>
           </table>
         </div>

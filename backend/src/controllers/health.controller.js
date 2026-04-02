@@ -15,18 +15,18 @@ const logWater = async (req, res) => {
       create: { user_id: req.user.id, log_date: today, glasses: 1 },
     });
 
-    // Cap at 5 glasses
-    if (waterLog.glasses > 5) {
+    // Cap at 8 glasses
+    if (waterLog.glasses > 8) {
       await prisma.waterLog.update({
         where: { id: waterLog.id },
-        data: { glasses: 5 },
+        data: { glasses: 8 },
       });
-      waterLog.glasses = 5;
+      waterLog.glasses = 8;
     }
 
     return res.status(200).json({
       success: true,
-      message: waterLog.glasses >= 5 ? '🎉 أحسنت! أكملت شرب الماء اليوم' : `💧 شربت ${waterLog.glasses} من 5 أكواب`,
+      message: waterLog.glasses >= 8 ? '🎉 أحسنت! أكملت شرب الماء اليوم' : `💧 شربت ${waterLog.glasses} من 8 أكواب`,
       data: waterLog,
     });
   } catch (error) {

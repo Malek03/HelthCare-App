@@ -120,7 +120,164 @@
 .status-approved { background: #E8F5E9; color: #2E7D32; }
 .status-cancelled { background: var(--sys-color-error-container); color: var(--sys-color-on-error-container); }
 
+/* Weekly Progress Dashboard */
+.weekly-progress-card {
+  padding: var(--sys-spacing-24);
+}
+
+.weekly-legend {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--sys-color-on-surface-variant);
+  font-weight: 500;
+}
+
+.weekly-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.weekly-day-card {
+  background: var(--sys-color-surface-container-low);
+  border-radius: var(--sys-radius-md);
+  padding: 14px 10px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+}
+
+.weekly-day-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.weekly-day-card.today {
+  border-color: var(--sys-color-primary);
+  background: var(--sys-color-primary-container);
+}
+
+.day-header {
+  margin-bottom: 12px;
+}
+
+.day-name {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--sys-color-on-surface-variant);
+  margin-bottom: 2px;
+}
+
+.day-num {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--sys-color-on-surface);
+}
+
+.day-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+}
+
+.metric-row i { font-size: 0.9rem; flex-shrink: 0; }
+
+.metric-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--sys-color-surface-variant);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.metric-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.water-fill { background: linear-gradient(90deg, #0288D1, #4FC3F7); }
+.sleep-fill { background: linear-gradient(90deg, #512DA8, #B388FF); }
+
+.metric-value {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--sys-color-on-surface-variant);
+  min-width: 22px;
+  text-align: left;
+}
+
+.walk-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-right: auto;
+}
+
+.walk-badge.done { background: #E8F5E9; color: #2E7D32; }
+.walk-badge.missed { background: #FFF3E0; color: #EF6C00; }
+
+/* Consultations Answer */
+.consultation-row { cursor: pointer; }
+.consultation-row:hover { background: var(--sys-color-primary-container) !important; }
+
+.question-preview {
+  font-size: 0.85rem;
+  color: var(--sys-color-on-surface);
+  line-height: 1.5;
+}
+
+.answer-box {
+  background: var(--sys-color-surface-container-low);
+  border-right: 4px solid var(--sys-color-primary);
+  padding: 16px 20px;
+  border-radius: var(--sys-radius-md);
+  margin: 4px 0;
+}
+
+.answer-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--sys-color-primary);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.answer-box p {
+  margin: 0;
+  color: var(--sys-color-on-surface);
+  line-height: 1.8;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 992px) {
   .container-split { grid-template-columns: 1fr; }
   .grid-cols-3 { grid-template-columns: 1fr; }
+  .weekly-progress-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .weekly-progress-grid { grid-template-columns: repeat(2, 1fr); }
 }
