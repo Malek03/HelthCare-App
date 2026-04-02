@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="doctors.html" class="nav-link ${currentPath === 'doctors.html' ? 'active' : ''}">الأطباء</a></li>
             <li><a href="bmi.html" class="nav-link ${currentPath === 'bmi.html' ? 'active' : ''}">حاسبة BMI</a></li>
             <li><a href="videos.html" class="nav-link ${currentPath === 'videos.html' ? 'active' : ''}">المكتبة المرئية</a></li>
+            <li><a href="consultation.html" class="nav-link ${currentPath === 'consultation.html' ? 'active' : ''}">الاستشارة الطبية</a></li>
             <li>
               <a href="join-doctor.html" class="doctor-join-btn">
                 <i class="ph ph-stethoscope"></i> انضم كطبيب

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المقال | المنصة الطبية</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/articles.css">
+</head>
+<body class="bg-surface">
+    <div id="navbar-container"></div>
+    
+    <!-- Hero Image Area (Strict Execution Rule: Must be right below app bar) -->
+    <div class="article-hero-container" id="article-hero">
+         <div class="skeleton-hero"></div>
+    </div>
+
+    <!-- Article Detail Content -->
+    <main class="container article-detail-container">
+        <!-- Back Navigation -->
+        <div class="article-navigation">
+            <a href="articles.html" class="btn btn-outline btn-back">
+                <i class="ph ph-arrow-right"></i> العودة للمقالات
+            </a>
+        </div>
+
+        <article id="article-content-wrapper" class="article-wrapper card">
+            <div class="loading-state">
+                <i class="ph ph-spinner ph-spin"></i>
+                <p>جاري عرض المقال...</p>
+            </div>
+        </article>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <!-- Note: using articles.js for shared logic alongside detail view execution -->
+    <script src="js/article-detail.js"></script>
+</body>
+</html>

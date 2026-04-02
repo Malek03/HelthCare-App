@@ -1,0 +1,121 @@
+/*
+ * Consultation CSS
+ * Based strictly on Stitch UI guidelines.
+ */
+
+.page-content {
+    padding-top: 120px;
+    padding-bottom: var(--sys-spacing-88);
+}
+
+.consultation-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.section-header {
+    margin-bottom: var(--sys-spacing-32);
+}
+
+.display-title {
+    font-family: var(--sys-font-display);
+    font-size: 2.25rem;
+    color: var(--sys-color-on-surface);
+    margin-bottom: var(--sys-spacing-12);
+}
+
+.text-muted {
+    color: var(--sys-color-on-surface-variant);
+    font-size: 1.125rem;
+    line-height: 1.8;
+}
+
+/* Guard State */
+.auth-guard-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--sys-spacing-64) var(--sys-spacing-32);
+    border: 2px dashed rgba(193, 198, 214, 0.4);
+    background: transparent;
+    box-shadow: none;
+}
+
+.auth-guard-state.hidden,
+#consultation-form-container.hidden {
+    display: none;
+}
+
+.auth-guard-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--sys-radius-full);
+    background: var(--sys-color-surface-variant);
+    color: var(--sys-color-secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    margin-bottom: var(--sys-spacing-24);
+}
+
+.auth-guard-state h2 {
+    font-family: var(--sys-font-headline);
+    font-size: 1.75rem;
+    color: var(--sys-color-on-surface);
+    margin-bottom: var(--sys-spacing-12);
+}
+
+.auth-guard-actions {
+    display: flex;
+    gap: var(--sys-spacing-16);
+    margin-top: var(--sys-spacing-32);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Form Specific */
+.consultation-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sys-spacing-24);
+}
+
+.form-hint {
+    display: block;
+    margin-top: var(--sys-spacing-8);
+    font-size: 0.875rem;
+    color: var(--sys-color-outline);
+}
+
+/* Notifications inside form */
+.alert-box {
+    padding: var(--sys-spacing-16);
+    border-radius: var(--sys-radius-md);
+    margin-bottom: var(--sys-spacing-24);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sys-spacing-12);
+    font-family: var(--sys-font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.alert-success {
+    background-color: var(--sys-color-elevation-glass);
+    border: 1px solid var(--sys-color-primary-container);
+    color: var(--sys-color-primary);
+}
+
+.alert-error {
+    background-color: var(--sys-color-error-container);
+    border: 1px solid var(--sys-color-on-error-container);
+    color: var(--sys-color-on-error-container);
+}
+
+.alert-box i {
+    font-size: 1.5rem;
+    margin-top: 2px;
+}

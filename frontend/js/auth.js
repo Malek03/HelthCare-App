@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         
         if (!localStorage.getItem('token')) {
-            alert('الرجاء تسجيل الدخول كمستخدم للتمكن من تقديم طلب الانضمام.');
-            window.location.href = 'login.html';
+            if(window.Toast) window.Toast.show('تنبيه هام', 'الرجاء تسجيل الدخول كمستخدم للتمكن من تقديم طلب الانضمام.', 'error');
+            setTimeout(() => { window.location.href = 'login.html'; }, 2500);
             return;
         }
         
@@ -124,9 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
           
           btn.style.display = 'none';
           document.getElementById('joinSuccess').style.display = 'block';
+          if(window.Toast) window.Toast.show('عملية ناجحة', 'تم إرسال طلب الانضمام وتلقت الإدارة بياناتك بنجاح!', 'success');
         } catch (err) {
           errBox.textContent = 'حدث خطأ: ' + err.message;
-          errBox.style.display = 'block';
+          errBox.style.display = 'none'; // Keep hidden, prefer toast
+          if(window.Toast) window.Toast.show('فشل في الإرسال', err.message || 'يرجى التحقق من صحة البيانات والمحاولة مجدداً.', 'error');
+          
           btn.innerHTML = 'إرسال طلب الانضمام';
           btn.disabled = false;
         }

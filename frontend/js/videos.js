@@ -13,39 +13,8 @@ async function initVideoLibrary() {
     const gridContainer = document.getElementById('video-grid');
     
     try {
-        // Here we simulate an API call replacing with real endpoints when backend is ready
-        // const response = await fetch('http://localhost:5000/api/videos');
-        // const videos = await response.json();
-        
-        const videos = [
-            {
-                id: '1',
-                title: 'كيف تحافظ على استقرار ضغط الدم',
-                url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-                description: 'شرح مفصل حول كيفية الحفاظ على ضغط الدم ضمن المعدلات الطبيعية من خلال نمط الحياة الصحي والتغذية المتوازنة... \n\nيعتبر ضغط الدم المرتفع من أهم عوامل الخطورة للعديد من الأمراض. في هذا الفيديو نتطرق إلى أهم النصائح العملية.',
-                thumbnail: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&q=80&w=800',
-                admin: { name: 'د. أحمد محمود' },
-                created_at: new Date().toISOString()
-            },
-            {
-                id: '2',
-                title: 'أهمية الرياضة لصحة القلب',
-                url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-                description: 'تعرف على أفضل التمارين الرياضية لتقوية عضلة القلب وتحسين الدورة الدموية بشكل عام.',
-                thumbnail: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=800',
-                admin: { name: 'د. سارة خليل' },
-                created_at: new Date(Date.now() - 86400000 * 2).toISOString()
-            },
-            {
-                id: '3',
-                title: 'الغذاء الصحي للمرأة الحامل',
-                url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-                description: 'دليلك الشامل للتغذية السليمة خلال فترة الحمل لضمان صحتك وصحة الجنين.',
-                thumbnail: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=800',
-                admin: { name: 'د. ليلى عبد الرحمن' },
-                created_at: new Date(Date.now() - 86400000 * 5).toISOString()
-            }
-        ];
+        const response = await window.ApiService.getVideos();
+        const videos = (response.data && response.data.videos) || [];
 
         renderVideoCards(videos, gridContainer);
 

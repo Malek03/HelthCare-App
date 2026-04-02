@@ -148,6 +148,10 @@ class ApiService {
     return this.request(`/articles?page=${page}&limit=${limit}`, { method: 'GET' });
   }
 
+  static async getArticleById(id) {
+    return this.request(`/articles/${id}`, { method: 'GET' });
+  }
+
   static async getVideos() {
     return this.request('/videos', { method: 'GET' });
   }

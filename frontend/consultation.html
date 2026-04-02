@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب استشارة طبية | المنصة الطبية</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/consultation.css">
+</head>
+<body class="bg-surface">
+    <div id="navbar-container"></div>
+    
+    <main class="page-content container flex-container">
+        
+        <!-- View Default Wrapper -->
+        <div class="consultation-wrapper">
+
+            <header class="section-header text-center">
+                <h1 class="display-title">الاستشارات الطبية</h1>
+                <p class="body-text text-muted">اسأل طبيبك واحصل على إجابات موثوقة ومفصلة لحالتك الصحية بكل خصوصية وأمان.</p>
+            </header>
+
+            <!-- Guarded State: Access Denied -->
+            <div id="auth-guard-container" class="auth-guard-state card hidden">
+                <div class="auth-guard-icon">
+                    <i class="ph-fill ph-lock-key"></i>
+                </div>
+                <h2>يجب تسجيل الدخول</h2>
+                <p class="text-muted">هذه الخدمة متاحة فقط للأعضاء المسجلين. يرجى تسجيل الدخول لتتمكن من تقديم استشارة طبية.</p>
+                <div class="auth-guard-actions">
+                    <a href="login.html" class="btn btn-primary">تسجيل الدخول</a>
+                    <a href="register.html" class="btn btn-outline">إنشاء حساب</a>
+                </div>
+            </div>
+
+            <!-- Authenticated State: Consultation Form -->
+            <div id="consultation-form-container" class="card hidden">
+                <div id="form-alert-placeholder"></div>
+
+                <form id="consultationForm" class="consultation-form">
+                    
+                    <div class="form-group">
+                        <label for="doctorSelect" class="form-label">اختر الطبيب المختص</label>
+                        <div class="input-with-icon">
+                            <i class="ph ph-stethoscope form-icon"></i>
+                            <select id="doctorSelect" name="doctor_id" class="form-control" required>
+                                <option value="" disabled selected>جاري تحميل قائمة الأطباء...</option>
+                            </select>
+                        </div>
+                        <span class="form-hint">سيقوم الطبيب بمراجعة استشارتك والرد في أقرب وقت.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="questionInput" class="form-label">تفاصيل الاستشارة</label>
+                        <textarea id="questionInput" name="question" class="form-control" rows="6" placeholder="اكتب سؤالك الطبي أو تفاصيل حالتك بوضوح هنا..." required></textarea>
+                    </div>
+
+                    <!-- Hidden Fields Managed by API implicitly -->
+                    <input type="hidden" name="status" value="PENDING">
+
+                    <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
+                        <span class="btn-text">إرسال الاستشارة</span>
+                        <i class="ph ph-paper-plane-right"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="components/toast.js"></script>
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/consultation.js"></script>
+</body>
+</html>
