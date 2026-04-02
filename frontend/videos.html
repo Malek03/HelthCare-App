@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المكتبة المرئية | المنصة الطبية</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/videos.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <main class="page-content container flex-container">
+        <!-- Header Section -->
+        <header class="section-header">
+            <h1 class="display-title">المكتبة المرئية</h1>
+            <p class="body-text text-muted">محتوى مرئي موثوق لتعزيز الوعي الصحي من قبل نخبة من الأطباء</p>
+        </header>
+
+        <!-- Video Grid Container -->
+        <div id="video-grid" class="video-grid">
+            <!-- Loading state -->
+            <div class="loading-state">
+                <i class="ph ph-spinner ph-spin"></i>
+                <p>جاري تحميل مقاطع الفيديو...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <!-- Video Modal / Overlay -->
+    <div id="video-modal" class="modal-overlay hidden">
+        <!-- Expanded Video Player will be injected here by JS -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="js/videos.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="./css/variables.css">
   <link rel="stylesheet" href="./css/styles.css">
   <link rel="stylesheet" href="./css/home.css">
+  <link rel="stylesheet" href="./css/videos.css">
   
   <!-- Icons (Phosphor Icons - clean and modern) -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -139,10 +140,10 @@
     <div class="container">
       <div class="d-flex justify-between align-center mb-4">
         <h2 class="display-text">مكتبة الفيديوهات الطبية</h2>
-        <a href="#" class="btn btn-outline">عرض الكل <i class="ph ph-arrow-left"></i></a>
+        <a href="videos.html" class="btn btn-outline">عرض الكل <i class="ph ph-arrow-left"></i></a>
       </div>
       
-      <div class="video-scroller d-flex" id="videoList">
+      <div class="grid grid-cols-3" id="videoList">
         <!-- Videos rendered via JS -->
       </div>
     </div>
@@ -168,6 +169,9 @@
 
   <!-- Footer Component Container -->
   <div id="footer-container"></div>
+
+  <!-- Video Modal / Overlay -->
+  <div id="video-modal" class="modal-overlay hidden"></div>
 
   <!-- Scripts -->
   <script src="./js/api.js"></script>

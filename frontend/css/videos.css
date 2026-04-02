@@ -1,0 +1,243 @@
+/* 
+  Videos Page Styles 
+  Follows The Clinical Sanctuary Design Theme 
+*/
+
+.page-content {
+    padding-top: 120px; /* Offset for the 80px fixed navbar */
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--sys-spacing-24);
+    margin-top: var(--sys-spacing-32);
+    margin-bottom: var(--sys-spacing-88);
+}
+
+.loading-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--sys-spacing-48);
+    color: var(--sys-color-on-surface-variant);
+    font-family: var(--sys-font-body);
+}
+
+.loading-state i {
+    font-size: 2rem;
+    color: var(--sys-color-primary);
+    margin-bottom: var(--sys-spacing-12);
+}
+
+/* Video Card Styles */
+.video-card {
+    background: var(--sys-color-surface-container-lowest);
+    border-radius: var(--sys-radius-lg);
+    box-shadow: var(--sys-elevation-1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid var(--sys-color-outline-variant); /* Ghost Border at ~15% opacity usually */
+    border-color: rgba(193, 198, 214, 0.15); /* 15% opacity fallback */
+}
+
+.video-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sys-elevation-2);
+}
+
+.video-card-preview {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    background: var(--sys-color-surface-container-low);
+    overflow: hidden;
+}
+
+.video-card-preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* Ignore clicks on video directly, catch on wrapper */
+}
+
+.video-card-preview .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(0 4px 12px rgba(17, 28, 45, 0.4));
+    transition: transform 0.2s ease;
+}
+
+.video-card:hover .play-icon {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-card-content {
+    padding: var(--sys-spacing-16);
+}
+
+.video-title {
+    font-family: var(--sys-font-headline);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--sys-color-on-surface);
+    margin-bottom: var(--sys-spacing-8);
+    display: inline-block;
+    transition: color 0.2s ease;
+}
+
+.video-title:hover {
+    color: var(--sys-color-primary);
+    text-decoration: underline;
+}
+
+.video-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--sys-spacing-8);
+    font-family: var(--sys-font-label);
+    font-size: 0.875rem;
+    color: var(--sys-color-on-surface-variant);
+    margin-bottom: var(--sys-spacing-12);
+}
+
+.video-description-preview {
+    font-family: var(--sys-font-body);
+    font-size: 0.875rem;
+    color: var(--sys-color-on-surface-variant);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Expanded Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(17, 28, 45, 0.7); /* Custom modal backdrop */
+    backdrop-filter: blur(20px); /* Glassmorphism rule */
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--sys-spacing-24);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.expanded-player-container {
+    background: var(--sys-color-surface-container-lowest);
+    border-radius: var(--sys-radius-xl);
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--sys-elevation-glass);
+    position: relative;
+    transform: translateY(0) scale(1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.hidden .expanded-player-container {
+    transform: translateY(20px) scale(0.95);
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: var(--sys-spacing-16);
+    right: var(--sys-spacing-16);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--sys-radius-full);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    color: var(--sys-color-on-surface);
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+}
+
+.close-modal-btn:hover {
+    background: var(--sys-color-error-container);
+    color: var(--sys-color-error);
+}
+
+.player-video-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--sys-color-surface-container-low);
+    border-top-left-radius: var(--sys-radius-xl);
+    border-top-right-radius: var(--sys-radius-xl);
+    overflow: hidden;
+}
+
+.player-video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.player-info-container {
+    padding: var(--sys-spacing-32);
+}
+
+.player-title {
+    font-family: var(--sys-font-display);
+    font-size: 1.75rem; /* headline-md equivalent */
+    font-weight: 800;
+    color: var(--sys-color-on-surface);
+    margin-bottom: var(--sys-spacing-16);
+}
+
+.player-instructor {
+    display: flex;
+    align-items: center;
+    gap: var(--sys-spacing-8);
+    font-family: var(--sys-font-label);
+    font-weight: 600;
+    color: var(--sys-color-primary);
+    margin-bottom: var(--sys-spacing-16);
+}
+
+.player-description {
+    font-family: var(--sys-font-body);
+    font-size: 1rem;
+    color: var(--sys-color-on-surface-variant);
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .player-title {
+        font-size: 1.5rem;
+    }
+    
+    .player-info-container {
+        padding: var(--sys-spacing-16);
+    }
+}

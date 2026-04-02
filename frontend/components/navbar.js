@@ -15,19 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('name') || 'حسابي';
   
     let userControls = `
-      <div class="nav-controls d-flex align-center" style="gap: 16px;">
+      <div class="nav-controls d-flex align-center" style="gap: 16px; white-space: nowrap;">
         <a href="login.html" class="btn btn-outline">تسجيل الدخول</a>
-        <a href="register.html" class="btn btn-primary" style="height: 40px; border-radius: 8px;">حساب جديد</a>
+        <a href="register.html" class="btn btn-primary" style="height: 40px; border-radius: 8px; white-space: nowrap;">حساب جديد</a>
       </div>
     `;
   
     if (token) {
       userControls = `
-        <div class="nav-controls d-flex align-center" style="gap: 16px;">
-          <a href="${role === 'DOCTOR' ? 'doctor-dashboard.html' : 'profile.html'}" class="btn btn-outline">
+        <div class="nav-controls d-flex align-center" style="gap: 16px; white-space: nowrap;">
+          <a href="${role === 'DOCTOR' ? 'doctor-dashboard.html' : 'profile.html'}" class="btn btn-outline" style="white-space: nowrap;">
             <i class="ph ph-user"></i> ${userName}
           </a>
-          <button onclick="logout()" class="btn btn-secondary" style="height: 40px; border-radius: 8px;">تسجيل الخروج</button>
+          <button onclick="logout()" class="btn btn-secondary" style="height: 40px; border-radius: 8px; white-space: nowrap;">تسجيل الخروج</button>
         </div>
       `;
     }
@@ -52,11 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
           display: flex;
           align-items: center;
           gap: 8px;
+          white-space: nowrap;
         }
         
         .nav-links {
           display: flex;
-          gap: var(--sys-spacing-32);
+          gap: var(--sys-spacing-16);
+          margin: 0 var(--sys-spacing-8);
           list-style: none;
         }
         
@@ -69,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
           transition: color 0.2s;
           padding: 8px 0;
           position: relative;
+          white-space: nowrap;
         }
         
         .nav-link:hover, .nav-link.active {
@@ -91,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
           align-items: center;
           gap: 6px;
           text-decoration: none;
+          white-space: nowrap;
         }
   
         @media (max-width: 992px) {
@@ -109,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="index.html" class="nav-link ${currentPath === 'index.html' ? 'active' : ''}">الرئيسية</a></li>
             <li><a href="doctors.html" class="nav-link ${currentPath === 'doctors.html' ? 'active' : ''}">الأطباء</a></li>
             <li><a href="bmi.html" class="nav-link ${currentPath === 'bmi.html' ? 'active' : ''}">حاسبة BMI</a></li>
-            <li><a href="articles.html" class="nav-link ${currentPath === 'articles.html' ? 'active' : ''}">المقالات الموثوقة</a></li>
+            <li><a href="videos.html" class="nav-link ${currentPath === 'videos.html' ? 'active' : ''}">المكتبة المرئية</a></li>
             <li>
               <a href="join-doctor.html" class="doctor-join-btn">
                 <i class="ph ph-stethoscope"></i> انضم كطبيب

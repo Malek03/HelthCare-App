@@ -71,7 +71,8 @@ try {
     const resp = await window.ApiService.getVideos();
     
     // 👈 الوصول للمصفوفة الصحيحة بناءً على هيكل الباك إند الخاص بك
-    const videos = (resp.data && resp.data.videos) || []; 
+    const allVideos = (resp.data && resp.data.videos) || []; 
+    const videos = allVideos.slice(0, 3);
     
     let html = '';
     
@@ -81,8 +82,9 @@ try {
     }
 
     videos.forEach(v => {
+        const videoDataStr = encodeURIComponent(JSON.stringify(v));
         html += `
-          <div class="card video-card">
+          <div class="card video-card" style="width: 100%; min-width: unset; cursor: pointer;" data-video="${videoDataStr}">
             <div class="video-thumb">
               <img src="${v.thumbnail}" alt="${v.title}">
               <div class="play-overlay"><i class="ph-fill ph-play"></i></div>
@@ -96,6 +98,16 @@ try {
     });
     
     container.innerHTML = html;
+
+    // Add click listeners to launch modal
+    const cards = container.querySelectorAll('.video-card');
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+             const vDataStr = decodeURIComponent(card.getAttribute('data-video'));
+             const videoData = JSON.parse(vDataStr);
+             openVideoPlayer(videoData);
+        });
+    });
 }catch(e) {
       console.error("Error loading videos:", e);
       container.innerHTML = '<p class="text-center w-100" style="color:var(--sys-color-error);">تعذر تحميل المقاطع حالياً.</p>';
@@ -138,4 +150,49 @@ try {
       console.error("Error loading articles:", e);
       container.innerHTML = '<p class="text-center w-100" style="color:var(--sys-color-error);">تعذر إحضار المقالات.</p>';
     }
+  }
+
+  // 4. Video Player Modal Logic (Shared Behavior)
+  function openVideoPlayer(video) {
+      const modal = document.getElementById('video-modal');
+      const doctorName = video.admin?.name || 'الإدارة';
+  
+      const playerHTML = `
+          <div class="expanded-player-container">
+              <button class="close-modal-btn" id="close-modal" aria-label="إغلاق المشغل">
+                  <i class="ph ph-x"></i>
+              </button>
+              <div class="player-video-wrapper">
+                  <video src="${video.url}" controls autoplay playsinline controlsList="nodownload"></video>
+              </div>
+              <div class="player-info-container">
+                  <h2 class="player-title">${video.title}</h2>
+                  <div class="player-instructor">
+                      <i class="ph-fill ph-user-circle" style="font-size: 1.5rem;"></i>
+                      <span>بواسطة: ${doctorName}</span>
+                  </div>
+                  <div class="player-description">
+                      ${video.description || 'لا يوجد وصف متاح لهذا الفيديو.'}
+                  </div>
+              </div>
+          </div>
+      `;
+  
+      modal.innerHTML = playerHTML;
+      modal.classList.remove('hidden');
+  
+      const closeBtn = document.getElementById('close-modal');
+      closeBtn.addEventListener('click', closeVideoPlayer);
+      
+      modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+              closeVideoPlayer();
+          }
+      });
+  }
+  
+  function closeVideoPlayer() {
+      const modal = document.getElementById('video-modal');
+      modal.innerHTML = ''; 
+      modal.classList.add('hidden');
   }

@@ -50,8 +50,8 @@
   /* Typography */
   --sys-font-display: 'Cairo', sans-serif;
   --sys-font-headline: 'Cairo', sans-serif;
-  --sys-font-body: 'Inter', sans-serif;
-  --sys-font-label: 'Inter', sans-serif;
+  --sys-font-body: 'Cairo', sans-serif;
+  --sys-font-label: 'Cairo', sans-serif;
 
   /* Spacing */
   --sys-spacing-4: 0.25rem;
