@@ -124,13 +124,13 @@ try {
       const articles = resp.data.articles || [];
       let html = '';
       articles.forEach(a => {
-        // Handle author based on backend logic (could be doctor or admin)
         const authorName = a.doctor?.user?.name || a.admin?.name || 'محرر المنصة';
         const dateObj = new Date(a.created_at);
         const formattedDate = dateObj.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+        const detailURL = `article-detail.html?id=${a.id}`;
         
         html += `
-          <div class="card article-card">
+          <a href="${detailURL}" class="card article-card" style="text-decoration:none; color:inherit; display:flex; flex-direction:column;">
             <img src="${a.image}" alt="${a.title}" class="article-img">
             <div class="article-content">
               <span class="category-badge">تثقيف طبي</span>
@@ -142,7 +142,7 @@ try {
                 <span class="label" style="text-transform: none;">${authorName}</span>
               </div>
             </div>
-          </div>
+          </a>
         `;
       });
       container.innerHTML = html;
