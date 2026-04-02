@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./css/variables.css">
   <link rel="stylesheet" href="./css/styles.css">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="stylesheet" href="./css/consultation.css">
   
   <style>
     .join-container {
@@ -94,13 +95,29 @@
   <div id="navbar-container"></div>
 
   <div class="join-container">
-    <div class="card join-card glass-panel">
-      <div class="text-center mb-4">
-        <h1 class="display-text" style="color: var(--sys-color-primary);">طلب الانضمام كطبيب</h1>
-        <p class="body-md">نرحب بانضمامك لشبكة أطبائنا المعتمدين لخدمة المرضى وتقديم رعاية صحية أفضل.</p>
+    <div class="join-card">
+
+      <!-- Guarded State: Access Denied -->
+      <div id="auth-guard-container" class="auth-guard-state card hidden" style="margin-top: 40px;">
+          <div class="auth-guard-icon">
+              <i class="ph-fill ph-lock-key"></i>
+          </div>
+          <h2>يجب تسجيل الدخول</h2>
+          <p class="text-muted" style="margin-bottom: 24px;">نرحب بانضمامك لطاقمنا الطبي المعتمد. يرجى تسجيل الدخول بحسابك لعرض وتقديم مستندات الانضمام.</p>
+          <div class="auth-guard-actions">
+              <a href="login.html" class="btn btn-primary">تسجيل الدخول</a>
+              <a href="register.html" class="btn btn-outline">إنشاء حساب</a>
+          </div>
       </div>
 
-      <form id="joinDoctorForm">
+      <!-- Authenticated State: Join Form -->
+      <div id="join-form-container" class="card glass-panel hidden">
+        <div class="text-center mb-4">
+          <h1 class="display-text" style="color: var(--sys-color-primary);">طلب الانضمام كطبيب</h1>
+          <p class="body-md">نرحب بانضمامك لشبكة أطبائنا المعتمدين لخدمة المرضى وتقديم رعاية صحية أفضل.</p>
+        </div>
+
+        <form id="joinDoctorForm">
         <div class="grid grid-cols-2">
           
           <div class="form-group">
@@ -141,7 +158,7 @@
               <label for="documents" class="file-label">
                 <i class="ph ph-file-pdf upload-icon"></i>
                 <span class="upload-title">ارفع السيرة الذاتية</span>
-                <span class="body-md">PDF, DOC (الحد الأقصى 5MB)</span>
+                <span class="body-md">المسموح: صورتك ومستنداتك (الحد الأقصى 10MB)</span>
                 <span id="documents-name" class="file-name-text">لم يتم اختيار ملف</span>
               </label>
             </div>
@@ -178,8 +195,8 @@
             إرسال طلب الانضمام
           </button>
         </div>
-      </form>
-
+        </div>
+      </div>
     </div>
   </div>
 

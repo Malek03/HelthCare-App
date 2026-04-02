@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? process.env.FRONTEND_URL
-    : '*',
+    : true,
   credentials: true,
 }));
 
@@ -77,7 +77,6 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error(' Server Error:', err);
 
-  // Multer file size error
   if (err.code === 'LIMIT_FILE_SIZE') {
     return res.status(400).json({
       success: false,
@@ -85,9 +84,16 @@ app.use((err, req, res, next) => {
     });
   }
 
+  if (err.message && err.message.includes('نوع الملف غير مدعوم')) {
+    return res.status(400).json({
+      success: false,
+      message: err.message
+    });
+  }
+
   res.status(500).json({
     success: false,
-    message: 'خطأ داخلي في الخادم',
+    message: err.message || 'خطأ داخلي في الخادم',
     ...(process.env.NODE_ENV === 'development' && { error: err.message }),
   });
 });
@@ -96,7 +102,7 @@ app.use((err, req, res, next) => {
 // Start Server
 // ==========================================
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`
   ╔═══════════════════════════════════════════╗
   ║   Healthcare Platform API Server      ║

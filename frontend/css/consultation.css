@@ -43,9 +43,8 @@
     box-shadow: none;
 }
 
-.auth-guard-state.hidden,
-#consultation-form-container.hidden {
-    display: none;
+.hidden {
+    display: none !important;
 }
 
 .auth-guard-icon {

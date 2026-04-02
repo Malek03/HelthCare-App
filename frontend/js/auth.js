@@ -83,11 +83,25 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // 3. Join Doctor App Logic
     const joinForm = document.getElementById('joinDoctorForm');
+    
+    // Page load auth guard execution
+    const authGuard = document.getElementById('auth-guard-container');
+    const formContainer = document.getElementById('join-form-container');
+    const token = localStorage.getItem('token');
+    
+    if (authGuard && formContainer) {
+        if (!token) {
+            authGuard.classList.remove('hidden');
+        } else {
+            formContainer.classList.remove('hidden');
+        }
+    }
+
     if (joinForm) {
       joinForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        if (!localStorage.getItem('token')) {
+        if (!token) {
             if(window.Toast) window.Toast.show('تنبيه هام', 'الرجاء تسجيل الدخول كمستخدم للتمكن من تقديم طلب الانضمام.', 'error');
             setTimeout(() => { window.location.href = 'login.html'; }, 2500);
             return;
@@ -108,11 +122,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const personalPhotoInput = document.getElementById('personal_photo');
         if (personalPhotoInput.files[0]) {
+            if (personalPhotoInput.files[0].size > 10 * 1024 * 1024) {
+                if(window.Toast) window.Toast.show('تنبيه هام', 'الصورة الشخصية تتجاوز الحجم المسموح (10MB)', 'error');
+                return;
+            }
             formData.append('personal_photo', personalPhotoInput.files[0]);
         }
 
         const documentsInput = document.getElementById('documents');
         if (documentsInput.files[0]) {
+            if (documentsInput.files[0].size > 10 * 1024 * 1024) {
+                if(window.Toast) window.Toast.show('تنبيه هام', 'ملف السيرة الذاتية يتجاوز الحجم المسموح (10MB)', 'error');
+                return;
+            }
             formData.append('documents', documentsInput.files[0]);
         }
         
