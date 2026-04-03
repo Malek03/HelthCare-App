@@ -1,8 +1,3 @@
-/**
- * Home Page Logic
- * Handles Hero Slider, Mock API for Videos and Articles
- */
-
 document.addEventListener('DOMContentLoaded', () => {
     initHeroSlider();
     loadMockVideos();

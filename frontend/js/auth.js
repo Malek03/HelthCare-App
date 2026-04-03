@@ -142,14 +142,50 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> جاري إرسال الطلب...';
           btn.disabled = true;
           
-          await window.ApiService.applyAsDoctor(formData);
+          // Use XMLHttpRequest for reliable file uploads
+          const result = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:5000/api/doctors/apply');
+            
+            // Set auth header
+            const authToken = localStorage.getItem('token');
+            if (authToken) {
+              xhr.setRequestHeader('Authorization', `Bearer ${authToken}`);
+            }
+            
+            // Do NOT set Content-Type — browser sets multipart/form-data boundary automatically
+            
+            xhr.onload = function() {
+              try {
+                const response = JSON.parse(xhr.responseText);
+                if (xhr.status >= 200 && xhr.status < 300) {
+                  resolve(response);
+                } else {
+                  reject(new Error(response.message || 'خطأ من السيرفر'));
+                }
+              } catch(e) {
+                reject(new Error('خطأ غير متوقع في استجابة السيرفر'));
+              }
+            };
+            
+            xhr.onerror = function() {
+              reject(new Error('تعذر الاتصال بالسيرفر. تأكد من أن السيرفر يعمل.'));
+            };
+            
+            xhr.ontimeout = function() {
+              reject(new Error('انتهت مهلة الاتصال. حاول مرة أخرى.'));
+            };
+            
+            xhr.timeout = 60000; // 60 seconds timeout
+            xhr.send(formData);
+          });
           
           btn.style.display = 'none';
           document.getElementById('joinSuccess').style.display = 'block';
           if(window.Toast) window.Toast.show('عملية ناجحة', 'تم إرسال طلب الانضمام وتلقت الإدارة بياناتك بنجاح!', 'success');
         } catch (err) {
           errBox.textContent = 'حدث خطأ: ' + err.message;
-          errBox.style.display = 'none'; // Keep hidden, prefer toast
+          errBox.style.display = 'none';
           if(window.Toast) window.Toast.show('فشل في الإرسال', err.message || 'يرجى التحقق من صحة البيانات والمحاولة مجدداً.', 'error');
           
           btn.innerHTML = 'إرسال طلب الانضمام';

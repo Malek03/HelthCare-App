@@ -18,10 +18,38 @@ router.get('/', listDoctors);
 router.get('/profile/:id', getDoctorProfile);
 
 // User routes (must be logged in)
-router.post('/apply', authenticate, upload.fields([
+// Wrap Multer to handle errors gracefully and prevent connection drops
+const handleUpload = upload.fields([
   { name: 'personal_photo', maxCount: 1 },
   { name: 'documents', maxCount: 1 }
-]), applyAsDoctor);
+]);
+
+const multerErrorHandler = (req, res, next) => {
+  handleUpload(req, res, (err) => {
+    if (err) {
+      console.error('Multer Error:', err.code, err.message);
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+          success: false,
+          message: 'حجم الملف يتجاوز الحد المسموح (10MB)',
+        });
+      }
+      if (err.message && err.message.includes('نوع الملف غير مدعوم')) {
+        return res.status(400).json({
+          success: false,
+          message: err.message,
+        });
+      }
+      return res.status(500).json({
+        success: false,
+        message: 'خطأ في رفع الملف: ' + err.message,
+      });
+    }
+    next();
+  });
+};
+
+router.post('/apply', authenticate, multerErrorHandler, applyAsDoctor);
 router.get('/application-status', authenticate, getApplicationStatus);
 
 // Doctor-only routes
