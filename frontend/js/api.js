@@ -184,6 +184,21 @@ class ApiService {
       body: JSON.stringify({ schedules }),
     });
   }
+
+  static async getDoctorAppointments(page = 1, limit = 10, status = '') {
+    let url = `/appointments/doctor?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`;
+    }
+    return this.request(url, { method: 'GET' });
+  }
+
+  static async updateDoctorAppointmentStatus(id, status, rejectReason = '') {
+    return this.request(`/appointments/doctor/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status, reject_reason: rejectReason })
+    });
+  }
 }
 
 // Expose globally for easy component usage

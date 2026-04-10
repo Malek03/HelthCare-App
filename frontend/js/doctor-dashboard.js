@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   loadDashboard();
   loadSchedule();
+  loadAppointments();
 
   // ==========================================
   // Profile Form Submit
@@ -335,3 +336,102 @@ async function saveSchedule() {
     btn.disabled = false;
   }
 }
+
+// ==========================================
+// Load Appointments
+// ==========================================
+async function loadAppointments() {
+  const tbody = document.getElementById('appointmentsTableBody');
+  if (!tbody) return;
+
+  try {
+    const res = await window.ApiService.getDoctorAppointments(1, 50, ''); // Load recent 50
+
+    if (res.success && res.data) {
+      renderAppointments(res.data.appointments);
+    }
+  } catch (error) {
+    console.error('Load appointments error:', error);
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">فشل تحميل المواعيد</td></tr>`;
+  }
+}
+
+function renderAppointments(appointments) {
+  const tbody = document.getElementById('appointmentsTableBody');
+  if (!tbody) return;
+
+  if (!appointments || appointments.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">لا توجد مواعيد محجوزة</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = appointments.map(app => {
+    let statusBadge = '';
+    let actions = '';
+
+    const dt = new Date(app.date_time);
+    const dateStr = dt.toLocaleDateString('ar-SA');
+    const timeStr = dt.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+
+    if (app.status === 'PENDING') {
+      statusBadge = '<span class="status-badge status-pending">قيد الانتظار</span>';
+      actions = `
+        <button class="btn btn-primary" style="height:32px; padding:0 12px; font-size:0.8rem;" onclick="updateApptStatus('${app.id}', 'ACCEPTED')">قبول</button>
+        <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:0.8rem; color:var(--sys-color-error); border-color:var(--sys-color-error);" onclick="promptRejectAppt('${app.id}')">رفض</button>
+      `;
+    } else if (app.status === 'ACCEPTED') {
+      statusBadge = '<span class="status-badge status-approved">مؤكد</span>';
+      actions = `
+        <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:0.8rem; color:var(--sys-color-error); border-color:var(--sys-color-error);" onclick="promptRejectAppt('${app.id}', 'CANCELLED')">إلغاء</button>
+      `;
+    } else if (app.status === 'REJECTED') {
+      statusBadge = '<span class="status-badge status-cancelled">مرفوض</span>';
+      actions = '-';
+    } else if (app.status === 'CANCELLED') {
+      statusBadge = '<span class="status-badge status-cancelled">ملغي</span>';
+      actions = '-';
+    } else {
+      statusBadge = `<span class="status-badge status-approved">${app.status}</span>`;
+      actions = '-';
+    }
+
+    const patientName = app.patient?.name || 'غير معروف';
+    const reason = app.reason || 'لا يوجد';
+
+    return `
+      <tr>
+        <td><strong>${patientName}</strong></td>
+        <td dir="ltr" style="text-align:right;">${timeStr} <br> <span class="text-muted" style="font-size:0.8rem">${dateStr}</span></td>
+        <td>${reason}</td>
+        <td>${statusBadge}</td>
+        <td><div style="display:flex; gap:8px;">${actions}</div></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+window.promptRejectAppt = function(id, requestedStatus = 'REJECTED') {
+  const reason = prompt(requestedStatus === 'REJECTED' ? "يرجى كتابة سبب الرفض (اختياري):" : "يرجى كتابة سبب الإلغاء (اختياري):");
+  if (reason !== null) {
+    updateApptStatus(id, requestedStatus, reason);
+  }
+}
+
+window.updateApptStatus = async function(id, status, rejectReason = '') {
+  try {
+    const res = await window.ApiService.updateDoctorAppointmentStatus(id, status, rejectReason);
+    if (res.success) {
+      if (window.Toast) {
+        window.Toast.show('تم التحديث', 'تم تحديث حالة الموعد بنجاح.', 'success');
+      }
+      // Reload appointments and dashboard stats
+      loadAppointments();
+      loadDashboard();
+    }
+  } catch (error) {
+    console.error('Update appointment error:', error);
+    if (window.Toast) {
+      window.Toast.show('خطأ', error.message || 'فشل تحديث حالة الموعد', 'error');
+    }
+  }
+};

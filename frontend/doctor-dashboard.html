@@ -38,6 +38,7 @@
         <div class="card p-0 overflow-hidden">
           <ul class="sidebar-menu" id="sidebarMenu">
             <li><a href="#overview" class="active" data-section="overviewSection"><i class="ph ph-chart-bar"></i> نظرة عامة</a></li>
+            <li><a href="#appointments" data-section="appointmentsSection"><i class="ph ph-calendar"></i> المواعيد</a></li>
             <li><a href="#edit-profile" data-section="profileSection"><i class="ph ph-user-gear"></i> تعديل الملف الشخصي</a></li>
             <li><a href="#schedule" data-section="scheduleSection"><i class="ph ph-clock"></i> مواعيد العمل</a></li>
             <li><a href="#" onclick="logout(); return false;" class="text-danger"><i class="ph ph-sign-out"></i> تسجيل الخروج</a></li>
@@ -127,6 +128,30 @@
                 <i class="ph ph-floppy-disk" style="margin-left:8px;"></i> حفظ جدول العمل
               </button>
             </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             Section 4: Appointments
+             ========================================== -->
+        <div id="appointmentsSection" class="dashboard-section">
+          <h2 class="headline-md mb-4">المواعيد المحجوزة</h2>
+
+          <div class="card p-0 overflow-auto">
+            <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: right;">
+              <thead>
+                <tr>
+                  <th style="padding: 16px; background: var(--sys-color-surface-container-low); border-bottom: 2px solid var(--sys-color-surface-variant);">المريض</th>
+                  <th style="padding: 16px; background: var(--sys-color-surface-container-low); border-bottom: 2px solid var(--sys-color-surface-variant);">التاريخ والوقت</th>
+                  <th style="padding: 16px; background: var(--sys-color-surface-container-low); border-bottom: 2px solid var(--sys-color-surface-variant);">الأسباب</th>
+                  <th style="padding: 16px; background: var(--sys-color-surface-container-low); border-bottom: 2px solid var(--sys-color-surface-variant);">الحالة</th>
+                  <th style="padding: 16px; background: var(--sys-color-surface-container-low); border-bottom: 2px solid var(--sys-color-surface-variant);">إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTableBody">
+                <tr><td colspan="5" class="text-center py-4 text-muted">جاري تحميل المواعيد...</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
