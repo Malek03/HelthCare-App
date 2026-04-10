@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم الطبيب | المنصة الطبية</title>
+  <meta name="description" content="لوحة تحكم الطبيب - إدارة المواعيد والاستشارات وجدول العمل">
+
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/doctor-dashboard.css">
+
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-low">
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container d-flex align-center gap-4 py-4">
+      <div class="doctor-avatar-lg" id="doctorAvatar">
+        <i class="ph-fill ph-stethoscope"></i>
+      </div>
+      <div>
+        <h1 class="display-text mb-0" style="color:white; margin:0;" id="doctorName">د. ...</h1>
+        <p class="body-md mt-2 text-white-90" id="doctorSpecialty">جاري التحميل...</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="section pt-4">
+    <div class="container container-split">
+
+      <!-- Sidebar -->
+      <div class="profile-sidebar">
+        <div class="card p-0 overflow-hidden">
+          <ul class="sidebar-menu" id="sidebarMenu">
+            <li><a href="#overview" class="active" data-section="overviewSection"><i class="ph ph-chart-bar"></i> نظرة عامة</a></li>
+            <li><a href="#edit-profile" data-section="profileSection"><i class="ph ph-user-gear"></i> تعديل الملف الشخصي</a></li>
+            <li><a href="#schedule" data-section="scheduleSection"><i class="ph ph-clock"></i> مواعيد العمل</a></li>
+            <li><a href="#" onclick="logout(); return false;" class="text-danger"><i class="ph ph-sign-out"></i> تسجيل الخروج</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="profile-main">
+
+        <!-- ==========================================
+             Section 1: Overview (Stats)
+             ========================================== -->
+        <div id="overviewSection" class="dashboard-section active">
+          <h2 class="headline-md mb-4">الإحصائيات العامة</h2>
+
+          <div class="stats-grid" id="statsGrid">
+            <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+          </div>
+
+        </div>
+
+        <!-- ==========================================
+             Section 2: Edit Profile
+             ========================================== -->
+        <div id="profileSection" class="dashboard-section">
+          <h2 class="headline-md mb-4">تعديل الملف الشخصي</h2>
+
+          <div class="card">
+            <form id="profileForm">
+              <div class="profile-form-grid">
+
+                <div class="form-group">
+                  <label for="editSpecialty">التخصص</label>
+                  <input type="text" id="editSpecialty" class="form-control" placeholder="مثال: طب أسنان">
+                </div>
+
+                <div class="form-group">
+                  <label for="editPhone">رقم الهاتف</label>
+                  <input type="tel" id="editPhone" class="form-control" placeholder="+966 5xx xxx xxx" dir="ltr">
+                </div>
+
+                <div class="form-group">
+                  <label for="editLocation">الموقع / المدينة</label>
+                  <input type="text" id="editLocation" class="form-control" placeholder="مثال: الرياض">
+                </div>
+
+                <div class="form-group">
+                  <label for="editExperience">سنوات الخبرة</label>
+                  <input type="number" id="editExperience" class="form-control" min="0" placeholder="5">
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="editQualifications">المؤهلات العلمية</label>
+                  <input type="text" id="editQualifications" class="form-control" placeholder="مثال: بكالوريوس طب، ماجستير جراحة">
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="editBio">النبذة التعريفية</label>
+                  <textarea id="editBio" class="form-control" rows="4" placeholder="نبذة مختصرة عنك وعن خبرتك..."></textarea>
+                </div>
+
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btnSaveProfile">
+                  <i class="ph ph-floppy-disk" style="margin-left:8px;"></i> حفظ التعديلات
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             Section 3: Work Schedule
+             ========================================== -->
+        <div id="scheduleSection" class="dashboard-section">
+          <h2 class="headline-md mb-4">جدول مواعيد العمل</h2>
+
+          <div class="card">
+            <div class="schedule-grid" id="scheduleGrid">
+              <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" id="btnSaveSchedule">
+                <i class="ph ph-floppy-disk" style="margin-left:8px;"></i> حفظ جدول العمل
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="./js/api.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./components/footer.js"></script>
+  <script src="./components/toast.js"></script>
+  <script src="./js/doctor-dashboard.js"></script>
+</body>
+</html>

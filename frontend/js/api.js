@@ -159,6 +159,31 @@ class ApiService {
   static async getVideos() {
     return this.request('/videos', { method: 'GET' });
   }
+
+  // ==========================================
+  // Doctor Dashboard API
+  // ==========================================
+  static async getDoctorDashboard() {
+    return this.request('/doctors/dashboard', { method: 'GET' });
+  }
+
+  static async updateDoctorProfile(data) {
+    return this.request('/doctors/my-profile', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  static async getDoctorSchedule() {
+    return this.request('/doctors/schedule', { method: 'GET' });
+  }
+
+  static async updateDoctorSchedule(schedules) {
+    return this.request('/doctors/schedule', {
+      method: 'POST',
+      body: JSON.stringify({ schedules }),
+    });
+  }
 }
 
 // Expose globally for easy component usage
