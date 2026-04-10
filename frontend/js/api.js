@@ -199,6 +199,31 @@ class ApiService {
       body: JSON.stringify({ status, reject_reason: rejectReason })
     });
   }
+
+  // ==========================================
+  // Doctor Articles API
+  // ==========================================
+  static async getMyArticles() {
+    return this.request('/articles/doctor/my', { method: 'GET' });
+  }
+
+  static async createDoctorArticle(data) {
+    return this.request('/articles/doctor', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  static async updateDoctorArticle(id, data) {
+    return this.request(`/articles/doctor/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  static async deleteDoctorArticle(id) {
+    return this.request(`/articles/doctor/${id}`, { method: 'DELETE' });
+  }
 }
 
 // Expose globally for easy component usage

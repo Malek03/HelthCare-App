@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadDashboard();
   loadSchedule();
   loadAppointments();
+  loadMyArticles();
+  setupArticleForm();
 
   // ==========================================
   // Profile Form Submit
@@ -432,6 +434,152 @@ window.updateApptStatus = async function(id, status, rejectReason = '') {
     console.error('Update appointment error:', error);
     if (window.Toast) {
       window.Toast.show('خطأ', error.message || 'فشل تحديث حالة الموعد', 'error');
+    }
+  }
+};
+
+// ==========================================
+// Doctor Articles Logic
+// ==========================================
+function setupArticleForm() {
+  const form = document.getElementById('doctorArticleForm');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await saveArticle();
+    });
+  }
+}
+
+async function loadMyArticles() {
+  const container = document.getElementById('doctorArticlesGrid');
+  if (!container) return;
+
+  try {
+    const res = await window.ApiService.getMyArticles();
+    if (res.success && res.data) {
+      renderMyArticles(res.data);
+    }
+  } catch (error) {
+    console.error('Load articles error:', error);
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column: 1/-1;">
+        <i class="ph ph-warning-circle"></i>
+        <p>تعذر تحميل المقالات المنشورة.</p>
+      </div>`;
+  }
+}
+
+function renderMyArticles(articles) {
+  const container = document.getElementById('doctorArticlesGrid');
+  if (!container) return;
+
+  if (!articles || articles.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column: 1/-1;">
+        <i class="ph ph-article"></i>
+        <p>لم تقم بنشر أي مقالات بعد.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = articles.map(art => {
+    const dateStr = new Date(art.created_at).toLocaleDateString('ar-SA');
+    return `
+      <div class="card p-0" style="display:flex; flex-direction:column; overflow:hidden;">
+        ${art.image ? `<img src="${art.image}" style="width:100%; height:160px; object-fit:cover;" alt="صورة المقال">` : `<div style="width:100%; height:160px; background:var(--sys-color-surface-container); display:flex; align-items:center; justify-content:center;"><i class="ph ph-image text-muted" style="font-size:3rem;"></i></div>`}
+        <div style="padding:16px; flex-grow:1; display:flex; flex-direction:column;">
+          <h3 class="headline-sm mb-2" style="font-size:1rem; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${art.title}</h3>
+          <p class="text-muted" style="font-size:0.8rem; margin-bottom:12px;">نُشر في: <span dir="ltr">${dateStr}</span></p>
+          <div class="mt-auto d-flex justify-between" style="border-top:1px solid var(--sys-color-surface-variant); padding-top:12px;">
+            <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:0.8rem;" onclick='editArticle(${JSON.stringify(art).replace(/'/g, "&#39;")})'><i class="ph ph-pencil-simple"></i> تعديل</button>
+            <button class="btn btn-outline" style="height:32px; padding:0 12px; font-size:0.8rem; color:var(--sys-color-error); border-color:var(--sys-color-error);" onclick="deleteArticle('${art.id}')"><i class="ph ph-trash"></i> حذف</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.showArticleForm = function() {
+  document.getElementById('articlesListContainer').style.display = 'none';
+  document.getElementById('articleFormContainer').style.display = 'block';
+  document.getElementById('articleFormTitle').textContent = 'كتابة مقال جديد';
+  document.getElementById('doctorArticleForm').reset();
+  document.getElementById('articleId').value = '';
+};
+
+window.hideArticleForm = function() {
+  document.getElementById('articleFormContainer').style.display = 'none';
+  document.getElementById('articlesListContainer').style.display = 'block';
+};
+
+window.editArticle = function(article) {
+  document.getElementById('articlesListContainer').style.display = 'none';
+  document.getElementById('articleFormContainer').style.display = 'block';
+  document.getElementById('articleFormTitle').textContent = 'تعديل المقال';
+  
+  document.getElementById('articleId').value = article.id;
+  document.getElementById('articleTitle').value = article.title;
+  document.getElementById('articleImage').value = article.image || '';
+  document.getElementById('articleContent').value = article.content;
+};
+
+async function saveArticle() {
+  const btn = document.getElementById('btnSaveArticle');
+  const originalText = btn.innerHTML;
+  
+  try {
+    btn.innerHTML = '<i class="ph ph-spinner ph-spin" style="margin-left:8px;"></i> جاري الحفظ...';
+    btn.disabled = true;
+
+    const id = document.getElementById('articleId').value;
+    const data = {
+      title: document.getElementById('articleTitle').value,
+      image: document.getElementById('articleImage').value || null,
+      content: document.getElementById('articleContent').value,
+    };
+
+    let res;
+    if (id) {
+      res = await window.ApiService.updateDoctorArticle(id, data);
+    } else {
+      res = await window.ApiService.createDoctorArticle(data);
+    }
+
+    if (res.success) {
+      if (window.Toast) {
+        window.Toast.show('تم بنجاح', id ? 'تم تحديث المقال' : 'تم نشر المقال بنجاح', 'success');
+      }
+      hideArticleForm();
+      loadMyArticles();
+      loadDashboard();
+    }
+  } catch (error) {
+    console.error('Save article error:', error);
+    if (window.Toast) {
+      window.Toast.show('خطأ', error.message || 'فشل حفظ المقال', 'error');
+    }
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+}
+
+window.deleteArticle = async function(id) {
+  if (!confirm('هل أنت متأكد من رغبتك في حذف هذا المقال بصورة نهائية؟')) return;
+  
+  try {
+    const res = await window.ApiService.deleteDoctorArticle(id);
+    if (res.success) {
+      if (window.Toast) window.Toast.show('تم الحذف', 'تم حذف المقال بنجاح', 'success');
+      loadMyArticles();
+      loadDashboard();
+    }
+  } catch (error) {
+    console.error('Delete article error:', error);
+    if (window.Toast) {
+      window.Toast.show('خطأ', error.message || 'فشل حذف المقال', 'error');
     }
   }
 };

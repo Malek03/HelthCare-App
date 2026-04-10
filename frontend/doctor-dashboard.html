@@ -39,6 +39,7 @@
           <ul class="sidebar-menu" id="sidebarMenu">
             <li><a href="#overview" class="active" data-section="overviewSection"><i class="ph ph-chart-bar"></i> نظرة عامة</a></li>
             <li><a href="#appointments" data-section="appointmentsSection"><i class="ph ph-calendar"></i> المواعيد</a></li>
+            <li><a href="#articles" data-section="articlesSection"><i class="ph ph-article"></i> المقالات</a></li>
             <li><a href="#edit-profile" data-section="profileSection"><i class="ph ph-user-gear"></i> تعديل الملف الشخصي</a></li>
             <li><a href="#schedule" data-section="scheduleSection"><i class="ph ph-clock"></i> مواعيد العمل</a></li>
             <li><a href="#" onclick="logout(); return false;" class="text-danger"><i class="ph ph-sign-out"></i> تسجيل الخروج</a></li>
@@ -153,6 +154,59 @@
               </tbody>
             </table>
           </div>
+        </div>
+
+        <!-- ==========================================
+             Section 5: Articles
+             ========================================== -->
+        <div id="articlesSection" class="dashboard-section">
+          <div class="d-flex justify-between align-center mb-4">
+            <h2 class="headline-md mb-0">المقالات المنشورة</h2>
+            <button class="btn btn-primary" onclick="showArticleForm()">
+              <i class="ph ph-plus"></i> مقال جديد
+            </button>
+          </div>
+
+          <!-- Articles List -->
+          <div id="articlesListContainer">
+            <div class="grid grid-cols-2" id="doctorArticlesGrid">
+              <div class="spinner-overlay" style="grid-column: 1/-1;"><i class="ph ph-spinner"></i></div>
+            </div>
+          </div>
+
+          <!-- Article Form (Hidden by default) -->
+          <div id="articleFormContainer" class="card" style="display: none;">
+            <div class="d-flex justify-between align-center mb-4">
+              <h3 class="headline-sm mb-0" id="articleFormTitle">كتابة مقال جديد</h3>
+              <button class="btn btn-outline" style="height: 36px;" onclick="hideArticleForm()">إلغاء</button>
+            </div>
+            
+            <form id="doctorArticleForm">
+              <input type="hidden" id="articleId">
+              
+              <div class="form-group">
+                <label for="articleTitle">عنوان المقال</label>
+                <input type="text" id="articleTitle" class="form-control" placeholder="أدخل عنواناً جذاباً لمقالك" required>
+              </div>
+
+              <div class="form-group">
+                <label for="articleImage">رابط صورة المقال (اختياري)</label>
+                <input type="url" id="articleImage" class="form-control" placeholder="https://example.com/image.jpg" dir="ltr">
+              </div>
+
+              <div class="form-group">
+                <label for="articleContent">محتوى المقال</label>
+                <textarea id="articleContent" class="form-control" rows="8" placeholder="اكتب محتوى مقالك هنا..." required></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btnSaveArticle">
+                  <i class="ph ph-paper-plane-right" style="margin-left:8px;"></i> نشر المقال
+                </button>
+              </div>
+            </form>
+          </div>
+
         </div>
 
       </div>
