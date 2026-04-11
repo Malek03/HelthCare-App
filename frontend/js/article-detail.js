@@ -42,9 +42,11 @@ function renderArticleDetail(article) {
     const dateObj = new Date(article.created_at);
     const formattedDate = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
 
+    const imageUrl = window.ApiService.getImageUrl(article.image) || 'https://images.unsplash.com/photo-1576091160550-217359f42f8c?auto=format&fit=crop&w=1200&q=80';
+
     // 1. Inject Hero Image (Requirement)
     heroContainer.innerHTML = `
-        <img src="${article.image || 'https://via.placeholder.com/1200x500?text=Medical+Hero'}" alt="Hero Image: ${article.title}" class="article-hero-image">
+        <img src="${imageUrl}" alt="Hero Image: ${article.title}" class="article-hero-image" onerror="this.src='https://images.unsplash.com/photo-1576091160550-217359f42f8c?auto=format&fit=crop&w=1200&q=80'">
     `;
 
     // 2. Format Body properly handling line-breaks natively if it's plain text vs HTML

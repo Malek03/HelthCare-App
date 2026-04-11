@@ -121,3 +121,53 @@
   .doc-img-lg-wrapper { margin: 0 auto; }
   .time-slots { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ============================================
+   Schedule Display (Public Profile)
+   ============================================ */
+.schedule-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.schedule-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--sys-color-surface-variant);
+  transition: background 0.2s;
+}
+
+.schedule-row:last-child {
+  border-bottom: none;
+}
+
+.schedule-row:hover {
+  background: var(--sys-color-surface-container-low);
+}
+
+.schedule-day {
+  font-weight: 600;
+  color: var(--sys-color-on-surface);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.schedule-day i {
+  color: var(--sys-color-primary);
+  font-size: 1.1rem;
+}
+
+.schedule-time {
+  font-weight: 700;
+  color: var(--sys-color-primary);
+  background: var(--sys-color-primary-container);
+  padding: 4px 14px;
+  border-radius: var(--sys-radius-full);
+  font-size: 0.85rem;
+}
+
+.p-0 { padding: 0; }

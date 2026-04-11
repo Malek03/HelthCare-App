@@ -39,6 +39,7 @@
           <ul class="sidebar-menu" id="sidebarMenu">
             <li><a href="#overview" class="active" data-section="overviewSection"><i class="ph ph-chart-bar"></i> نظرة عامة</a></li>
             <li><a href="#appointments" data-section="appointmentsSection"><i class="ph ph-calendar"></i> المواعيد</a></li>
+            <li><a href="#consultations" data-section="consultationsSection"><i class="ph ph-chats"></i> الاستشارات</a></li>
             <li><a href="#articles" data-section="articlesSection"><i class="ph ph-article"></i> المقالات</a></li>
             <li><a href="#edit-profile" data-section="profileSection"><i class="ph ph-user-gear"></i> تعديل الملف الشخصي</a></li>
             <li><a href="#schedule" data-section="scheduleSection"><i class="ph ph-clock"></i> مواعيد العمل</a></li>
@@ -58,6 +59,20 @@
 
           <div class="stats-grid" id="statsGrid">
             <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+          </div>
+
+          <!-- Latest Article Preview -->
+          <div id="latestArticleCard" style="display: none;">
+            <h3 class="headline-md mb-4" style="margin-top: var(--sys-spacing-32);"><i class="ph ph-article" style="color: var(--sys-color-primary);"></i> آخر مقال منشور</h3>
+            <div class="card p-0 latest-article-preview" id="latestArticleContent">
+            </div>
+          </div>
+
+          <!-- Latest Consultation Preview -->
+          <div id="latestConsultationCard" style="display: none;">
+            <h3 class="headline-md mb-4" style="margin-top: var(--sys-spacing-32);"><i class="ph ph-chats" style="color: var(--sys-color-primary);"></i> آخر استشارة واردة</h3>
+            <div id="latestConsultationContent">
+            </div>
           </div>
 
         </div>
@@ -157,6 +172,16 @@
         </div>
 
         <!-- ==========================================
+             Section 5: Consultations
+             ========================================== -->
+        <div id="consultationsSection" class="dashboard-section">
+          <h2 class="headline-md mb-4">الاستشارات الواردة</h2>
+
+          <div id="consultationsList">
+            <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+          </div>
+        </div>
+        <!-- ==========================================
              Section 5: Articles
              ========================================== -->
         <div id="articlesSection" class="dashboard-section">
@@ -189,9 +214,21 @@
                 <input type="text" id="articleTitle" class="form-control" placeholder="أدخل عنواناً جذاباً لمقالك" required>
               </div>
 
-              <div class="form-group">
-                <label for="articleImage">رابط صورة المقال (اختياري)</label>
-                <input type="url" id="articleImage" class="form-control" placeholder="https://example.com/image.jpg" dir="ltr">
+              <div class="form-group mb-4">
+                <label>صورة المقال (اختياري)</label>
+                <div class="upload-zone" id="articleImageDropZone">
+                  <div class="upload-info">
+                    <i class="ph-duotone ph-image-square"></i>
+                    <p>اسحب الصورة هنا أو <span>تصفح الملفات</span></p>
+                    <small>تدعم صيغ JPEG, PNG, WEBP (بحد أقصى 5 ميجا)</small>
+                  </div>
+                  <div class="file-preview hidden" id="filePreview">
+                    <i class="ph ph-file-image"></i>
+                    <span id="fileNameDisplay">image_name.jpg</span>
+                    <button type="button" class="remove-file" id="btnRemoveFile"><i class="ph ph-x"></i></button>
+                  </div>
+                </div>
+                <input type="file" id="articleImage" class="hidden" accept="image/*">
               </div>
 
               <div class="form-group">

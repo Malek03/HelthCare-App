@@ -71,7 +71,11 @@ const getArticle = async (req, res) => {
  */
 const createDoctorArticle = async (req, res) => {
   try {
-    const { title, content, image } = req.body;
+    const { title, content } = req.body;
+    let image = req.body.image;
+    if (req.file) {
+      image = '/uploads/image/' + req.file.filename;
+    }
 
     if (!title || !content) {
       return res.status(400).json({ success: false, message: 'العنوان والمحتوى مطلوبان' });
@@ -102,7 +106,11 @@ const createDoctorArticle = async (req, res) => {
 const updateDoctorArticle = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, content, image, is_published } = req.body;
+    const { title, content, is_published } = req.body;
+    let image = req.body.image;
+    if (req.file) {
+      image = '/uploads/image/' + req.file.filename;
+    }
 
     const doctorProfile = await prisma.doctorProfile.findUnique({
       where: { user_id: req.user.id },

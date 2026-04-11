@@ -2,15 +2,24 @@
  * Doctor Profile Logic
  */
 
+const DEFAULT_ARTICLE_IMAGE = 'https://images.unsplash.com/photo-1576091160550-217359f42f8c?auto=format&fit=crop&w=800&q=80';
+
+const DAYS_AR_MAP = {
+  SUNDAY: 'الأحد',
+  MONDAY: 'الاثنين',
+  TUESDAY: 'الثلاثاء',
+  WEDNESDAY: 'الأربعاء',
+  THURSDAY: 'الخميس',
+  FRIDAY: 'الجمعة',
+  SATURDAY: 'السبت',
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Get ID from URL
     const params = new URLSearchParams(window.location.search);
-    const docId = params.get('id') || 1; // Default to 1 if testing directly
+    const docId = params.get('id') || 1;
   
-    // 2. Fetch mock Data
     loadDoctorDetails(docId);
   
-    // 3. Set minimum date for booking
     const dateInput = document.getElementById('bookDate');
     if (dateInput) {
       const today = new Date().toISOString().split('T')[0];
@@ -18,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
       dateInput.value = today;
     }
   
-    // 4. Time slot selection
     document.querySelectorAll('.slot:not(.disabled)').forEach(el => {
       el.addEventListener('click', (e) => {
         document.querySelectorAll('.slot').forEach(s => s.classList.remove('active'));
@@ -27,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   
-    // 5. Submit Booking
     const form = document.getElementById('bookingForm');
     if (form) {
       form.addEventListener('submit', handleBooking);
@@ -57,6 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const imgEl = document.getElementById('docImg');
       if(imgEl) imgEl.src = docImg;
+
+      // Render work schedule
+      renderDoctorSchedule(doc.work_schedule || []);
+
+      // Render articles
+      renderDoctorArticles(doc.articles || []);
+
     } catch(err) {
       console.error(err);
       if(document.getElementById('docName')) {
@@ -64,11 +78,59 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+
+  function renderDoctorSchedule(schedule) {
+    const container = document.getElementById('docSchedule');
+    if (!container) return;
+
+    if (!schedule || schedule.length === 0) {
+      container.innerHTML = '<p class="body-md text-center text-muted py-4">لم يتم تحديد مواعيد العمل بعد.</p>';
+      return;
+    }
+
+    container.innerHTML = schedule.map(s => {
+      const dayName = DAYS_AR_MAP[s.day] || s.day;
+      const startTime = s.start_time || '--:--';
+      const endTime = s.end_time || '--:--';
+
+      return `
+        <div class="schedule-row">
+          <span class="schedule-day"><i class="ph ph-calendar-blank"></i> ${dayName}</span>
+          <span class="schedule-time" dir="ltr">${startTime} - ${endTime}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderDoctorArticles(articles) {
+    const container = document.getElementById('docArticles');
+    if (!container) return;
+
+    if (!articles || articles.length === 0) {
+      container.innerHTML = '<div class="body-md text-center py-4 text-muted w-100" style="grid-column: span 2;">لا توجد مقالات منشورة حالياً</div>';
+      return;
+    }
+
+    container.innerHTML = articles.map(art => {
+      const dateStr = new Date(art.created_at).toLocaleDateString('ar-SA');
+      const imageUrl = art.image ? window.ApiService.getImageUrl(art.image) : DEFAULT_ARTICLE_IMAGE;
+      const detailURL = `article-detail.html?id=${art.id}`;
+
+      return `
+        <a href="${detailURL}" class="card p-0" style="display:flex; flex-direction:column; overflow:hidden; text-decoration:none; color:inherit; transition: transform 0.2s, box-shadow 0.2s;">
+          <img src="${imageUrl}" style="width:100%; height:160px; object-fit:cover;" alt="${art.title}" onerror="this.src='${DEFAULT_ARTICLE_IMAGE}'">
+          <div style="padding:16px;">
+            <h4 class="headline-sm" style="font-size:0.95rem; margin-bottom:8px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${art.title}</h4>
+            <span class="text-muted" style="font-size:0.8rem;">${dateStr}</span>
+          </div>
+        </a>
+      `;
+    }).join('');
+  }
   
   async function handleBooking(e) {
     e.preventDefault();
   
-    // Simulate API logic
     const date = document.getElementById('bookDate').value;
     const time = document.getElementById('selectedSlot').value;
     const notes = document.getElementById('bookReason').value;
@@ -100,3 +162,4 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.disabled = false;
     }
   }
+

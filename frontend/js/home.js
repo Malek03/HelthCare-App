@@ -123,10 +123,11 @@ try {
         const dateObj = new Date(a.created_at);
         const formattedDate = dateObj.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
         const detailURL = `article-detail.html?id=${a.id}`;
+        const imageUrl = window.ApiService.getImageUrl(a.image);
         
         html += `
           <a href="${detailURL}" class="card article-card" style="text-decoration:none; color:inherit; display:flex; flex-direction:column;">
-            <img src="${a.image}" alt="${a.title}" class="article-img">
+            <img src="${imageUrl || 'https://via.placeholder.com/400x250?text=No+Image'}" alt="${a.title}" class="article-img">
             <div class="article-content">
               <span class="category-badge">تثقيف طبي</span>
               <h3 class="headline-sm" style="margin-bottom: 8px;">${a.title}</h3>

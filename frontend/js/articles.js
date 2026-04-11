@@ -60,13 +60,14 @@ function ArticleCard(article) {
 
     // Link URL matching detail page requirement
     const detailURL = `article-detail.html?id=${article.id}`;
+    const imageUrl = window.ApiService.getImageUrl(article.image) || 'https://images.unsplash.com/photo-1576091160550-217359f42f8c?auto=format&fit=crop&w=800&q=80';
 
     return `
         <article class="card article-listing-card">
             <!-- Navigation bound to entire card implicitly holding its URL -->
             <a href="${detailURL}" class="article-listing-link">
                 <!-- Image Container -->
-                <img src="${article.image || 'https://via.placeholder.com/600x400?text=Medical+Article'}" alt="${article.title}" class="article-listing-image">
+                <img src="${imageUrl}" alt="${article.title}" class="article-listing-image" onerror="this.src='https://images.unsplash.com/photo-1576091160550-217359f42f8c?auto=format&fit=crop&w=800&q=80'">
                 
                 <!-- Text Container -->
                 <div class="article-listing-content">

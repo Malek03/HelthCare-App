@@ -363,3 +363,204 @@
     grid-template-columns: 1fr;
   }
 }
+/* ============================================
+   Article Upload Zone
+   ============================================ */
+.upload-zone {
+  border: 2px dashed var(--sys-color-outline-variant);
+  border-radius: var(--sys-radius-lg);
+  padding: var(--sys-spacing-32);
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: var(--sys-color-surface-container-lowest);
+  position: relative;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--sys-color-primary);
+  background: var(--sys-color-primary-container);
+  opacity: 0.9;
+}
+
+.upload-info i {
+  font-size: 3rem;
+  color: var(--sys-color-primary);
+  margin-bottom: var(--sys-spacing-12);
+}
+
+.upload-info p {
+  font-weight: 600;
+  color: var(--sys-color-on-surface);
+  margin-bottom: var(--sys-spacing-4);
+}
+
+.upload-info p span {
+  color: var(--sys-color-primary);
+}
+
+.upload-info small {
+  color: var(--sys-color-on-surface-variant);
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--sys-spacing-12);
+  background: white;
+  padding: var(--sys-spacing-12) var(--sys-spacing-16);
+  border-radius: var(--sys-radius-md);
+  box-shadow: var(--sys-elevation-1);
+  border: 1px solid var(--sys-color-surface-variant);
+}
+
+.file-preview i {
+  font-size: 1.5rem;
+  color: var(--sys-color-primary);
+}
+
+.file-preview span {
+  font-weight: 500;
+  color: var(--sys-color-on-surface);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.remove-file {
+  background: none;
+  border: none;
+  color: var(--sys-color-error);
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.remove-file:hover {
+  transform: scale(1.1);
+}
+
+.hidden { display: none !important; }
+.mb-4 { margin-bottom: var(--sys-spacing-24); }
+
+/* ============================================
+   Consultation Cards
+   ============================================ */
+.consultation-card {
+  background: var(--sys-color-surface-container-lowest);
+  border-radius: var(--sys-radius-lg);
+  padding: var(--sys-spacing-24);
+  margin-bottom: var(--sys-spacing-16);
+  box-shadow: var(--sys-elevation-1);
+  transition: box-shadow 0.2s ease;
+  border-right: 4px solid var(--sys-color-primary);
+}
+
+.consultation-card:hover {
+  box-shadow: var(--sys-elevation-2);
+}
+
+.consultation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sys-spacing-16);
+  padding-bottom: var(--sys-spacing-12);
+  border-bottom: 1px solid var(--sys-color-surface-variant);
+}
+
+.consultation-patient {
+  display: flex;
+  align-items: center;
+  gap: var(--sys-spacing-12);
+}
+
+.consultation-patient strong {
+  font-size: 0.95rem;
+  color: var(--sys-color-on-surface);
+}
+
+.consultation-question {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sys-spacing-12);
+  background: var(--sys-color-primary-container);
+  padding: var(--sys-spacing-16);
+  border-radius: var(--sys-radius-md);
+  margin-bottom: var(--sys-spacing-12);
+}
+
+.consultation-question i {
+  font-size: 1.25rem;
+  margin-top: 2px;
+}
+
+.consultation-question p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--sys-color-on-primary-container);
+}
+
+.consultation-answer {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sys-spacing-12);
+  background: #E8F5E9;
+  padding: var(--sys-spacing-16);
+  border-radius: var(--sys-radius-md);
+}
+
+.consultation-answer i {
+  font-size: 1.25rem;
+  margin-top: 2px;
+}
+
+.consultation-answer p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #1B5E20;
+}
+
+.consultation-reply-area {
+  margin-top: var(--sys-spacing-4);
+}
+
+.consultation-reply-area textarea {
+  height: auto;
+  min-height: 80px;
+  padding: var(--sys-spacing-12) var(--sys-spacing-16);
+  resize: vertical;
+  font-size: 0.9rem;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  border-radius: var(--sys-radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-pending {
+  background: #FFF3E0;
+  color: #E65100;
+}
+
+.status-approved {
+  background: #E8F5E9;
+  color: #2E7D32;
+}

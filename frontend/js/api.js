@@ -4,8 +4,18 @@
  */
 
 const API_BASE_URL = 'http://127.0.0.1:5000/api';
+const BASE_SERVER_URL = 'http://127.0.0.1:5000';
 
 class ApiService {
+  /**
+   * Formats a local path (like /uploads/...) into a full URL
+   */
+  static getImageUrl(path) {
+    if (!path) return null;
+    if (path.startsWith('http')) return path;
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return `${BASE_SERVER_URL}${cleanPath}`;
+  }
   /**
    * Internal fetch wrapper handling tokens and JSON parsing
    */
@@ -210,19 +220,35 @@ class ApiService {
   static async createDoctorArticle(data) {
     return this.request('/articles/doctor', {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: data instanceof FormData ? data : JSON.stringify(data)
     });
   }
 
   static async updateDoctorArticle(id, data) {
     return this.request(`/articles/doctor/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(data)
+      body: data instanceof FormData ? data : JSON.stringify(data)
     });
   }
 
   static async deleteDoctorArticle(id) {
     return this.request(`/articles/doctor/${id}`, { method: 'DELETE' });
+  }
+
+  // ==========================================
+  // Doctor Consultations API
+  // ==========================================
+  static async getDoctorConsultations(page = 1, limit = 20, status = '') {
+    let url = `/consultations/doctor?page=${page}&limit=${limit}`;
+    if (status) url += `&status=${status}`;
+    return this.request(url, { method: 'GET' });
+  }
+
+  static async answerConsultation(id, answer) {
+    return this.request(`/consultations/doctor/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ answer })
+    });
   }
 }
 
