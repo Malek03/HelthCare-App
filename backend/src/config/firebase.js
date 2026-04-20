@@ -15,13 +15,13 @@ const initializeFirebase = () => {
       firebaseApp = admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
       });
-      console.log('✅ Firebase Admin SDK initialized successfully');
+      console.log(' Firebase Admin SDK initialized successfully');
     } else {
-      console.warn('⚠️ Firebase service account file not found. Push notifications will be disabled.');
+      console.warn('Firebase service account file not found. Push notifications will be disabled.');
       firebaseApp = admin.initializeApp();
     }
   } catch (error) {
-    console.error('❌ Firebase initialization error:', error.message);
+    console.error('Firebase initialization error:', error.message);
   }
 
   return firebaseApp;
@@ -32,7 +32,7 @@ const getMessaging = () => {
   try {
     return admin.messaging();
   } catch (error) {
-    console.error('❌ Firebase Messaging not available:', error.message);
+    console.error(' Firebase Messaging not available:', error.message);
     return null;
   }
 };

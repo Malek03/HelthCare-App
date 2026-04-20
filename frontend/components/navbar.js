@@ -22,10 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   
     if (token) {
+      let dashboardLink = 'profile.html';
+      let userIcon = 'ph-user';
+      if (role === 'ADMIN') {
+        dashboardLink = 'admin-dashboard.html';
+        userIcon = 'ph-shield-star';
+      } else if (role === 'DOCTOR') {
+        dashboardLink = 'doctor-dashboard.html';
+        userIcon = 'ph-stethoscope';
+      }
+
       userControls = `
         <div class="nav-controls d-flex align-center" style="gap: 16px; white-space: nowrap;">
-          <a href="${role === 'DOCTOR' ? 'doctor-dashboard.html' : 'profile.html'}" class="btn btn-outline" style="white-space: nowrap;">
-            <i class="ph ph-user"></i> ${userName}
+          <a href="${dashboardLink}" class="btn btn-outline" style="white-space: nowrap;">
+            <i class="ph ${userIcon}"></i> ${userName}
           </a>
           <button onclick="logout()" class="btn btn-secondary" style="height: 40px; border-radius: 8px; white-space: nowrap;">تسجيل الخروج</button>
         </div>

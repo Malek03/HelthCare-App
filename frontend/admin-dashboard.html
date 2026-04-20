@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم المدير | المنصة الطبية</title>
+  <meta name="description" content="لوحة تحكم المدير - إدارة المستخدمين والأطباء والمحتوى">
+
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/admin-dashboard.css">
+
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-low">
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container d-flex align-center gap-4 py-4">
+      <div class="admin-avatar-lg">
+        <i class="ph-fill ph-shield-star"></i>
+      </div>
+      <div>
+        <h1 class="display-text mb-0" style="color:white; margin:0;" id="adminName">المدير</h1>
+        <p class="body-md mt-2 text-white-90">لوحة التحكم الرئيسية</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="section pt-4">
+    <div class="container container-split">
+
+      <!-- Sidebar -->
+      <div class="profile-sidebar">
+        <div class="card p-0 overflow-hidden">
+          <ul class="sidebar-menu" id="sidebarMenu">
+            <li><a href="#overview" class="active" data-section="overviewSection"><i class="ph ph-chart-pie"></i> نظرة عامة</a></li>
+            <li><a href="#users" data-section="usersSection"><i class="ph ph-users-three"></i> المستخدمون</a></li>
+            <li><a href="#applications" data-section="applicationsSection"><i class="ph ph-clipboard-text"></i> طلبات الانضمام</a></li>
+            <li><a href="#doctors" data-section="doctorsSection"><i class="ph ph-stethoscope"></i> الأطباء</a></li>
+            <li><a href="#articles" data-section="articlesSection"><i class="ph ph-article"></i> المقالات</a></li>
+            <li><a href="#videos" data-section="videosSection"><i class="ph ph-video"></i> الفيديوهات</a></li>
+            <li><a href="#tips" data-section="tipsSection"><i class="ph ph-lightbulb"></i> النصائح الصحية</a></li>
+            <li><a href="#" onclick="logout(); return false;" class="text-danger"><i class="ph ph-sign-out"></i> تسجيل الخروج</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="profile-main">
+
+        <!-- ==========================================
+             Section 1: Overview (Stats)
+             ========================================== -->
+        <div id="overviewSection" class="dashboard-section active">
+          <h2 class="headline-md mb-4">الإحصائيات العامة</h2>
+          <div class="stats-grid" id="statsGrid">
+            <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             Section 2: Users Management
+             ========================================== -->
+        <div id="usersSection" class="dashboard-section">
+          <h2 class="headline-md mb-4">إدارة المستخدمين</h2>
+
+          <div class="search-bar">
+            <input type="text" class="form-control" id="userSearchInput" placeholder="بحث بالاسم أو البريد الإلكتروني...">
+            <select class="form-control" id="userRoleFilter">
+              <option value="">جميع الأدوار</option>
+              <option value="USER">مستخدم</option>
+              <option value="DOCTOR">طبيب</option>
+              <option value="ADMIN">مدير</option>
+            </select>
+            <button class="btn btn-primary" style="height:48px;" onclick="searchUsers()"><i class="ph ph-magnifying-glass"></i> بحث</button>
+          </div>
+
+          <div class="card p-0 overflow-auto">
+            <table class="data-table" id="usersTable">
+              <thead>
+                <tr>
+                  <th>المستخدم</th>
+                  <th>البريد الإلكتروني</th>
+                  <th>الدور</th>
+                  <th>الحالة</th>
+                  <th>تاريخ التسجيل</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="6" class="text-center" style="padding:40px;">جاري تحميل المستخدمين...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" id="usersPagination"></div>
+        </div>
+
+        <!-- ==========================================
+             Section 3: Doctor Applications
+             ========================================== -->
+        <div id="applicationsSection" class="dashboard-section">
+          <h2 class="headline-md mb-4">طلبات الانضمام كطبيب</h2>
+
+          <div class="filter-tabs" id="applicationFilterTabs">
+            <button class="filter-tab active" data-status="PENDING" onclick="filterApplications('PENDING', this)">المعلقة</button>
+            <button class="filter-tab" data-status="APPROVED" onclick="filterApplications('APPROVED', this)">المقبولة</button>
+            <button class="filter-tab" data-status="REJECTED" onclick="filterApplications('REJECTED', this)">المرفوضة</button>
+            <button class="filter-tab" data-status="ALL" onclick="filterApplications('ALL', this)">الكل</button>
+          </div>
+
+          <div id="applicationsList">
+            <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             Section 4: Doctors Management
+             ========================================== -->
+        <div id="doctorsSection" class="dashboard-section">
+          <h2 class="headline-md mb-4">إدارة الأطباء</h2>
+
+          <div class="card p-0 overflow-auto">
+            <table class="data-table" id="doctorsTable">
+              <thead>
+                <tr>
+                  <th>الطبيب</th>
+                  <th>التخصص</th>
+                  <th>الموقع</th>
+                  <th>سنوات الخبرة</th>
+                  <th>الحالة</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="doctorsTableBody">
+                <tr><td colspan="6" class="text-center" style="padding:40px;">جاري تحميل الأطباء...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" id="doctorsPagination"></div>
+        </div>
+
+        <!-- ==========================================
+             Section 5: Articles
+             ========================================== -->
+        <div id="articlesSection" class="dashboard-section">
+          <div class="section-header">
+            <h2 class="headline-md mb-0">إضافة مقال جديد</h2>
+          </div>
+
+          <div class="content-form-card">
+            <form id="adminArticleForm">
+              <div class="form-group">
+                <label for="articleTitle">عنوان المقال</label>
+                <input type="text" id="articleTitle" class="form-control" placeholder="أدخل عنوان المقال" required>
+              </div>
+
+              <div class="form-group">
+                <label for="articleImage">رابط الصورة (اختياري)</label>
+                <input type="text" id="articleImage" class="form-control" placeholder="https://example.com/image.jpg" dir="ltr">
+              </div>
+
+              <div class="form-group">
+                <label for="articleContent">محتوى المقال</label>
+                <textarea id="articleContent" class="form-control" rows="8" placeholder="اكتب محتوى المقال هنا..." required></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btnSaveArticle">
+                  <i class="ph ph-paper-plane-right" style="margin-left:8px;"></i> نشر المقال
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             Section 6: Videos
+             ========================================== -->
+        <div id="videosSection" class="dashboard-section">
+          <div class="section-header">
+            <h2 class="headline-md mb-0">إضافة فيديو جديد</h2>
+          </div>
+
+          <div class="content-form-card">
+            <form id="adminVideoForm">
+              <div class="form-group">
+                <label for="videoTitle">عنوان الفيديو</label>
+                <input type="text" id="videoTitle" class="form-control" placeholder="أدخل عنوان الفيديو" required>
+              </div>
+
+              <div class="form-group">
+                <label for="videoUrl">رابط الفيديو (YouTube أو غيره)</label>
+                <input type="url" id="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=..." dir="ltr" required>
+              </div>
+
+              <div class="form-group">
+                <label for="videoThumbnail">رابط الصورة المصغرة (اختياري)</label>
+                <input type="text" id="videoThumbnail" class="form-control" placeholder="https://example.com/thumbnail.jpg" dir="ltr">
+              </div>
+
+              <div class="form-group">
+                <label for="videoDescription">وصف الفيديو (اختياري)</label>
+                <textarea id="videoDescription" class="form-control" rows="4" placeholder="اكتب وصفاً للفيديو..."></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btnSaveVideo">
+                  <i class="ph ph-video" style="margin-left:8px;"></i> إضافة الفيديو
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             Section 7: Health Tips
+             ========================================== -->
+        <div id="tipsSection" class="dashboard-section">
+          <div class="section-header">
+            <h2 class="headline-md mb-0">النصائح الصحية</h2>
+          </div>
+
+          <!-- Add New Tip -->
+          <div class="content-form-card mb-4">
+            <h3 class="headline-sm mb-4" style="font-size:1rem;"><i class="ph ph-plus-circle" style="color:var(--sys-color-primary);"></i> إضافة نصيحة جديدة</h3>
+            <form id="healthTipForm">
+              <div class="form-group">
+                <label for="tipContent">محتوى النصيحة</label>
+                <textarea id="tipContent" class="form-control" rows="3" placeholder="اكتب نصيحة صحية مفيدة..." required></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btnSaveTip">
+                  <i class="ph ph-plus" style="margin-left:8px;"></i> إضافة النصيحة
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Tips List -->
+          <div id="tipsList">
+            <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Promote Modal (hidden) -->
+  <div id="promoteModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3><i class="ph ph-user-gear" style="color:var(--sys-color-primary);"></i> ترقية إلى طبيب</h3>
+      <form id="promoteForm">
+        <input type="hidden" id="promoteUserId">
+        <div class="form-group">
+          <label for="promoteSpecialty">التخصص *</label>
+          <input type="text" id="promoteSpecialty" class="form-control" placeholder="مثال: طب أسنان" required>
+        </div>
+        <div class="form-group">
+          <label for="promoteQualifications">المؤهلات</label>
+          <input type="text" id="promoteQualifications" class="form-control" placeholder="مثال: بكالوريوس طب">
+        </div>
+        <div class="form-group">
+          <label for="promoteExperience">سنوات الخبرة</label>
+          <input type="number" id="promoteExperience" class="form-control" min="0" placeholder="5">
+        </div>
+        <div class="form-group">
+          <label for="promotePhone">رقم الهاتف</label>
+          <input type="tel" id="promotePhone" class="form-control" placeholder="+966 5xx xxx xxx" dir="ltr">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="ph ph-arrow-fat-up" style="margin-left:8px;"></i> ترقية
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="closePromoteModal()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="./js/api.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./components/footer.js"></script>
+  <script src="./components/toast.js"></script>
+  <script src="./js/admin-dashboard.js"></script>
+</body>
+</html>

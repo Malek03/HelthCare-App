@@ -250,6 +250,88 @@ class ApiService {
       body: JSON.stringify({ answer })
     });
   }
+
+  // ==========================================
+  // Admin Dashboard API
+  // ==========================================
+  static async getAdminStats() {
+    return this.request('/admin/stats', { method: 'GET' });
+  }
+
+  static async getAdminUsers(page = 1, limit = 20, search = '', role = '') {
+    const params = new URLSearchParams({ page, limit });
+    if (search) params.append('search', search);
+    if (role) params.append('role', role);
+    return this.request(`/admin/users?${params.toString()}`, { method: 'GET' });
+  }
+
+  static async banUser(id, is_banned = true) {
+    return this.request(`/admin/users/${id}/ban`, {
+      method: 'PUT',
+      body: JSON.stringify({ is_banned })
+    });
+  }
+
+  static async deleteUser(id) {
+    return this.request(`/admin/users/${id}`, { method: 'DELETE' });
+  }
+
+  static async promoteUser(id, data) {
+    return this.request(`/admin/users/${id}/promote`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  static async getApplications(status = 'PENDING', page = 1, limit = 20) {
+    const params = new URLSearchParams({ status, page, limit });
+    return this.request(`/admin/applications?${params.toString()}`, { method: 'GET' });
+  }
+
+  static async handleApplication(id, status, admin_notes = '') {
+    return this.request(`/admin/applications/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status, admin_notes })
+    });
+  }
+
+  static async getAdminDoctors(page = 1, limit = 20) {
+    const params = new URLSearchParams({ page, limit });
+    return this.request(`/admin/doctors?${params.toString()}`, { method: 'GET' });
+  }
+
+  static async deleteDoctor(id) {
+    return this.request(`/admin/doctors/${id}`, { method: 'DELETE' });
+  }
+
+  static async createAdminArticle(title, content, image = '') {
+    return this.request('/admin/articles', {
+      method: 'POST',
+      body: JSON.stringify({ title, content, image })
+    });
+  }
+
+  static async createAdminVideo(title, url, description = '', thumbnail = '') {
+    return this.request('/admin/videos', {
+      method: 'POST',
+      body: JSON.stringify({ title, url, description, thumbnail })
+    });
+  }
+
+  static async getHealthTips() {
+    return this.request('/admin/health-tips', { method: 'GET' });
+  }
+
+  static async createHealthTip(content) {
+    return this.request('/admin/health-tips', {
+      method: 'POST',
+      body: JSON.stringify({ content })
+    });
+  }
+
+  static async sendHealthTip(id) {
+    return this.request(`/admin/health-tips/${id}/send`, { method: 'POST' });
+  }
 }
 
 // Expose globally for easy component usage
