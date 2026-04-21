@@ -74,7 +74,7 @@ const createDoctorArticle = async (req, res) => {
     const { title, content } = req.body;
     let image = req.body.image;
     if (req.file) {
-      image = '/uploads/image/' + req.file.filename;
+      image = req.file.path.startsWith('http') ? req.file.path : '/uploads/image/' + req.file.filename;
     }
 
     if (!title || !content) {
@@ -109,7 +109,7 @@ const updateDoctorArticle = async (req, res) => {
     const { title, content, is_published } = req.body;
     let image = req.body.image;
     if (req.file) {
-      image = '/uploads/image/' + req.file.filename;
+      image = req.file.path.startsWith('http') ? req.file.path : '/uploads/image/' + req.file.filename;
     }
 
     const doctorProfile = await prisma.doctorProfile.findUnique({

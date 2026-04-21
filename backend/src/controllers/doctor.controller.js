@@ -120,10 +120,12 @@ const applyAsDoctor = async (req, res) => {
 
     if (req.files) {
       if (req.files.personal_photo && req.files.personal_photo[0]) {
-        personal_photo_url = '/uploads/personal_photo/' + req.files.personal_photo[0].filename;
+        const file = req.files.personal_photo[0];
+        personal_photo_url = file.path.startsWith('http') ? file.path : '/uploads/personal_photo/' + file.filename;
       }
       if (req.files.documents && req.files.documents[0]) {
-        documents_url = '/uploads/documents/' + req.files.documents[0].filename;
+        const file = req.files.documents[0];
+        documents_url = file.path.startsWith('http') ? file.path : '/uploads/documents/' + file.filename;
       }
     }
 

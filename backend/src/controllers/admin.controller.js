@@ -445,7 +445,7 @@ const createVideo = async (req, res) => {
     let finalUrl = url;
     if (req.file) {
       // If a file was uploaded, construct its URL
-      finalUrl = `/uploads/${req.file.fieldname}/${req.file.filename}`;
+      finalUrl = req.file.path.startsWith('http') ? req.file.path : `/uploads/${req.file.fieldname}/${req.file.filename}`;
     }
 
     if (!title || !finalUrl) {
@@ -554,7 +554,7 @@ const updateArticle = async (req, res) => {
     if (title) updateData.title = title;
     if (content) updateData.content = content;
     if (req.file) {
-      updateData.image = `/uploads/${req.file.fieldname}/${req.file.filename}`;
+      updateData.image = req.file.path.startsWith('http') ? req.file.path : `/uploads/${req.file.fieldname}/${req.file.filename}`;
     }
 
     const article = await prisma.article.update({
@@ -598,7 +598,7 @@ const updateVideo = async (req, res) => {
 
     let finalUrl = url;
     if (req.file) {
-      finalUrl = `/uploads/${req.file.fieldname}/${req.file.filename}`;
+      finalUrl = req.file.path.startsWith('http') ? req.file.path : `/uploads/${req.file.fieldname}/${req.file.filename}`;
     }
     if (finalUrl) updateData.url = finalUrl;
 
