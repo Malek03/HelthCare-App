@@ -75,6 +75,30 @@ function renderVideoCards(videos, container) {
 }
 
 /**
+ * Helper: generates the correct player HTML depending on if it's a YouTube link or direct video
+ */
+function getPlayerHTML(url, isPreview = false) {
+    let fullUrl = url;
+    if (window.ApiService && typeof window.ApiService.getImageUrl === 'function') {
+        fullUrl = window.ApiService.getImageUrl(url) || url;
+    }
+    
+    const ytMatch = fullUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
+    
+    if (ytMatch && ytMatch[1]) {
+        const videoId = ytMatch[1];
+        // If preview, we don't autoplay, just show the thumbnail or iframe. Better to just use iframe with pointer-events: none.
+        const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=${isPreview ? 0 : 1}&mute=${isPreview ? 1 : 0}&rel=0`;
+        return `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; ${isPreview ? 'pointer-events:none;' : ''}"></iframe>`;
+    }
+    
+    if (isPreview) {
+        return `<video src="${fullUrl}" muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>`;
+    }
+    return `<video src="${fullUrl}" controls autoplay playsinline controlsList="nodownload" style="width:100%; height:100%;"></video>`;
+}
+
+/**
  * Reusable Component: VideoCard
  * Returns the HTML string for a single Video Card.
  */
@@ -87,14 +111,18 @@ function VideoCard(video) {
     const dateObj = new Date(video.created_at);
     const formattedDate = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleDateString('ar-EG');
 
+    let thumbnailHTML = '';
+    if (video.thumbnail) {
+        const thumbUrl = window.ApiService ? window.ApiService.getImageUrl(video.thumbnail) : video.thumbnail;
+        thumbnailHTML = `<img src="${thumbUrl}" alt="Thumbnail for ${video.title}" style="width:100%; height:100%; object-fit:cover;">`;
+    } else {
+        thumbnailHTML = getPlayerHTML(video.url, true);
+    }
+
     return `
         <article class="video-card" data-video="${videoDataStr}">
             <div class="video-card-preview">
-                <!-- Using real video element for preview. For a simpler preview, an img tag + thumbnail could also be used -->
-                ${video.thumbnail ? 
-                    `<img src="${video.thumbnail}" alt="Thumbnail for ${video.title}" style="width:100%; height:100%; object-fit:cover;">` : 
-                    `<video src="${video.url}" muted playsinline></video>`
-                }
+                ${thumbnailHTML}
                 <i class="ph-fill ph-play-circle play-icon"></i>
             </div>
             <div class="video-card-content">
@@ -123,8 +151,7 @@ function openVideoPlayer(video) {
                 <i class="ph ph-x"></i>
             </button>
             <div class="player-video-wrapper">
-                <!-- Video autoPlats using HTML5 attribute -->
-                <video src="${video.url}" controls autoplay playsinline controlsList="nodownload"></video>
+                ${getPlayerHTML(video.url, false)}
             </div>
             <div class="player-info-container">
                 <h2 class="player-title">${video.title}</h2>

@@ -28,18 +28,20 @@ const fileFilter = (req, file, cb) => {
       'image/jpeg', 'image/png', 'image/gif', 'image/webp', 
       'application/pdf', 
       'application/msword', 
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'video/mp4', 'video/webm', 'video/ogg'
   ];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('نوع الملف غير مدعوم. الأنواع المسموحة: PDF, DOC, DOCX, والصور (JPEG, PNG)'), false);
+    cb(new Error('نوع الملف غير مدعوم. الأنواع المسموحة: الصور (JPEG, PNG)، الملفات (PDF, DOC)، والفيديوهات (MP4, WEBM)'), false);
   }
 };
 
 const upload = multer({
   storage,
   fileFilter,
+  limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for videos
 });
 
 module.exports = upload;

@@ -365,6 +365,48 @@ const deleteDoctor = async (req, res) => {
 // ==========================================
 
 /**
+ * GET /api/admin/articles
+ */
+const getAdminArticles = async (req, res) => {
+  try {
+    const { page = 1, limit = 50, search } = req.query;
+    const where = {};
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search } },
+        { content: { contains: search } },
+      ];
+    }
+
+    const [articles, total] = await Promise.all([
+      prisma.article.findMany({
+        where,
+        skip: (parseInt(page) - 1) * parseInt(limit),
+        take: parseInt(limit),
+        include: {
+          doctor: { include: { user: { select: { name: true, avatar: true } } } },
+          admin: { select: { name: true } },
+        },
+        orderBy: { created_at: 'desc' },
+      }),
+      prisma.article.count({ where }),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        articles,
+        pagination: { total, page: parseInt(page), totalPages: Math.ceil(total / parseInt(limit)) },
+      },
+    });
+  } catch (error) {
+    console.error('GetAdminArticles error:', error);
+    return res.status(500).json({ success: false, message: 'خطأ في جلب المقالات' });
+  }
+};
+
+/**
  * POST /api/admin/articles
  */
 const createArticle = async (req, res) => {
@@ -396,13 +438,19 @@ const createArticle = async (req, res) => {
 const createVideo = async (req, res) => {
   try {
     const { title, url, description, thumbnail } = req.body;
+    
+    let finalUrl = url;
+    if (req.file) {
+      // If a file was uploaded, construct its URL
+      finalUrl = `/uploads/${req.file.fieldname}/${req.file.filename}`;
+    }
 
-    if (!title || !url) {
-      return res.status(400).json({ success: false, message: 'العنوان والرابط مطلوبان' });
+    if (!title || !finalUrl) {
+      return res.status(400).json({ success: false, message: 'العنوان ورابط/ملف الفيديو مطلوبان' });
     }
 
     const video = await prisma.video.create({
-      data: { title, url, description, thumbnail, admin_id: req.user.id },
+      data: { title, url: finalUrl, description, thumbnail, admin_id: req.user.id },
     });
 
     return res.status(201).json({
@@ -491,11 +539,118 @@ const getHealthTips = async (req, res) => {
   }
 };
 
+/**
+ * PUT /api/admin/articles/:id
+ */
+const updateArticle = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    const updateData = {};
+
+    if (title) updateData.title = title;
+    if (content) updateData.content = content;
+    if (req.file) {
+      updateData.image = `/uploads/${req.file.fieldname}/${req.file.filename}`;
+    }
+
+    const article = await prisma.article.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return res.status(200).json({ success: true, message: 'تم تحديث المقال', data: article });
+  } catch (error) {
+    console.error('UpdateArticle error:', error);
+    return res.status(500).json({ success: false, message: 'خطأ في تحديث المقال' });
+  }
+};
+
+/**
+ * DELETE /api/admin/articles/:id
+ */
+const deleteArticle = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.article.delete({ where: { id } });
+    return res.status(200).json({ success: true, message: 'تم حذف المقال' });
+  } catch (error) {
+    console.error('DeleteArticle error:', error);
+    return res.status(500).json({ success: false, message: 'خطأ في حذف المقال' });
+  }
+};
+
+/**
+ * PUT /api/admin/videos/:id
+ */
+const updateVideo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, url, description, thumbnail } = req.body;
+    const updateData = {};
+
+    if (title) updateData.title = title;
+    if (description !== undefined) updateData.description = description;
+    if (thumbnail !== undefined) updateData.thumbnail = thumbnail;
+
+    let finalUrl = url;
+    if (req.file) {
+      finalUrl = `/uploads/${req.file.fieldname}/${req.file.filename}`;
+    }
+    if (finalUrl) updateData.url = finalUrl;
+
+    const video = await prisma.video.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return res.status(200).json({ success: true, message: 'تم تحديث الفيديو', data: video });
+  } catch (error) {
+    console.error('UpdateVideo error:', error);
+    return res.status(500).json({ success: false, message: 'خطأ في تحديث الفيديو' });
+  }
+};
+
+/**
+ * DELETE /api/admin/videos/:id
+ */
+const deleteVideo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.video.delete({ where: { id } });
+    return res.status(200).json({ success: true, message: 'تم حذف الفيديو' });
+  } catch (error) {
+    console.error('DeleteVideo error:', error);
+    return res.status(500).json({ success: false, message: 'خطأ في حذف الفيديو' });
+  }
+};
+
+/**
+ * PUT /api/admin/articles/:id/toggle-publish
+ */
+const toggleArticlePublish = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { is_published } = req.body;
+    
+    const article = await prisma.article.update({
+      where: { id },
+      data: { is_published: is_published !== undefined ? is_published : false },
+    });
+
+    return res.status(200).json({ success: true, message: article.is_published ? 'تم إظهار المقال' : 'تم حظر (إخفاء) المقال' });
+  } catch (error) {
+    console.error('ToggleArticlePublish error:', error);
+    return res.status(500).json({ success: false, message: 'خطأ في تغيير حالة المقال' });
+  }
+};
+
 module.exports = {
   getStats,
   getUsers, banUser, deleteUser, promoteUser,
   getApplications, handleApplication,
   getDoctors, deleteDoctor,
-  createArticle, createVideo,
+  getAdminArticles, createArticle, updateArticle, deleteArticle, toggleArticlePublish,
+  createVideo, updateVideo, deleteVideo,
   createHealthTip, sendHealthTip, getHealthTips,
 };

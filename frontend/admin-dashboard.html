@@ -175,6 +175,14 @@
               </div>
             </form>
           </div>
+
+          <!-- Articles List -->
+          <div class="mt-4">
+            <h3 class="headline-sm mb-3">المقالات الحالية</h3>
+            <div id="articlesList">
+              <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+            </div>
+          </div>
         </div>
 
         <!-- ==========================================
@@ -193,9 +201,42 @@
               </div>
 
               <div class="form-group">
-                <label for="videoUrl">رابط الفيديو (YouTube أو غيره)</label>
-                <input type="url" id="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=..." dir="ltr" required>
+                <label>نوع الرفع</label>
+                <div style="display:flex; gap: 15px; margin-bottom: 10px;">
+                  <label><input type="radio" name="videoType" value="url" checked onchange="toggleVideoInputType()"> رابط خارجي</label>
+                  <label><input type="radio" name="videoType" value="file" onchange="toggleVideoInputType()"> ملف من الجهاز</label>
+                </div>
               </div>
+
+              <div class="form-group" id="videoUrlGroup">
+                <label for="videoUrl">رابط الفيديو (YouTube أو غيره)</label>
+                <input type="url" id="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=..." dir="ltr">
+              </div>
+
+              <div class="form-group hidden" id="videoFileGroup">
+                <label for="videoFile">ملف الفيديو</label>
+                <input type="file" id="videoFile" class="form-control" accept="video/mp4,video/webm,video/ogg">
+              </div>
+
+              <script>
+                function toggleVideoInputType() {
+                  const type = document.querySelector('input[name="videoType"]:checked').value;
+                  const urlGroup = document.getElementById('videoUrlGroup');
+                  const fileGroup = document.getElementById('videoFileGroup');
+                  const urlInput = document.getElementById('videoUrl');
+                  const fileInput = document.getElementById('videoFile');
+                  
+                  if (type === 'url') {
+                    urlGroup.classList.remove('hidden');
+                    fileGroup.classList.add('hidden');
+                    fileInput.value = ''; // clear file
+                  } else {
+                    urlGroup.classList.add('hidden');
+                    fileGroup.classList.remove('hidden');
+                    urlInput.value = ''; // clear url
+                  }
+                }
+              </script>
 
               <div class="form-group">
                 <label for="videoThumbnail">رابط الصورة المصغرة (اختياري)</label>
@@ -213,6 +254,14 @@
                 </button>
               </div>
             </form>
+          </div>
+
+          <!-- Videos List -->
+          <div class="mt-4">
+            <h3 class="headline-sm mb-3">الفيديوهات الحالية</h3>
+            <div id="videosList">
+              <div class="spinner-overlay"><i class="ph ph-spinner"></i></div>
+            </div>
           </div>
         </div>
 

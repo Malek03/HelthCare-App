@@ -334,6 +334,10 @@ class ApiService {
     return this.request(`/admin/doctors/${id}`, { method: 'DELETE' });
   }
 
+  static async getAdminArticles(page = 1, limit = 50) {
+    return this.request(`/admin/articles?page=${page}&limit=${limit}`, { method: 'GET' });
+  }
+
   static async createAdminArticle(title, content, image = '') {
     return this.request('/admin/articles', {
       method: 'POST',
@@ -341,11 +345,40 @@ class ApiService {
     });
   }
 
-  static async createAdminVideo(title, url, description = '', thumbnail = '') {
+  static async updateAdminArticle(id, data) {
+    return this.request(`/admin/articles/${id}`, {
+      method: 'PUT',
+      body: data instanceof FormData ? data : JSON.stringify(data)
+    });
+  }
+
+  static async deleteAdminArticle(id) {
+    return this.request(`/admin/articles/${id}`, { method: 'DELETE' });
+  }
+
+  static async toggleAdminArticleStatus(id, is_published) {
+    return this.request(`/admin/articles/${id}/toggle-publish`, {
+      method: 'PUT',
+      body: JSON.stringify({ is_published })
+    });
+  }
+
+  static async createAdminVideo(data) {
     return this.request('/admin/videos', {
       method: 'POST',
-      body: JSON.stringify({ title, url, description, thumbnail })
+      body: data instanceof FormData ? data : JSON.stringify(data)
     });
+  }
+
+  static async updateAdminVideo(id, data) {
+    return this.request(`/admin/videos/${id}`, {
+      method: 'PUT',
+      body: data instanceof FormData ? data : JSON.stringify(data)
+    });
+  }
+
+  static async deleteAdminVideo(id) {
+    return this.request(`/admin/videos/${id}`, { method: 'DELETE' });
   }
 
   static async getHealthTips() {

@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadApplications('PENDING');
   loadDoctors();
   loadHealthTips();
+  loadArticles();
+  loadVideos();
 
   // ==========================================
   // Form Handlers
@@ -445,61 +447,307 @@ async function deleteDoctorAction(id) {
 // ==========================================
 // SECTION 5: Articles
 // ==========================================
+let editingArticleId = null;
+
 async function saveArticle() {
   const btn = document.getElementById('btnSaveArticle');
   const original = btn.innerHTML;
 
   try {
-    btn.innerHTML = '<i class="ph ph-spinner" style="animation:spin 1s linear infinite;margin-left:8px;"></i> جاري النشر...';
+    btn.innerHTML = '<i class="ph ph-spinner" style="animation:spin 1s linear infinite;margin-left:8px;"></i> جاري الحفظ...';
     btn.disabled = true;
 
     const title = document.getElementById('articleTitle').value;
     const content = document.getElementById('articleContent').value;
     const image = document.getElementById('articleImage').value;
 
-    const res = await ApiService.createAdminArticle(title, content, image);
+    let res;
+    if (editingArticleId) {
+      res = await ApiService.updateAdminArticle(editingArticleId, { title, content, image });
+    } else {
+      res = await ApiService.createAdminArticle(title, content, image);
+    }
+
     if (res.success) {
-      Toast.show('تم النشر', res.message, 'success');
-      document.getElementById('adminArticleForm').reset();
+      Toast.show(editingArticleId ? 'تم التعديل' : 'تم النشر', res.message, 'success');
+      cancelEditArticle();
       loadStats();
+      loadArticles();
     }
   } catch (e) {
-    Toast.show('خطأ', e.message || 'فشل نشر المقال', 'error');
+    Toast.show('خطأ', e.message || 'فشل حفظ المقال', 'error');
   } finally {
     btn.innerHTML = original;
     btn.disabled = false;
   }
 }
 
+async function loadArticles() {
+  const container = document.getElementById('articlesList');
+  if(!container) return;
+  container.innerHTML = `<div class="spinner-overlay"><i class="ph ph-spinner"></i></div>`;
+  try {
+    const res = await ApiService.getAdminArticles(1, 50);
+    if (res.success && res.data) {
+      // Store articles globally to easily access data for editing
+      window._allArticles = res.data.articles || [];
+      renderArticles(window._allArticles);
+    }
+  } catch (error) {
+    console.error('Articles error:', error);
+    container.innerHTML = `<div class="empty-state"><p>تعذر تحميل المقالات</p></div>`;
+  }
+}
+
+function renderArticles(articles) {
+  const container = document.getElementById('articlesList');
+  if (!articles || articles.length === 0) {
+    container.innerHTML = `<div class="empty-state"><p>لا توجد مقالات حالياً</p></div>`;
+    return;
+  }
+
+  container.innerHTML = articles.map(art => {
+    const isDoctor = !!art.doctor_id;
+    let publishBadge = '';
+    
+    // Status and Toggle Button for Doctor Articles
+    let toggleBtn = '';
+    if (isDoctor) {
+      if (art.is_published) {
+        publishBadge = '<span class="status-badge status-active" style="margin-right:10px;">ظاهر</span>';
+        toggleBtn = `<button class="btn-action ban" onclick="toggleArticlePublish('${art.id}', false)"><i class="ph ph-eye-slash"></i> إخفاء</button>`;
+      } else {
+        publishBadge = '<span class="status-badge status-banned" style="margin-right:10px;">مخفي (محظور)</span>';
+        toggleBtn = `<button class="btn-action unban" onclick="toggleArticlePublish('${art.id}', true)"><i class="ph ph-eye"></i> إظهار</button>`;
+      }
+    }
+
+    // Edit Button only if it's by Admin
+    let editBtn = '';
+    if (!isDoctor) {
+      editBtn = `<button class="btn-action edit" onclick="editArticle('${art.id}')"><i class="ph ph-pencil"></i> تعديل</button>`;
+    }
+
+    return `
+      <div class="card mb-3" style="display:flex; justify-content:space-between; align-items:center; padding:15px;">
+        <div>
+          <h4 style="margin:0; display:flex; align-items:center;">${art.title} ${publishBadge}</h4>
+          <span class="text-muted" style="font-size:0.85rem;">بواسطة: ${art.doctor?.user?.name || art.admin?.name || 'الإدارة'}</span>
+        </div>
+        <div class="actions-cell">
+          ${toggleBtn}
+          ${editBtn}
+          <button class="btn-action delete" onclick="confirmDeleteArticle('${art.id}', '${art.title}')"><i class="ph ph-trash"></i> حذف</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.toggleArticlePublish = async function(id, is_published) {
+  const action = is_published ? 'إظهار هذا المقال للعامة' : 'إخفاء (حظر) هذا المقال';
+  if (!confirm(`هل أنت متأكد من ${action}؟`)) return;
+  try {
+    const res = await ApiService.toggleAdminArticleStatus(id, is_published);
+    if (res.success) {
+      Toast.show('تم التحديث', res.message, 'success');
+      loadArticles();
+    }
+  } catch (e) {
+    Toast.show('خطأ', e.message || 'فشل تغيير حالة المقال', 'error');
+  }
+};
+
+window.editArticle = function(id) {
+  const article = window._allArticles.find(a => a.id === id);
+  if (!article) return;
+  
+  editingArticleId = id;
+  document.getElementById('articleTitle').value = article.title || '';
+  document.getElementById('articleContent').value = article.content || '';
+  document.getElementById('articleImage').value = article.image || '';
+  
+  const btn = document.getElementById('btnSaveArticle');
+  btn.innerHTML = '<i class="ph ph-floppy-disk" style="margin-left:8px;"></i> حفظ التعديلات';
+  
+  // Add cancel button if not exists
+  if(!document.getElementById('btnCancelEditArticle')) {
+    btn.insertAdjacentHTML('afterend', `
+      <button type="button" class="btn btn-secondary" id="btnCancelEditArticle" onclick="cancelEditArticle()" style="margin-right:10px;">إلغاء التعديل</button>
+    `);
+  }
+  
+  document.getElementById('adminArticleForm').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelEditArticle = function() {
+  editingArticleId = null;
+  document.getElementById('adminArticleForm').reset();
+  const btn = document.getElementById('btnSaveArticle');
+  btn.innerHTML = '<i class="ph ph-paper-plane-right" style="margin-left:8px;"></i> نشر المقال';
+  const cancelBtn = document.getElementById('btnCancelEditArticle');
+  if(cancelBtn) cancelBtn.remove();
+};
+
+window.confirmDeleteArticle = async function(id, title) {
+  if (!confirm(`هل أنت متأكد من حذف المقال "${title}"؟`)) return;
+  try {
+    const res = await ApiService.deleteAdminArticle(id);
+    if (res.success) {
+      Toast.show('تم الحذف', res.message, 'success');
+      loadArticles();
+      loadStats();
+    }
+  } catch (e) {
+    Toast.show('خطأ', e.message || 'فشل حذف المقال', 'error');
+  }
+};
+
 // ==========================================
 // SECTION 6: Videos
 // ==========================================
+let editingVideoId = null;
+
 async function saveVideo() {
   const btn = document.getElementById('btnSaveVideo');
   const original = btn.innerHTML;
 
   try {
-    btn.innerHTML = '<i class="ph ph-spinner" style="animation:spin 1s linear infinite;margin-left:8px;"></i> جاري الإضافة...';
+    btn.innerHTML = '<i class="ph ph-spinner" style="animation:spin 1s linear infinite;margin-left:8px;"></i> جاري الحفظ...';
     btn.disabled = true;
 
     const title = document.getElementById('videoTitle').value;
+    const type = document.querySelector('input[name="videoType"]:checked').value;
     const url = document.getElementById('videoUrl').value;
+    const fileInput = document.getElementById('videoFile');
     const description = document.getElementById('videoDescription').value;
     const thumbnail = document.getElementById('videoThumbnail').value;
 
-    const res = await ApiService.createAdminVideo(title, url, description, thumbnail);
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('thumbnail', thumbnail);
+    
+    if (type === 'file' && fileInput.files.length > 0) {
+      formData.append('video_file', fileInput.files[0]);
+    } else {
+      // Allow saving edit even if no new file is selected, by sending the existing url/path or ignoring it
+      // But we always append url if we're on 'url' mode
+      formData.append('url', url);
+    }
+
+    let res;
+    if (editingVideoId) {
+      res = await ApiService.updateAdminVideo(editingVideoId, formData);
+    } else {
+      res = await ApiService.createAdminVideo(formData);
+    }
+
     if (res.success) {
-      Toast.show('تمت الإضافة', res.message, 'success');
-      document.getElementById('adminVideoForm').reset();
+      Toast.show(editingVideoId ? 'تم التعديل' : 'تمت الإضافة', res.message, 'success');
+      cancelEditVideo();
       loadStats();
+      loadVideos();
     }
   } catch (e) {
-    Toast.show('خطأ', e.message || 'فشل إضافة الفيديو', 'error');
+    Toast.show('خطأ', e.message || 'فشل حفظ الفيديو', 'error');
   } finally {
     btn.innerHTML = original;
     btn.disabled = false;
   }
 }
+
+async function loadVideos() {
+  const container = document.getElementById('videosList');
+  if(!container) return;
+  container.innerHTML = `<div class="spinner-overlay"><i class="ph ph-spinner"></i></div>`;
+  try {
+    const res = await ApiService.getVideos();
+    if (res.success && res.data) {
+      window._allVideos = res.data.videos || [];
+      renderVideos(window._allVideos);
+    }
+  } catch (error) {
+    console.error('Videos error:', error);
+    container.innerHTML = `<div class="empty-state"><p>تعذر تحميل الفيديوهات</p></div>`;
+  }
+}
+
+function renderVideos(videos) {
+  const container = document.getElementById('videosList');
+  if (!videos || videos.length === 0) {
+    container.innerHTML = `<div class="empty-state"><p>لا توجد فيديوهات حالياً</p></div>`;
+    return;
+  }
+
+  container.innerHTML = videos.map(vid => {
+    return `
+      <div class="card mb-3" style="display:flex; justify-content:space-between; align-items:center; padding:15px;">
+        <div>
+          <h4 style="margin:0;">${vid.title}</h4>
+          <span class="text-muted" style="font-size:0.85rem;">بواسطة: ${vid.admin?.name || 'الإدارة'}</span>
+        </div>
+        <div class="actions-cell">
+          <button class="btn-action edit" onclick="editVideo('${vid.id}')"><i class="ph ph-pencil"></i> تعديل</button>
+          <button class="btn-action delete" onclick="confirmDeleteVideo('${vid.id}', '${vid.title}')"><i class="ph ph-trash"></i> حذف</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.editVideo = function(id) {
+  const video = window._allVideos.find(v => v.id === id);
+  if (!video) return;
+  
+  editingVideoId = id;
+  document.getElementById('videoTitle').value = video.title || '';
+  document.getElementById('videoDescription').value = video.description || '';
+  document.getElementById('videoThumbnail').value = video.thumbnail || '';
+  
+  // Set type to URL as fallback so we can show the existing string
+  document.querySelector('input[name="videoType"][value="url"]').checked = true;
+  toggleVideoInputType();
+  document.getElementById('videoUrl').value = video.url || '';
+  
+  const btn = document.getElementById('btnSaveVideo');
+  btn.innerHTML = '<i class="ph ph-floppy-disk" style="margin-left:8px;"></i> حفظ التعديلات';
+  
+  // Add cancel button if not exists
+  if(!document.getElementById('btnCancelEditVideo')) {
+    btn.insertAdjacentHTML('afterend', `
+      <button type="button" class="btn btn-secondary" id="btnCancelEditVideo" onclick="cancelEditVideo()" style="margin-right:10px;">إلغاء التعديل</button>
+    `);
+  }
+  
+  document.getElementById('adminVideoForm').scrollIntoView({ behavior: 'smooth' });
+};
+
+window.cancelEditVideo = function() {
+  editingVideoId = null;
+  document.getElementById('adminVideoForm').reset();
+  document.querySelector('input[name="videoType"][value="url"]').checked = true;
+  toggleVideoInputType();
+  
+  const btn = document.getElementById('btnSaveVideo');
+  btn.innerHTML = '<i class="ph ph-video" style="margin-left:8px;"></i> إضافة الفيديو';
+  const cancelBtn = document.getElementById('btnCancelEditVideo');
+  if(cancelBtn) cancelBtn.remove();
+};
+
+window.confirmDeleteVideo = async function(id, title) {
+  if (!confirm(`هل أنت متأكد من حذف الفيديو "${title}"؟`)) return;
+  try {
+    const res = await ApiService.deleteAdminVideo(id);
+    if (res.success) {
+      Toast.show('تم الحذف', res.message, 'success');
+      loadVideos();
+      loadStats();
+    }
+  } catch (e) {
+    Toast.show('خطأ', e.message || 'فشل حذف الفيديو', 'error');
+  }
+};
 
 // ==========================================
 // SECTION 7: Health Tips
