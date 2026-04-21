@@ -1,4 +1,4 @@
-const CACHE_NAME = 'clinical-sanctuary-v1';
+const CACHE_NAME = 'clinical-sanctuary-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

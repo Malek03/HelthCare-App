@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('name') || 'حسابي';
   
     let userControls = `
-      <div class="nav-controls d-flex align-center" style="gap: 16px; white-space: nowrap;">
+      <div class="nav-controls d-flex align-center">
         <a href="login.html" class="btn btn-outline">تسجيل الدخول</a>
-        <a href="register.html" class="btn btn-primary" style="height: 40px; border-radius: 8px; white-space: nowrap;">حساب جديد</a>
+        <a href="register.html" class="btn btn-primary" style="height: 40px; border-radius: 8px;">حساب جديد</a>
       </div>
     `;
   
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       userControls = `
-        <div class="nav-controls d-flex align-center" style="gap: 16px; white-space: nowrap;">
+        <div class="nav-controls d-flex align-center">
           <div class="notification-container" style="position: relative; display: flex; align-items: center;">
             <button onclick="toggleNotifications(event)" class="btn btn-icon" style="background: transparent; border: none; color: var(--sys-color-on-surface); font-size: 1.5rem; cursor: pointer; position: relative;">
               <i class="ph ph-bell"></i>
@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
           </div>
-          <a href="${dashboardLink}" class="btn btn-outline" style="white-space: nowrap;">
+          <a href="${dashboardLink}" class="btn btn-outline">
             <i class="ph ${userIcon}"></i> ${userName}
           </a>
-          <button onclick="logout()" class="btn btn-secondary" style="height: 40px; border-radius: 8px; white-space: nowrap;">تسجيل الخروج</button>
+          <button onclick="logout()" class="btn btn-secondary" style="height: 40px; border-radius: 8px;">تسجيل الخروج</button>
         </div>
       `;
     }
@@ -67,8 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0 var(--sys-spacing-32);
+          padding: 0 var(--sys-spacing-24);
           border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          position: relative;
         }
         
         .nav-logo {
@@ -81,13 +82,24 @@ document.addEventListener('DOMContentLoaded', () => {
           align-items: center;
           gap: 8px;
           white-space: nowrap;
+          z-index: 1001;
         }
         
+        .nav-content {
+          display: flex;
+          align-items: center;
+          gap: var(--sys-spacing-24);
+          flex: 1;
+          justify-content: flex-end;
+        }
+
         .nav-links {
           display: flex;
           gap: var(--sys-spacing-16);
           margin: 0 var(--sys-spacing-8);
           list-style: none;
+          padding: 0;
+          align-items: center;
         }
         
         .nav-link {
@@ -124,13 +136,110 @@ document.addEventListener('DOMContentLoaded', () => {
           text-decoration: none;
           white-space: nowrap;
         }
+
+        .nav-controls {
+          gap: 16px;
+        }
+
+        .mobile-menu-btn {
+          display: none;
+          background: transparent;
+          border: none;
+          color: var(--sys-color-primary);
+          font-size: 2rem;
+          cursor: pointer;
+          z-index: 1001;
+        }
   
         @media (max-width: 992px) {
-          .nav-links { display: none; }
-          .doctor-join-btn { display: none; }
+          .mobile-menu-btn {
+            display: block;
+          }
+          
+          .nav-content {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            bottom: 0;
+            width: 280px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 100px var(--sys-spacing-24) var(--sys-spacing-24);
+            gap: var(--sys-spacing-24);
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+            overflow-y: auto;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+          }
+          
+          .nav-content.active {
+            right: 0;
+          }
+
+          .nav-links {
+            flex-direction: column;
+            width: 100%;
+            align-items: flex-start;
+          }
+
+          .nav-links li {
+            width: 100%;
+          }
+
+          .nav-link {
+            display: block;
+            width: 100%;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--sys-color-surface-variant);
+          }
+
+          .nav-controls {
+            flex-direction: column;
+            width: 100%;
+            align-items: flex-start;
+            gap: 12px;
+          }
+
+          .nav-controls .btn {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+            margin-bottom: 12px;
+          }
+          
+          .notification-container {
+             width: 100%;
+          }
+          .notification-dropdown {
+             position: static !important;
+             width: 100% !important;
+             margin-top: 10px !important;
+             box-shadow: none !important;
+             border: 1px solid var(--sys-color-outline-variant) !important;
+          }
         }
 
         .hidden { display: none !important; }
+        
+        /* Mobile Overlay */
+        .mobile-overlay {
+          display: none;
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0,0,0,0.5);
+          z-index: 999;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        
+        .mobile-overlay.active {
+          display: block;
+          opacity: 1;
+        }
       </style>
   
       <nav class="glass-nav">
@@ -139,26 +248,52 @@ document.addEventListener('DOMContentLoaded', () => {
             <i class="ph-fill ph-heartbeat"></i> المنصة الطبية
           </a>
           
-          <ul class="nav-links">
-            <li><a href="index.html" class="nav-link ${currentPath === 'index.html' ? 'active' : ''}">الرئيسية</a></li>
-            <li><a href="doctors.html" class="nav-link ${currentPath === 'doctors.html' ? 'active' : ''}">الأطباء</a></li>
-            <li><a href="bmi.html" class="nav-link ${currentPath === 'bmi.html' ? 'active' : ''}">حاسبة BMI</a></li>
-            <li><a href="videos.html" class="nav-link ${currentPath === 'videos.html' ? 'active' : ''}">المكتبة المرئية</a></li>
-            <li><a href="consultation.html" class="nav-link ${currentPath === 'consultation.html' ? 'active' : ''}">الاستشارة الطبية</a></li>
-            <li>
-              <a href="join-doctor.html" class="doctor-join-btn">
-                <i class="ph ph-stethoscope"></i> انضم كطبيب
-              </a>
-            </li>
-          </ul>
-  
-          ${userControls}
+          <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <i class="ph ph-list"></i>
+          </button>
+          
+          <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+
+          <div class="nav-content" id="navContent">
+            <ul class="nav-links">
+              <li><a href="index.html" class="nav-link ${currentPath === 'index.html' ? 'active' : ''}">الرئيسية</a></li>
+              <li><a href="doctors.html" class="nav-link ${currentPath === 'doctors.html' ? 'active' : ''}">الأطباء</a></li>
+              <li><a href="bmi.html" class="nav-link ${currentPath === 'bmi.html' ? 'active' : ''}">حاسبة BMI</a></li>
+              <li><a href="videos.html" class="nav-link ${currentPath === 'videos.html' ? 'active' : ''}">المكتبة المرئية</a></li>
+              <li><a href="consultation.html" class="nav-link ${currentPath === 'consultation.html' ? 'active' : ''}">الاستشارة الطبية</a></li>
+              <li>
+                <a href="join-doctor.html" class="doctor-join-btn">
+                  <i class="ph ph-stethoscope"></i> انضم كطبيب
+                </a>
+              </li>
+            </ul>
+    
+            ${userControls}
+          </div>
         </div>
       </nav>
     `;
   
     container.innerHTML = navbarHTML;
   });
+  
+  window.toggleMobileMenu = function() {
+    const navContent = document.getElementById('navContent');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const menuBtn = document.querySelector('.mobile-menu-btn i');
+    
+    if (navContent.classList.contains('active')) {
+      navContent.classList.remove('active');
+      mobileOverlay.classList.remove('active');
+      menuBtn.classList.replace('ph-x', 'ph-list');
+      document.body.style.overflow = '';
+    } else {
+      navContent.classList.add('active');
+      mobileOverlay.classList.add('active');
+      menuBtn.classList.replace('ph-list', 'ph-x');
+      document.body.style.overflow = 'hidden';
+    }
+  };
   
   function logout() {
     localStorage.clear();

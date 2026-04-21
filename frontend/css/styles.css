@@ -182,10 +182,21 @@ h1, h2, h3, h4, .display-text {
 .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
 
+@media (max-width: 992px) {
+  .grid-cols-3, .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .grid-cols-2, .grid-cols-3, .grid-cols-4 {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 1fr;
   }
+  .section {
+    padding: var(--sys-spacing-48) 0;
+  }
+  .display-lg { font-size: 2.5rem; }
+  .headline-md { font-size: 1.25rem; }
 }
 
 /* Helpers */
