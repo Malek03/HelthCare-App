@@ -3,8 +3,36 @@
  * Provides mock calls or connects directly to Prisma/Express endpoints.
  */
 
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
-const BASE_SERVER_URL = 'http://127.0.0.1:5000';
+// دالة لتحميل وقراءة ملف .env
+let envConfig = null;
+const loadEnvConfig = async () => {
+  if (envConfig) return envConfig;
+  try {
+    const res = await fetch('/.env');
+    if (!res.ok) throw new Error('Cannot load .env');
+    const text = await res.text();
+    envConfig = {};
+    text.split('\n').forEach(line => {
+      const match = line.match(/^([^=]+)=(.*)$/);
+      if (match) envConfig[match[1].trim()] = match[2].trim().replace(/['"]/g, '');
+    });
+    return envConfig;
+  } catch (error) {
+    console.error('Error loading .env file:', error);
+    envConfig = {};
+    return envConfig;
+  }
+};
+
+const getApiBaseUrl = async () => {
+  const env = await loadEnvConfig();
+  return env.API_BASE_URL || 'http://127.0.0.1:5000/api';
+};
+
+const getBaseServerUrl = async () => {
+  const env = await loadEnvConfig();
+  return env.BASE_SERVER_URL || 'http://127.0.0.1:5000';
+};
 
 class ApiService {
   /**
@@ -14,7 +42,8 @@ class ApiService {
     if (!path) return null;
     if (path.startsWith('http')) return path;
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `${BASE_SERVER_URL}${cleanPath}`;
+    const baseUrl = (envConfig && envConfig.BASE_SERVER_URL) || 'http://127.0.0.1:5000';
+    return `${baseUrl}${cleanPath}`;
   }
   /**
    * Internal fetch wrapper handling tokens and JSON parsing
@@ -37,7 +66,8 @@ class ApiService {
     try {
       console.log(`API Request: ${endpoint}`, { method: options.method || 'GET', headers, body: options.body });
       
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      const baseUrl = await getApiBaseUrl();
+      const response = await fetch(`${baseUrl}${endpoint}`, {
         ...options,
         headers,
       });

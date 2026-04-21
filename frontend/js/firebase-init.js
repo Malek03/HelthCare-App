@@ -1,15 +1,39 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
-// TODO: استبدل هذه الإعدادات بإعدادات مشروعك في Firebase (من إعدادات المشروع -> تطبيق الويب)
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+// تحميل الإعدادات من ملف .env
+let firebaseConfig = {
+  apiKey: "AIzaSyCrBNhI6w-yp8-Z5WtaUI90_DYkrRGMtsg",
+  authDomain: "healthcarekg.firebaseapp.com",
   projectId: "healthcarekg",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  storageBucket: "healthcarekg.firebasestorage.app",
+  messagingSenderId: "544266605571",
+  appId: "1:544266605571:web:79e333a9e0245cbb192a36",
+  measurementId: "G-DXMHZYZT4F"
 };
+
+try {
+  const res = await fetch('/.env');
+  if (res.ok) {
+    const text = await res.text();
+    text.split('\n').forEach(line => {
+      const match = line.match(/^([^=]+)=(.*)$/);
+      if (match) {
+        const key = match[1].trim();
+        const value = match[2].trim().replace(/['"]/g, '');
+        if (key === 'FIREBASE_API_KEY') firebaseConfig.apiKey = value;
+        if (key === 'FIREBASE_AUTH_DOMAIN') firebaseConfig.authDomain = value;
+        if (key === 'FIREBASE_PROJECT_ID') firebaseConfig.projectId = value;
+        if (key === 'FIREBASE_STORAGE_BUCKET') firebaseConfig.storageBucket = value;
+        if (key === 'FIREBASE_MESSAGING_SENDER_ID') firebaseConfig.messagingSenderId = value;
+        if (key === 'FIREBASE_APP_ID') firebaseConfig.appId = value;
+        if (key === 'FIREBASE_MEASUREMENT_ID') firebaseConfig.measurementId = value;
+      }
+    });
+  }
+} catch (e) {
+  console.error("Failed to load .env for Firebase, using fallback", e);
+}
 
 try {
   // تهيئة Firebase
