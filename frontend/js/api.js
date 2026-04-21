@@ -332,6 +332,30 @@ class ApiService {
   static async sendHealthTip(id) {
     return this.request(`/admin/health-tips/${id}/send`, { method: 'POST' });
   }
+
+  // ==========================================
+  // Notifications API
+  // ==========================================
+  static async updateFcmToken(fcmToken) {
+    return this.request('/auth/update-fcm', {
+      method: 'PUT',
+      body: JSON.stringify({ fcm_token: fcmToken })
+    });
+  }
+
+  static async getNotifications(page = 1, limit = 20, unreadOnly = false) {
+    let url = `/notifications?page=${page}&limit=${limit}`;
+    if (unreadOnly) url += `&unread_only=true`;
+    return this.request(url, { method: 'GET' });
+  }
+
+  static async markNotificationAsRead(id) {
+    return this.request(`/notifications/${id}/read`, { method: 'PUT' });
+  }
+
+  static async markAllNotificationsAsRead() {
+    return this.request('/notifications/read-all', { method: 'PUT' });
+  }
 }
 
 // Expose globally for easy component usage

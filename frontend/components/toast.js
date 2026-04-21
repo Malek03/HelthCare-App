@@ -1,39 +1,47 @@
 /**
- * Stitch Design System Toast Notifications
- * A global floating notification component matching the platform's theme.
+ * Premium Glassmorphic Toast Notifications
  */
 
 (function() {
-    // 1. Inject Auto-Styles
     const style = document.createElement('style');
     style.innerHTML = `
         .stitch-toast-container {
             position: fixed;
-            bottom: 32px;
-            left: 32px;
-            z-index: 9999;
+            top: 24px;
+            right: 24px;
+            z-index: 10000;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
             pointer-events: none;
+            width: 380px;
         }
         
         .stitch-toast {
-            min-width: 320px;
-            max-width: 400px;
-            background: var(--sys-color-surface-container-lowest, #ffffff);
-            box-shadow: var(--sys-elevation-glass, 0 8px 32px rgba(17,28,45,0.08));
-            border-radius: var(--sys-radius-lg, 12px);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 16px 20px;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 16px;
-            transform: translateX(-120%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transform: translateX(120%);
             opacity: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             pointer-events: auto;
-            border-right: 4px solid;
-            font-family: var(--sys-font-body, 'Cairo', sans-serif);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .stitch-toast::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 6px;
+            background: var(--toast-color, var(--sys-color-primary));
         }
         
         .stitch-toast.show {
@@ -41,24 +49,17 @@
             opacity: 1;
         }
         
-        .stitch-toast.success {
-            border-right-color: #2E7D32;
-        }
-        .stitch-toast.success i { color: #2E7D32; }
-        
-        .stitch-toast.error {
-            border-right-color: var(--sys-color-error, #ba1a1a);
-        }
-        .stitch-toast.error i { color: var(--sys-color-error, #ba1a1a); }
-        
-        .stitch-toast.info {
-            border-right-color: var(--sys-color-primary, #005bbf);
-        }
-        .stitch-toast.info i { color: var(--sys-color-primary, #005bbf); }
-
-        .stitch-toast i {
-            font-size: 1.75rem;
-            margin-top: 2px;
+        .stitch-toast-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            background: var(--toast-bg, rgba(var(--sys-color-primary-rgb), 0.1));
+            color: var(--toast-color, var(--sys-color-primary));
         }
         
         .stitch-toast-content {
@@ -66,57 +67,73 @@
         }
         
         .stitch-toast-title {
-            font-weight: 700;
-            color: var(--sys-color-on-surface, #111c2d);
-            margin-bottom: 6px;
-            font-size: 1.05rem;
+            font-weight: 800;
+            color: #111c2d;
+            margin-bottom: 2px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
         }
         
         .stitch-toast-message {
-            color: var(--sys-color-on-surface-variant, #414754);
-            font-size: 0.95rem;
-            line-height: 1.5;
+            color: #414754;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            font-family: 'Cairo', sans-serif;
         }
-        
-        @media (max-width: 600px) {
+
+        .stitch-toast.success { --toast-color: #00c853; --toast-bg: rgba(0, 200, 83, 0.1); }
+        .stitch-toast.error { --toast-color: #ff5252; --toast-bg: rgba(255, 82, 82, 0.1); }
+        .stitch-toast.info { --toast-color: #2196f3; --toast-bg: rgba(33, 150, 243, 0.1); }
+        .stitch-toast.warning { --toast-color: #ffab00; --toast-bg: rgba(255, 171, 0, 0.1); }
+
+        @keyframes progress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--toast-color);
+            opacity: 0.3;
+            width: 100%;
+        }
+
+        @media (max-width: 480px) {
             .stitch-toast-container {
-                bottom: 16px;
-                left: 16px;
                 right: 16px;
-            }
-            .stitch-toast {
-                min-width: unset;
-                width: 100%;
-                transform: translateY(120%);
-            }
-            .stitch-toast.show {
-                transform: translateY(0);
+                left: 16px;
+                width: auto;
             }
         }
     `;
     document.head.appendChild(style);
 
-    // 2. Inject Container
     const container = document.createElement('div');
     container.className = 'stitch-toast-container';
     document.body.appendChild(container);
 
-    // 3. Expose Global API
     window.Toast = {
-        show: function(title, message, type = 'success', duration = 4500) {
+        show: function(title, message, type = 'success', duration = 4000) {
             const toast = document.createElement('div');
             toast.className = `stitch-toast ${type}`;
             
-            let icon = 'ph-info';
-            if (type === 'success') icon = 'ph-check-circle';
-            if (type === 'error') icon = 'ph-warning-circle';
+            let iconClass = 'ph-info';
+            if (type === 'success') iconClass = 'ph-check-circle';
+            if (type === 'error') iconClass = 'ph-warning-circle';
+            if (type === 'warning') iconClass = 'ph-warning';
             
             toast.innerHTML = `
-                <i class="ph-fill ${icon}"></i>
+                <div class="stitch-toast-icon">
+                    <i class="ph-fill ${iconClass}"></i>
+                </div>
                 <div class="stitch-toast-content">
                     <div class="stitch-toast-title">${title}</div>
                     <div class="stitch-toast-message">${message}</div>
                 </div>
+                <div class="toast-progress" style="animation: progress ${duration}ms linear forwards"></div>
             `;
             
             container.appendChild(toast);
@@ -127,10 +144,14 @@
             
             setTimeout(() => {
                 toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 400); // Wait for transition
+                setTimeout(() => toast.remove(), 500);
             }, duration);
         }
+    };
+
+    // Aliases for convenience
+    window.showToast = (msg, type = 'info') => {
+        const titles = { success: 'نجاح العملية', error: 'تنبيه خطأ', info: 'إشعار جديد', warning: 'تحذير' };
+        window.Toast.show(titles[type] || 'إشعار', msg, type);
     };
 })();

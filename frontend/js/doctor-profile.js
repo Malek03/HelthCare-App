@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const docId = params.get('id');
 
     if (!localStorage.getItem('token')) {
-      alert("الرجاء تسجيل الدخول أولاً لحجز الموعد");
+      if(window.showToast) window.showToast('الرجاء تسجيل الدخول أولاً لحجز الموعد', 'warning');
       window.location.href = "login.html";
       return;
     }
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('bookingSuccess').style.display = 'block';
     } catch(err) {
       console.error(err);
-      alert('تعذر إكمال الحجز: ' + err.message);
+      if(window.showToast) window.showToast('تعذر إكمال الحجز: ' + err.message, 'error');
       btn.innerHTML = 'تأكيد الحجز';
       btn.disabled = false;
     }

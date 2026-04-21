@@ -77,7 +77,7 @@ async function addWater() {
       initWaterCups();
     } catch(err) {
       console.error(err);
-      alert('حدث خطأ أثناء تسجيل الماء');
+      if(window.showToast) window.showToast('حدث خطأ أثناء تسجيل الماء', 'error');
     }
   }
 }
@@ -101,7 +101,7 @@ async function logSleep() {
     document.getElementById('sleepInput').value = '';
   } catch(err) {
     console.error(err);
-    alert('حدث خطأ أثناء تسجيل ساعات النوم');
+    if(window.showToast) window.showToast('حدث خطأ أثناء تسجيل ساعات النوم', 'error');
   }
 }
 
@@ -132,7 +132,7 @@ async function toggleWalk() {
     }
   } catch(err) {
     console.error(err);
-    alert('حدث خطأ أثناء التأكيد');
+    if(window.showToast) window.showToast('حدث خطأ أثناء التأكيد', 'error');
   }
 }
 

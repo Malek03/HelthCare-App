@@ -34,6 +34,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       userControls = `
         <div class="nav-controls d-flex align-center" style="gap: 16px; white-space: nowrap;">
+          <div class="notification-container" style="position: relative; display: flex; align-items: center;">
+            <button onclick="toggleNotifications(event)" class="btn btn-icon" style="background: transparent; border: none; color: var(--sys-color-on-surface); font-size: 1.5rem; cursor: pointer; position: relative;">
+              <i class="ph ph-bell"></i>
+              <span id="unreadBadge" class="badge hidden" style="position: absolute; top: -5px; right: -5px; background: var(--sys-color-error); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; font-weight: bold;">0</span>
+            </button>
+            <div id="notificationDropdown" class="notification-dropdown hidden" style="position: absolute; top: 100%; left: 0; background: #ffffff; border: 1px solid var(--sys-color-outline-variant); border-radius: 16px; width: 350px; max-height: 450px; overflow-y: auto; box-shadow: var(--sys-elevation-2); z-index: 1000; padding: 0; margin-top: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--sys-color-outline-variant); position: sticky; top: 0; background: #ffffff; z-index: 10;">
+                <h4 style="margin: 0; font-size: 1.1rem; color: var(--sys-color-on-surface); font-weight: 700;">الإشعارات</h4>
+                <button onclick="markAllNotificationsAsRead()" style="background:none; border:none; color:var(--sys-color-primary); cursor:pointer; font-size:0.85rem; font-weight: 600;">تحديد الكل كمقروء</button>
+              </div>
+              <div id="notificationList" style="padding: 4px 0;">
+                <div style="text-align: center; color: var(--sys-color-on-surface-variant); padding: 30px;">
+                  <i class="ph ph-spinner ph-spin" style="font-size: 1.5rem; margin-bottom: 8px;"></i>
+                  <p style="margin: 0;">جاري التحميل...</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <a href="${dashboardLink}" class="btn btn-outline" style="white-space: nowrap;">
             <i class="ph ${userIcon}"></i> ${userName}
           </a>
@@ -111,6 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
           .nav-links { display: none; }
           .doctor-join-btn { display: none; }
         }
+
+        .hidden { display: none !important; }
       </style>
   
       <nav class="glass-nav">
@@ -144,3 +164,95 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.clear();
     window.location.href = 'login.html';
   }
+
+  // --- Notifications Logic ---
+  window.toggleNotifications = function(event) {
+    if (event) event.stopPropagation(); // منع انتشار الحدث لغلق القائمة فوراً
+    const dropdown = document.getElementById('notificationDropdown');
+    if (dropdown) {
+      dropdown.classList.toggle('hidden');
+      if (!dropdown.classList.contains('hidden')) {
+        loadNotifications();
+      }
+    }
+  };
+
+  // إغلاق القائمة عند النقر في أي مكان خارجها
+  document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('notificationDropdown');
+    const container = document.querySelector('.notification-container');
+    if (dropdown && !dropdown.classList.contains('hidden') && container && !container.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+
+  window.loadNotifications = async function() {
+    const list = document.getElementById('notificationList');
+    const badge = document.getElementById('unreadBadge');
+    
+    if (!window.ApiService) return;
+    
+    try {
+      const res = await window.ApiService.getNotifications(1, 10);
+      if (res.success) {
+        const notifications = res.data.notifications;
+        const unreadCount = res.data.unreadCount;
+        
+        if (unreadCount > 0) {
+          badge.textContent = unreadCount;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+
+        if (notifications.length === 0) {
+          list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 20px;">لا توجد إشعارات</div>';
+          return;
+        }
+
+        list.innerHTML = notifications.map(n => `
+          <div class="notification-item ${n.is_read ? 'read' : 'unread'}" style="padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; background: ${n.is_read ? 'transparent' : 'rgba(0, 91, 191, 0.05)'}" onclick="markNotificationAsRead('${n.id}')">
+            <div style="font-weight: bold; font-size: 0.95rem; margin-bottom: 4px; color: ${n.is_read ? 'var(--sys-color-on-surface)' : 'var(--sys-color-primary)'}">
+              <i class="ph-fill ph-dot" style="display: ${n.is_read ? 'none' : 'inline'}; color: var(--sys-color-primary); margin-left: 4px;"></i>
+              ${n.title}
+            </div>
+            <div style="font-size: 0.85rem; color: var(--sys-color-on-surface-variant); line-height: 1.4;">${n.body}</div>
+            <div style="font-size: 0.75rem; color: var(--sys-color-outline); margin-top: 6px; display: flex; align-items: center; gap: 4px;">
+              <i class="ph ph-clock"></i>
+              ${new Date(n.created_at).toLocaleString('ar-EG')}
+            </div>
+          </div>
+        `).join('');
+      }
+    } catch (err) {
+      console.error('Failed to load notifications', err);
+      list.innerHTML = '<div style="text-align: center; color: var(--sys-color-error); padding: 20px;">حدث خطأ أثناء تحميل الإشعارات</div>';
+    }
+  };
+
+  window.markNotificationAsRead = async function(id) {
+    if (!window.ApiService) return;
+    try {
+      await window.ApiService.markNotificationAsRead(id);
+      loadNotifications();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  window.markAllNotificationsAsRead = async function() {
+    if (!window.ApiService) return;
+    try {
+      await window.ApiService.markAllNotificationsAsRead();
+      loadNotifications();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Load badge on initial load if logged in
+  document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('token')) {
+      setTimeout(loadNotifications, 1000);
+    }
+  });

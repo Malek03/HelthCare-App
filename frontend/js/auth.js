@@ -44,13 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
           } else {
              // في حالة وجود خطأ في البيانات (مثل كلمة مرور خاطئة)
-             alert(res.message || 'بيانات الدخول غير صحيحة.');
+             if(window.showToast) window.showToast(res.message || 'بيانات الدخول غير صحيحة.', 'error');
              btn.innerHTML = 'تسجيل الدخول';
              btn.disabled = false;
           }
         } catch (err) {
           // في حالة انقطاع الاتصال بالسيرفر
-          alert('فشل تسجيل الدخول: ' + err.message);
+          if(window.showToast) window.showToast('فشل تسجيل الدخول: ' + err.message, 'error');
           btn.innerHTML = 'تسجيل الدخول';
           btn.disabled = false;
         }
@@ -71,10 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.disabled = true;
           
           await window.ApiService.register(name, email, password);
-          alert('تم إنشاء الحساب بنجاح، يمكنك الآن تسجيل الدخول');
-          window.location.href = 'login.html';
+          if(window.showToast) window.showToast('تم إنشاء الحساب بنجاح، يمكنك الآن تسجيل الدخول', 'success');
+          setTimeout(() => { window.location.href = 'login.html'; }, 2000);
         } catch (err) {
-          alert('فشل التسجيل: ' + err.message);
+          if(window.showToast) window.showToast('فشل التسجيل: ' + err.message, 'error');
           btn.innerHTML = 'إنشاء الحساب';
           btn.disabled = false;
         }

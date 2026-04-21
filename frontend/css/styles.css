@@ -195,3 +195,5 @@ h1, h2, h3, h4, .display-text {
 .justify-between { justify-content: space-between; }
 .mt-4 { margin-top: var(--sys-spacing-16); }
 .mb-4 { margin-bottom: var(--sys-spacing-16); }
+
+.hidden { display: none !important; }
