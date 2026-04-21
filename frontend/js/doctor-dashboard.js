@@ -155,6 +155,13 @@ function renderStats(stats) {
       colorClass: 'green',
       cardClass: 'articles',
     },
+    {
+      key: 'blockedArticles',
+      label: 'مقالات محظورة',
+      icon: 'ph-article-ny-times',
+      colorClass: 'red',
+      cardClass: 'blocked-articles',
+    },
   ];
 
   statsGrid.innerHTML = statItems.map(item => `

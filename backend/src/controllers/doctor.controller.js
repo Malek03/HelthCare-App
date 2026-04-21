@@ -201,12 +201,20 @@ const getDoctorDashboard = async (req, res) => {
       return res.status(404).json({ success: false, message: 'ملف الطبيب غير موجود' });
     }
 
-    const [totalAppointments, pendingAppointments, totalConsultations, pendingConsultations, totalArticles] = await Promise.all([
+    const [
+      totalAppointments,
+      pendingAppointments,
+      totalConsultations,
+      pendingConsultations,
+      totalArticles,
+      blockedArticles
+    ] = await Promise.all([
       prisma.appointment.count({ where: { doctor_id: doctorProfile.id } }),
       prisma.appointment.count({ where: { doctor_id: doctorProfile.id, status: 'PENDING' } }),
       prisma.consultation.count({ where: { doctor_id: doctorProfile.id } }),
       prisma.consultation.count({ where: { doctor_id: doctorProfile.id, status: 'PENDING' } }),
       prisma.article.count({ where: { doctor_id: doctorProfile.id } }),
+      prisma.article.count({ where: { doctor_id: doctorProfile.id, is_published: false } }),
     ]);
 
     return res.status(200).json({
@@ -219,6 +227,7 @@ const getDoctorDashboard = async (req, res) => {
           totalConsultations,
           pendingConsultations,
           totalArticles,
+          blockedArticles,
         },
       },
     });

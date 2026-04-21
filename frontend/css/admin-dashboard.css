@@ -117,6 +117,7 @@
 .stat-card.consultations::before { background: linear-gradient(90deg, #00897B, #80CBC4); }
 .stat-card.pending-apps::before { background: linear-gradient(90deg, #F57C00, #FFB74D); }
 .stat-card.articles::before { background: linear-gradient(90deg, #4527A0, #7E57C2); }
+.stat-card.blocked-articles::before { background: linear-gradient(90deg, #C62828, #EF5350); }
 .stat-card.videos::before { background: linear-gradient(90deg, #AD1457, #EC407A); }
 
 .stat-icon {

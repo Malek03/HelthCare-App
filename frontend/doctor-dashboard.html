@@ -11,6 +11,14 @@
   <link rel="stylesheet" href="./css/doctor-dashboard.css">
 
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- PWA Setup -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a237e">
+    <link rel="apple-touch-icon" href="/icons/icon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 </head>
 <body class="bg-low">
 
@@ -259,5 +267,19 @@
   <script src="./components/footer.js"></script>
   <script src="./components/toast.js"></script>
   <script src="./js/doctor-dashboard.js"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(reg => {
+            console.log('Service Worker registered!', reg);
+          }).catch(err => {
+            console.log('Service Worker registration failed: ', err);
+          });
+        });
+      }
+    </script>
+
 </body>
 </html>

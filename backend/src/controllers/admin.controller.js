@@ -20,6 +20,7 @@ const getStats = async (req, res) => {
       pendingApplications,
       totalArticles,
       totalVideos,
+      blockedArticles,
     ] = await Promise.all([
       prisma.user.count(),
       prisma.user.count({ where: { is_active: true, is_banned: false } }),
@@ -30,6 +31,7 @@ const getStats = async (req, res) => {
       prisma.doctorApplication.count({ where: { status: 'PENDING' } }),
       prisma.article.count(),
       prisma.video.count(),
+      prisma.article.count({ where: { is_published: false } }),
     ]);
 
     return res.status(200).json({
@@ -44,6 +46,7 @@ const getStats = async (req, res) => {
         pendingApplications,
         totalArticles,
         totalVideos,
+        blockedArticles,
       },
     });
   } catch (error) {

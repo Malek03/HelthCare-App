@@ -108,6 +108,7 @@ function renderStats(data) {
     { key: 'completedConsultations',  label: 'استشارات مكتملة',    icon: 'ph-chat-circle-check',color: 'teal',   card: 'consultations' },
     { key: 'pendingApplications',     label: 'طلبات معلقة',        icon: 'ph-hourglass-medium', color: 'orange', card: 'pending-apps' },
     { key: 'totalArticles',           label: 'المقالات',           icon: 'ph-article',          color: 'indigo', card: 'articles' },
+    { key: 'blockedArticles',         label: 'المقالات المحظورة',  icon: 'ph-article-ny-times', color: 'red',    card: 'blocked-articles' },
     { key: 'totalVideos',             label: 'الفيديوهات',         icon: 'ph-video',            color: 'pink',   card: 'videos' },
   ];
 

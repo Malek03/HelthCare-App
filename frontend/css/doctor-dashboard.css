@@ -122,6 +122,7 @@
 .stat-card.consultations::before { background: linear-gradient(90deg, #7B1FA2, #CE93D8); }
 .stat-card.pending-consultations::before { background: linear-gradient(90deg, #00897B, #80CBC4); }
 .stat-card.articles::before { background: linear-gradient(90deg, #2E7D32, #81C784); }
+.stat-card.blocked-articles::before { background: linear-gradient(90deg, #C62828, #EF5350); }
 
 .stat-icon {
   width: 56px; height: 56px;
@@ -136,6 +137,7 @@
 .stat-icon.purple { background: linear-gradient(135deg, #7B1FA2, #CE93D8); }
 .stat-icon.teal { background: linear-gradient(135deg, #00897B, #80CBC4); }
 .stat-icon.green { background: linear-gradient(135deg, #2E7D32, #81C784); }
+.stat-icon.red { background: linear-gradient(135deg, #C62828, #EF5350); }
 
 .stat-number {
   font-size: 2.25rem;
