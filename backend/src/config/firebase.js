@@ -8,10 +8,18 @@ const initializeFirebase = () => {
   if (firebaseApp) return firebaseApp;
 
   try {
-    const serviceAccountPath = path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH || './firebase-service-account.json');
+    let serviceAccount;
 
-    if (fs.existsSync(serviceAccountPath)) {
-      const serviceAccount = require(serviceAccountPath);
+    if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+      serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    } else {
+      const serviceAccountPath = path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH || './firebase-service-account.json');
+      if (fs.existsSync(serviceAccountPath)) {
+        serviceAccount = require(serviceAccountPath);
+      }
+    }
+
+    if (serviceAccount) {
       firebaseApp = admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
       });

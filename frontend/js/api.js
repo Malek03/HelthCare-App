@@ -26,12 +26,12 @@ const loadEnvConfig = async () => {
 
 const getApiBaseUrl = async () => {
   const env = await loadEnvConfig();
-  return env.API_BASE_URL || 'http://127.0.0.1:5000/api';
+  return env.API_BASE_URL || 'https://helthcare-app.onrender.com/api'|| 'http://localhost:5000/api';
 };
 
 const getBaseServerUrl = async () => {
   const env = await loadEnvConfig();
-  return env.BASE_SERVER_URL || 'http://127.0.0.1:5000';
+  return env.BASE_SERVER_URL || 'https://helthcare-app.onrender.com'|| 'http://localhost:5000';
 };
 
 class ApiService {
@@ -42,7 +42,7 @@ class ApiService {
     if (!path) return null;
     if (path.startsWith('http')) return path;
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    const baseUrl = (envConfig && envConfig.BASE_SERVER_URL) || 'http://127.0.0.1:5000';
+    const baseUrl = (envConfig && envConfig.BASE_SERVER_URL) || 'https://helthcare-app.onrender.com';
     return `${baseUrl}${cleanPath}`;
   }
   /**
