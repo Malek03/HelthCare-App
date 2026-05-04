@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context Diagram - منصة الرعاية الصحية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .page-wrapper {
+            position: relative;
+        }
+
+        .diagram-container {
+            position: relative;
+            width: 1350px;
+            height: 1150px;
+            background: #ffffff;
+            border: 1.5px solid #888;
+        }
+
+        /* === Central System Box === */
+        .system-box {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 240px;
+            height: 380px;
+            background: #0047b3;
+            border: 2px solid #003380;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .system-box .process-number {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 28px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            color: #0047b3;
+        }
+
+        .system-box h1 {
+            color: #ffffff;
+            font-size: 30px;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.6;
+            padding: 0 12px;
+            margin-top: 10px;
+        }
+
+        /* === External Entities === */
+        .entity-box {
+            background: #dce8f5;
+            border: 2px solid #8badd4;
+            padding: 10px 24px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 15px;
+            color: #1a3a5c;
+            position: absolute;
+            z-index: 5;
+            white-space: nowrap;
+        }
+
+        /* === Data Flow Labels === */
+        .flow-label {
+            position: absolute;
+            font-size: 11px;
+            font-weight: 600;
+            color: #222;
+            background: rgba(255,255,255,0.95);
+            padding: 1px 5px;
+            border: 1px solid #bbb;
+            white-space: nowrap;
+            z-index: 8;
+            line-height: 1.5;
+        }
+
+        /* === SVG Arrows Layer === */
+        .arrows-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .arrow-line {
+            stroke: #333;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        /* === Diagram Title === */
+        .diagram-title {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 19px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .diagram-container { border: 1px solid #000; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="diagram-container">
+
+        <!-- ===== CENTRAL SYSTEM BOX ===== -->
+        <div class="system-box">
+            <div class="process-number">0</div>
+            <h1>منصة<br>الرعاية<br>الصحية</h1>
+        </div>
+
+        <!-- ===== EXTERNAL ENTITIES ===== -->
+
+        <!-- المريض / المستخدم (Left Center) -->
+        <div class="entity-box" style="left: 30px; top: 490px;">المريض / المستخدم</div>
+
+        <!-- الطبيب (Top Left) -->
+        <div class="entity-box" style="left: 200px; top: 25px;">الطبيب</div>
+
+        <!-- مدير النظام (Top Right) -->
+        <div class="entity-box" style="right: 50px; top: 25px;">مدير النظام</div>
+
+        <!-- Firebase (Bottom Left) -->
+        <div class="entity-box" style="left: 60px; bottom: 35px;">Firebase (FCM)<br><span style="font-size:12px;">خدمة الإشعارات</span></div>
+
+        <!-- قاعدة البيانات (Bottom Center) -->
+        <div class="entity-box" style="left: 50%; bottom: 35px; transform: translateX(-50%); border-bottom: 4px solid #8badd4;">PostgreSQL<br><span style="font-size:12px;">قاعدة البيانات</span></div>
+
+        <!-- Cloudinary (Bottom Right) -->
+        <div class="entity-box" style="right: 60px; bottom: 35px;">Cloudinary<br><span style="font-size:12px;">التخزين السحابي</span></div>
+
+
+        <!-- ===== SVG ARROWS ===== -->
+        <svg class="arrows-svg" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <marker id="ah" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" fill="#333">
+                    <polygon points="0 0, 10 3.5, 0 7" />
+                </marker>
+            </defs>
+
+            <!-- ============================== -->
+            <!-- المريض → النظام (4 arrows right) -->
+            <!-- ============================== -->
+            <line x1="195" y1="400" x2="548" y2="400" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="195" y1="455" x2="548" y2="455" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="195" y1="510" x2="548" y2="510" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="195" y1="565" x2="548" y2="565" class="arrow-line" marker-end="url(#ah)" />
+
+            <!-- ============================== -->
+            <!-- النظام → المريض (2 arrows left) -->
+            <!-- ============================== -->
+            <line x1="548" y1="630" x2="195" y2="630" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="548" y1="685" x2="195" y2="685" class="arrow-line" marker-end="url(#ah)" />
+
+            <!-- ============================== -->
+            <!-- الطبيب → النظام (3 arrows, top-left to center) -->
+            <!-- ============================== -->
+            <!-- Doctor arrow 1 -->
+            <line x1="250" y1="70" x2="580" y2="365" class="arrow-line" marker-end="url(#ah)" />
+            <!-- Doctor arrow 2 -->
+            <line x1="310" y1="70" x2="630" y2="365" class="arrow-line" marker-end="url(#ah)" />
+            <!-- Doctor arrow 3 -->
+            <line x1="370" y1="70" x2="660" y2="365" class="arrow-line" marker-end="url(#ah)" />
+
+            <!-- ============================== -->
+            <!-- النظام → الطبيب (2 arrows back) -->
+            <!-- ============================== -->
+            <line x1="570" y1="365" x2="190" y2="70" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="560" y1="370" x2="220" y2="70" class="arrow-line" marker-end="url(#ah)" />
+
+            <!-- ============================== -->
+            <!-- مدير النظام → النظام (arrows from top-right) -->
+            <!-- ============================== -->
+            <line x1="1170" y1="70" x2="808" y2="400" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="1210" y1="70" x2="808" y2="450" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="1250" y1="70" x2="808" y2="500" class="arrow-line" marker-end="url(#ah)" />
+
+            <!-- ============================== -->
+            <!-- النظام → مدير النظام (arrows back) -->
+            <!-- ============================== -->
+            <line x1="808" y1="540" x2="1200" y2="70" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="808" y1="580" x2="1240" y2="70" class="arrow-line" marker-end="url(#ah)" />
+
+            <!-- ============================== -->
+            <!-- النظام ↔ قاعدة البيانات (Down center) -->
+            <!-- ============================== -->
+            <line x1="660" y1="770" x2="660" y2="1060" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="700" y1="1060" x2="700" y2="770" class="arrow-line" marker-end="url(#ah)" />
+
+            <!-- ============================== -->
+            <!-- النظام → Firebase (Down-left) -->
+            <!-- ============================== -->
+            <line x1="580" y1="770" x2="180" y2="1060" class="arrow-line" marker-end="url(#ah)" />
+
+            <!-- ============================== -->
+            <!-- النظام ↔ Cloudinary (Down-right) -->
+            <!-- ============================== -->
+            <line x1="780" y1="770" x2="1150" y2="1060" class="arrow-line" marker-end="url(#ah)" />
+            <line x1="1190" y1="1060" x2="790" y2="770" class="arrow-line" marker-end="url(#ah)" />
+
+        </svg>
+
+
+        <!-- ===== DATA FLOW LABELS ===== -->
+
+        <!-- === المريض → النظام === -->
+        <div class="flow-label" style="left: 220px; top: 385px;">تسجيل دخول / إنشاء حساب</div>
+        <div class="flow-label" style="left: 220px; top: 440px;">حجز مواعيد / إرسال استشارة</div>
+        <div class="flow-label" style="left: 220px; top: 495px;">بيانات تتبع الصحة (ماء، نوم، مشي)</div>
+        <div class="flow-label" style="left: 220px; top: 550px;">البحث عن أطباء / تصفح مقالات / حساب BMI</div>
+
+        <!-- === النظام → المريض === -->
+        <div class="flow-label" style="left: 220px; top: 615px;">نتائج البحث / بيانات الأطباء / المقالات والفيديوهات</div>
+        <div class="flow-label" style="left: 220px; top: 670px;">إشعارات (قبول/رفض موعد) / بيانات التقدم اليومي</div>
+
+        <!-- === الطبيب → النظام === -->
+        <div class="flow-label" style="left: 70px; top: 120px;">إدارة مواعيد المرضى (قبول / رفض)</div>
+        <div class="flow-label" style="left: 70px; top: 170px;">إشعارات بمواعيد جديدة / استشارات واردة</div>
+        <div class="flow-label" style="left: 380px; top: 120px;">نشر مقالات / الرد على استشارات</div>
+        <div class="flow-label" style="left: 380px; top: 170px;">تعديل الملف الشخصي وأوقات العمل</div>
+        <div class="flow-label" style="left: 380px; top: 220px;">طلب الانضمام كطبيب + رفع الوثائق</div>
+
+        <!-- === مدير النظام → النظام === -->
+        <div class="flow-label" style="right: 40px; top: 120px;">إدارة المستخدمين (حظر / ترقية / حذف)</div>
+        <div class="flow-label" style="right: 40px; top: 170px;">الموافقة / رفض طلبات انضمام الأطباء</div>
+        <div class="flow-label" style="right: 40px; top: 220px;">إضافة مقالات / فيديوهات / نصائح صحية</div>
+
+        <!-- === النظام → مدير النظام === -->
+        <div class="flow-label" style="right: 40px; top: 280px;">إحصائيات النظام والتقارير</div>
+        <div class="flow-label" style="right: 40px; top: 330px;">قوائم المستخدمين والأطباء وطلبات الانضمام</div>
+
+        <!-- === النظام ↔ قاعدة البيانات === -->
+        <div class="flow-label" style="left: 575px; top: 900px;">تخزين واسترجاع البيانات</div>
+
+        <!-- === النظام → Firebase === -->
+        <div class="flow-label" style="left: 250px; top: 900px;">إرسال إشعارات فورية (Push)</div>
+
+        <!-- === النظام ↔ Cloudinary === -->
+        <div class="flow-label" style="right: 120px; top: 900px;">رفع / جلب الصور والوثائق</div>
+
+    </div>
+
+    <div class="diagram-title">
+        مخطط السياق (Context Diagram) — منصة الرعاية الصحية — DFD Level 0
+    </div>
+</div>
+
+</body>
+</html>
