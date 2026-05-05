@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERD Diagram - منصة الرعاية الصحية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Cairo',sans-serif;background:#f5f7fa;display:flex;justify-content:center;padding:40px;}
+        .wrap{position:relative;}
+        .dc{position:relative;width:1550px;height:1050px;background:#fff;border:2px solid #aaa;box-shadow:0 10px 30px rgba(0,0,0,0.05);}
+        .title{text-align:center;margin-top:20px;font-size:22px;font-weight:800;color:#1a3050;}
+
+        /* Entity Box */
+        .e{
+            position:absolute; z-index:5; background:#fff; border:2.5px solid #1a3050; border-radius:6px;
+            padding:12px 18px; text-align:center; font-weight:700; font-size:15px; color:#111;
+            transform:translate(-50%, -50%); min-width:140px; box-shadow:0 3px 10px rgba(0,0,0,0.08);
+        }
+        .e small{display:block;font-size:12px;color:#555;font-weight:600;margin-top:4px;}
+
+        /* Relationship Diamond */
+        .r{position:absolute;z-index:6;transform:translate(-50%, -50%);}
+        .r .d{
+            width:65px; height:65px; background:#fff; border:2px solid #1a3050;
+            transform:rotate(45deg); display:flex; align-items:center; justify-content:center;
+            box-shadow:0 3px 8px rgba(0,0,0,0.06);
+        }
+        .r .d span{
+            transform:rotate(-45deg); font-size:12px; font-weight:700; color:#1a3050; text-align:center; line-height:1.2;
+        }
+
+        /* Cardinality Label */
+        .c{
+            position:absolute; z-index:7; font-size:15px; font-weight:800; color:#111;
+            background:rgba(255,255,255,0.85); padding:2px 6px; border-radius:4px;
+            transform:translate(-50%, -50%);
+        }
+
+        /* SVG Lines */
+        .sv{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;}
+        .ln{stroke:#4a5568;stroke-width:2;fill:none;}
+
+        @media print{body{background:#fff;padding:0;}.dc{box-shadow:none;border:1px solid #000;}}
+    </style>
+</head>
+<body>
+<div class="wrap">
+<div class="dc">
+
+    <!-- ========================================== -->
+    <!-- ENTITIES -->
+    <!-- ========================================== -->
+    <div class="e" style="left:1000px;top:450px;border-width:4px;border-color:#0d2040;min-width:160px;">User<small>(المستخدم)</small></div>
+    <div class="e" style="left:300px;top:450px;border-width:4px;border-color:#0d2040;min-width:160px;">DoctorProfile<small>(ملف الطبيب)</small></div>
+    
+    <div class="e" style="left:1000px;top:150px;">DoctorApplication<small>(طلب الانضمام)</small></div>
+    <div class="e" style="left:300px;top:150px;">WorkSchedule<small>(مواعيد العمل)</small></div>
+    
+    <div class="e" style="left:650px;top:650px;">Appointment<small>(الموعد)</small></div>
+    <div class="e" style="left:650px;top:850px;">Consultation<small>(الاستشارة)</small></div>
+    
+    <div class="e" style="left:300px;top:850px;">Article<small>(المقال)</small></div>
+    <div class="e" style="left:1000px;top:850px;">HealthTip<small>(نصيحة صحية)</small></div>
+    
+    <!-- Right side entities -->
+    <div class="e" style="left:1350px;top:150px;">WaterLog<small>(تتبع الماء)</small></div>
+    <div class="e" style="left:1350px;top:325px;">SleepLog<small>(تتبع النوم)</small></div>
+    <div class="e" style="left:1350px;top:500px;">WalkLog<small>(تتبع المشي)</small></div>
+    <div class="e" style="left:1350px;top:675px;">Notification<small>(الإشعار)</small></div>
+    <div class="e" style="left:1350px;top:850px;">Video<small>(فيديو)</small></div>
+
+
+    <!-- ========================================== -->
+    <!-- RELATIONSHIP DIAMONDS -->
+    <!-- ========================================== -->
+    <div class="r" style="left:650px;top:450px;"><div class="d"><span>يمتلك</span></div></div>
+    
+    <div class="r" style="left:1000px;top:300px;"><div class="d"><span>يقدّم</span></div></div>
+    <div class="r" style="left:300px;top:300px;"><div class="d"><span>يضبط</span></div></div>
+    
+    <div class="r" style="left:825px;top:550px;"><div class="d"><span>يحجز</span></div></div>
+    <div class="r" style="left:475px;top:550px;"><div class="d"><span>يدير</span></div></div>
+    
+    <div class="r" style="left:825px;top:650px;"><div class="d"><span>يطلب</span></div></div>
+    <div class="r" style="left:475px;top:650px;"><div class="d"><span>يجيب</span></div></div>
+    
+    <div class="r" style="left:300px;top:650px;"><div class="d"><span>ينشر</span></div></div>
+    <div class="r" style="left:1000px;top:650px;"><div class="d"><span>يضيف</span></div></div>
+
+    <!-- Right side diamonds -->
+    <div class="r" style="left:1175px;top:300px;"><div class="d"><span>يسجّل</span></div></div>
+    <div class="r" style="left:1175px;top:388px;"><div class="d"><span>يسجّل</span></div></div>
+    <div class="r" style="left:1175px;top:475px;"><div class="d"><span>يسجّل</span></div></div>
+    <div class="r" style="left:1175px;top:563px;"><div class="d"><span>يتلقى</span></div></div>
+    <div class="r" style="left:1175px;top:650px;"><div class="d"><span>يضيف</span></div></div>
+
+
+    <!-- ========================================== -->
+    <!-- CARDINALITY LABELS -->
+    <!-- ========================================== -->
+    <!-- User - DoctorProfile -->
+    <span class="c" style="left:940px;top:430px;">1</span>
+    <span class="c" style="left:360px;top:430px;">1</span>
+
+    <!-- User - DoctorApp -->
+    <span class="c" style="left:980px;top:390px;">1</span>
+    <span class="c" style="left:980px;top:210px;">1</span>
+
+    <!-- DP - WorkSchedule -->
+    <span class="c" style="left:280px;top:390px;">1</span>
+    <span class="c" style="left:280px;top:210px;">M</span>
+
+    <!-- User - Appointment -->
+    <span class="c" style="left:940px;top:470px;">1</span>
+    <span class="c" style="left:710px;top:600px;">M</span>
+
+    <!-- DP - Appointment -->
+    <span class="c" style="left:360px;top:470px;">1</span>
+    <span class="c" style="left:590px;top:600px;">M</span>
+
+    <!-- User - Consultation -->
+    <span class="c" style="left:960px;top:510px;">1</span>
+    <span class="c" style="left:700px;top:780px;">M</span>
+
+    <!-- DP - Consultation -->
+    <span class="c" style="left:340px;top:510px;">1</span>
+    <span class="c" style="left:600px;top:780px;">M</span>
+
+    <!-- DP - Article -->
+    <span class="c" style="left:280px;top:520px;">1</span>
+    <span class="c" style="left:280px;top:780px;">M</span>
+
+    <!-- User - HealthTip -->
+    <span class="c" style="left:980px;top:520px;">1</span>
+    <span class="c" style="left:980px;top:780px;">M</span>
+
+    <!-- Right Side -->
+    <!-- Water -->
+    <span class="c" style="left:1060px;top:400px;">1</span>
+    <span class="c" style="left:1290px;top:200px;">M</span>
+    
+    <!-- Sleep -->
+    <span class="c" style="left:1070px;top:430px;">1</span>
+    <span class="c" style="left:1280px;top:350px;">M</span>
+    
+    <!-- Walk -->
+    <span class="c" style="left:1080px;top:460px;">1</span>
+    <span class="c" style="left:1270px;top:490px;">M</span>
+    
+    <!-- Notification -->
+    <span class="c" style="left:1070px;top:500px;">1</span>
+    <span class="c" style="left:1280px;top:640px;">M</span>
+    
+    <!-- Video -->
+    <span class="c" style="left:1060px;top:530px;">1</span>
+    <span class="c" style="left:1290px;top:780px;">M</span>
+
+
+    <!-- ========================================== -->
+    <!-- SVG LINES -->
+    <!-- ========================================== -->
+    <svg class="sv" xmlns="http://www.w3.org/2000/svg">
+        <!-- Main horizontal -->
+        <line x1="1000" y1="450" x2="300" y2="450" class="ln"/>
+        
+        <!-- Up lines -->
+        <line x1="1000" y1="450" x2="1000" y2="150" class="ln"/>
+        <line x1="300" y1="450" x2="300" y2="150" class="ln"/>
+        
+        <!-- Diagonal to Appt -->
+        <line x1="1000" y1="450" x2="650" y2="650" class="ln"/>
+        <line x1="300" y1="450" x2="650" y2="650" class="ln"/>
+        
+        <!-- Diagonal to Cons -->
+        <line x1="1000" y1="450" x2="650" y2="850" class="ln"/>
+        <line x1="300" y1="450" x2="650" y2="850" class="ln"/>
+        
+        <!-- Down lines -->
+        <line x1="300" y1="450" x2="300" y2="850" class="ln"/>
+        <line x1="1000" y1="450" x2="1000" y2="850" class="ln"/>
+        
+        <!-- Fanning lines to right -->
+        <line x1="1000" y1="450" x2="1350" y2="150" class="ln"/>
+        <line x1="1000" y1="450" x2="1350" y2="325" class="ln"/>
+        <line x1="1000" y1="450" x2="1350" y2="500" class="ln"/>
+        <line x1="1000" y1="450" x2="1350" y2="675" class="ln"/>
+        <line x1="1000" y1="450" x2="1350" y2="850" class="ln"/>
+    </svg>
+
+</div>
+<div class="title">مخطط الكيانات والعلاقات (ERD) — منصة الرعاية الصحية — Entity Relationship Diagram</div>
+</div>
+</body>
+</html>
