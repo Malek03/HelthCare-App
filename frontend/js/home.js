@@ -78,10 +78,23 @@ try {
 
     videos.forEach(v => {
         const videoDataStr = encodeURIComponent(JSON.stringify(v));
+        
+        let thumbUrl = v.thumbnail;
+        if (thumbUrl && window.ApiService && typeof window.ApiService.getImageUrl === 'function') {
+            thumbUrl = window.ApiService.getImageUrl(thumbUrl);
+        }
+        
+        let thumbnailHTML = '';
+        if (thumbUrl) {
+            thumbnailHTML = `<img src="${thumbUrl}" alt="${v.title}" style="width:100%; height:100%; object-fit:cover;">`;
+        } else {
+            thumbnailHTML = getPlayerHTML(v.url, true);
+        }
+
         html += `
           <div class="card video-card" style="width: 100%; min-width: unset; cursor: pointer;" data-video="${videoDataStr}">
             <div class="video-thumb">
-              <img src="${v.thumbnail}" alt="${v.title}">
+              ${thumbnailHTML}
               <div class="play-overlay"><i class="ph-fill ph-play"></i></div>
               <span class="duration-badge">${v.description || 'مقطع'}</span>
             </div>
@@ -148,6 +161,38 @@ try {
     }
   }
 
+  // Helper: generates the correct player HTML depending on if it's a YouTube link or direct video
+  function getPlayerHTML(url, isPreview = false) {
+      let fullUrl = url;
+      if (fullUrl && fullUrl.startsWith('www.')) {
+          fullUrl = 'https://' + fullUrl;
+      } else if (fullUrl && (fullUrl.startsWith('youtube.com') || fullUrl.startsWith('youtu.be'))) {
+          fullUrl = 'https://' + fullUrl;
+      }
+
+      if (window.ApiService && typeof window.ApiService.getImageUrl === 'function') {
+          // Only getImageUrl if it's a relative path
+          if (!fullUrl.startsWith('http')) {
+              fullUrl = window.ApiService.getImageUrl(fullUrl) || fullUrl;
+          }
+      }
+      
+      const ytMatch = fullUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
+      
+      if (ytMatch && ytMatch[1]) {
+          const videoId = ytMatch[1];
+          // If preview, we don't autoplay, just show the thumbnail or iframe.
+          const originParam = window.location.origin ? `&origin=${encodeURIComponent(window.location.origin)}` : '';
+          const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=${isPreview ? 0 : 1}&mute=${isPreview ? 1 : 0}&rel=0${originParam}`;
+          return `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; ${isPreview ? 'pointer-events:none;' : ''}"></iframe>`;
+      }
+      
+      if (isPreview) {
+          return `<video src="${fullUrl}" muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>`;
+      }
+      return `<video src="${fullUrl}" controls autoplay playsinline controlsList="nodownload" style="width:100%; height:100%;"></video>`;
+  }
+
   // 4. Video Player Modal Logic (Shared Behavior)
   function openVideoPlayer(video) {
       const modal = document.getElementById('video-modal');
@@ -159,7 +204,7 @@ try {
                   <i class="ph ph-x"></i>
               </button>
               <div class="player-video-wrapper">
-                  <video src="${video.url}" controls autoplay playsinline controlsList="nodownload"></video>
+                  ${getPlayerHTML(video.url, false)}
               </div>
               <div class="player-info-container">
                   <h2 class="player-title">${video.title}</h2>

@@ -79,16 +79,26 @@ function renderVideoCards(videos, container) {
  */
 function getPlayerHTML(url, isPreview = false) {
     let fullUrl = url;
+    if (fullUrl && fullUrl.startsWith('www.')) {
+        fullUrl = 'https://' + fullUrl;
+    } else if (fullUrl && (fullUrl.startsWith('youtube.com') || fullUrl.startsWith('youtu.be'))) {
+        fullUrl = 'https://' + fullUrl;
+    }
+
     if (window.ApiService && typeof window.ApiService.getImageUrl === 'function') {
-        fullUrl = window.ApiService.getImageUrl(url) || url;
+        // Only getImageUrl if it's a relative path
+        if (!fullUrl.startsWith('http')) {
+            fullUrl = window.ApiService.getImageUrl(fullUrl) || fullUrl;
+        }
     }
     
-    const ytMatch = fullUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
+    const ytMatch = fullUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
     
     if (ytMatch && ytMatch[1]) {
         const videoId = ytMatch[1];
         // If preview, we don't autoplay, just show the thumbnail or iframe. Better to just use iframe with pointer-events: none.
-        const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=${isPreview ? 0 : 1}&mute=${isPreview ? 1 : 0}&rel=0`;
+        const originParam = window.location.origin ? `&origin=${encodeURIComponent(window.location.origin)}` : '';
+        const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=${isPreview ? 0 : 1}&mute=${isPreview ? 1 : 0}&rel=0${originParam}`;
         return `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; ${isPreview ? 'pointer-events:none;' : ''}"></iframe>`;
     }
     
