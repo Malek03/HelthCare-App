@@ -18,20 +18,24 @@ const getSleepQuality = (hours) => {
 
 /**
  * Get today's date as Date object (no time)
+ * Constructs a UTC date based on the local YYYY-MM-DD string
+ * to prevent timezone offsets from shifting the date in Prisma (@db.Date)
  */
 const getTodayDate = () => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today;
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return new Date(`${year}-${month}-${day}T00:00:00.000Z`);
 };
 
 /**
  * Parse date string to Date object
+ * Ensures the parsed string YYYY-MM-DD is treated as UTC
  */
 const parseDate = (dateStr) => {
-  const date = new Date(dateStr);
-  date.setHours(0, 0, 0, 0);
-  return date;
+  if (dateStr.includes('T')) return new Date(dateStr);
+  return new Date(`${dateStr}T00:00:00.000Z`);
 };
 
 module.exports = { buildResponse, getSleepQuality, getTodayDate, parseDate };

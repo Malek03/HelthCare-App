@@ -23,8 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Load daily summary for health stats
   try {
-      const today = new Date().toISOString().split('T')[0];
-      const summaryRes = await window.ApiService.getDailySummary(today);
+      const d = new Date();
+      const todayStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const summaryRes = await window.ApiService.getDailySummary(todayStr);
       if(summaryRes && summaryRes.data) {
           // FIX: Extract glasses integer from the water object
           const waterData = summaryRes.data.water;
@@ -210,23 +211,26 @@ async function loadWeeklyProgress() {
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
-      d.setHours(0,0,0,0);
-      days.push(d);
+      const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      days.push({
+        dateObj: d,
+        dateStr: dateStr,
+        dayName: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'][d.getDay()],
+        dayNum: d.getDate()
+      });
     }
 
-    const dayNames = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const todayDateObj = new Date();
+    const todayStr = todayDateObj.getFullYear() + '-' + String(todayDateObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayDateObj.getDate()).padStart(2, '0');
 
     let html = '';
     days.forEach(day => {
-      const dateStr = day.toISOString().split('T')[0];
-      const dayName = dayNames[day.getDay()];
-      const dayNum = day.getDate();
-      const isToday = new Date().toDateString() === day.toDateString();
+      const isToday = day.dateStr === todayStr;
 
-      // Find matching logs
-      const waterLog = waterLogs.find(w => new Date(w.log_date).toDateString() === day.toDateString());
-      const sleepLog = sleepLogs.find(s => new Date(s.log_date).toDateString() === day.toDateString());
-      const walkLog = walkLogs.find(w => new Date(w.log_date).toDateString() === day.toDateString());
+      // Find matching logs using string prefix matching to avoid timezone offset issues
+      const waterLog = waterLogs.find(w => w.log_date && w.log_date.startsWith(day.dateStr));
+      const sleepLog = sleepLogs.find(s => s.log_date && s.log_date.startsWith(day.dateStr));
+      const walkLog = walkLogs.find(w => w.log_date && w.log_date.startsWith(day.dateStr));
 
       const glasses = waterLog ? waterLog.glasses : 0;
       const sleepHours = sleepLog ? sleepLog.hours : 0;
@@ -238,8 +242,8 @@ async function loadWeeklyProgress() {
       html += `
         <div class="weekly-day-card ${isToday ? 'today' : ''}">
           <div class="day-header">
-            <span class="day-name">${dayName}</span>
-            <span class="day-num">${dayNum}</span>
+            <span class="day-name">${day.dayName}</span>
+            <span class="day-num">${day.dayNum}</span>
           </div>
           <div class="day-metrics">
             <div class="metric-row">
