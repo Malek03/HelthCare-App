@@ -13,7 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
     const userName = localStorage.getItem('name') || 'حسابي';
-  
+
+    let joinDoctorLink = `
+              <li>
+                <a href="join-doctor.html" class="doctor-join-btn nav-link ${currentPath === 'join-doctor.html' ? 'active' : ''}">
+                  <i class="ph ph-stethoscope"></i> انضم كطبيب
+                </a>
+              </li>
+    `;
+
+    if (role === 'ADMIN' || role === 'DOCTOR') {
+      joinDoctorLink = '';
+    }
+
     let userControls = `
       <div class="nav-controls d-flex align-center">
         <a href="login.html" class="nav-btn nav-btn-outline">تسجيل الدخول</a>
@@ -565,11 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <li><a href="bmi.html" class="nav-link ${currentPath === 'bmi.html' ? 'active' : ''}">حاسبة BMI</a></li>
               <li><a href="videos.html" class="nav-link ${currentPath === 'videos.html' ? 'active' : ''}">المكتبة المرئية</a></li>
               <li><a href="consultation.html" class="nav-link ${currentPath === 'consultation.html' ? 'active' : ''}">الاستشارة</a></li>
-              <li>
-                <a href="join-doctor.html" class="doctor-join-btn nav-link ${currentPath === 'join-doctor.html' ? 'active' : ''}">
-                  <i class="ph ph-stethoscope"></i> انضم كطبيب
-                </a>
-              </li>
+${joinDoctorLink}
             </ul>
     
             ${userControls}

@@ -184,8 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
           document.getElementById('joinSuccess').style.display = 'block';
           if(window.Toast) window.Toast.show('عملية ناجحة', 'تم إرسال طلب الانضمام وتلقت الإدارة بياناتك بنجاح!', 'success');
         } catch (err) {
-          errBox.textContent = 'حدث خطأ: ' + err.message;
-          errBox.style.display = 'none';
+          errBox.textContent = err.message;
+          errBox.style.display = 'block';
           if(window.Toast) window.Toast.show('فشل في الإرسال', err.message || 'يرجى التحقق من صحة البيانات والمحاولة مجدداً.', 'error');
           
           btn.innerHTML = 'إرسال طلب الانضمام';

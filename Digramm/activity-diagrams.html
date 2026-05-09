@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مخططات الأنشطة والعمليات - Activity Diagrams</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f5f7fa;
+            color: #1a3050;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+        }
+        .diagram-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 950px;
+            border: 2px solid #e2e8f0;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c5282;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+        }
+        .btn {
+            background: #2b6cb0;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #2c5282; }
+        .header-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        .header-wrap h2 {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center; color: #1a3050;">مخططات الأنشطة والعمليات (Activity Diagrams)</h1>
+    <p style="text-align: center; color: #4a5568; margin-top:-30px;">تم تصميم المخططات الثلاثة لأهم العمليات بنفس نمط وهيكلية مخططات التتابع</p>
+
+    <!-- المخطط الأول -->
+    <div class="diagram-container">
+        <div class="header-wrap">
+            <h2>1. عملية تسجيل واعتماد طبيب جديد (Doctor Application Flow)</h2>
+            <button class="btn" onclick="downloadSVG(0, 'Doctor_Application_Activity')">حفظ كصورة (SVG)</button>
+        </div>
+        <div class="mermaid">
+            %%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'Cairo', 'primaryColor': '#f4f5f7', 'edgeLabelBackground':'#fff', 'primaryBorderColor': '#4a5568', 'lineColor': '#2b6cb0'}}}%%
+            flowchart TD
+                Start([بدء التسجيل]) --> SubmitForm[الطبيب يرسل طلب الانضمام والوثائق]
+                SubmitForm --> SavePending[حفظ الطلب في قاعدة البيانات بحالة PENDING]
+                SavePending --> NotifyAdmin[إرسال إشعار للإدارة بوجود طلب جديد]
+                NotifyAdmin --> AdminReview{مراجعة الإدارة للطلب}
+                
+                AdminReview -->|موافقة| ApproveAction[تحديث الطلب لـ APPROVED]
+                ApproveAction --> CreateProfile[إنشاء DoctorProfile آلياً]
+                CreateProfile --> NotifyDocAccept[إشعار الطبيب بتفعيل حسابه]
+                
+                AdminReview -->|رفض| RejectAction[تحديث الطلب لـ REJECTED]
+                RejectAction --> AddNotes[إضافة أسباب الرفض]
+                AddNotes --> NotifyDocReject[إشعار الطبيب بالرفض مع الأسباب]
+                
+                NotifyDocAccept --> End([النهاية])
+                NotifyDocReject --> End
+        </div>
+    </div>
+
+    <!-- المخطط الثاني -->
+    <div class="diagram-container">
+        <div class="header-wrap">
+            <h2>2. عملية حجز وإدارة موعد طبي (Appointment Booking Flow)</h2>
+            <button class="btn" onclick="downloadSVG(1, 'Appointment_Booking_Activity')">حفظ كصورة (SVG)</button>
+        </div>
+        <div class="mermaid">
+            %%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'Cairo', 'primaryColor': '#f4f5f7', 'edgeLabelBackground':'#fff', 'primaryBorderColor': '#4a5568', 'lineColor': '#2b6cb0'}}}%%
+            flowchart TD
+                Start([البدء]) --> SearchDoc[المريض يبحث عن طبيب حسب التخصص]
+                SearchDoc --> ViewSchedule[استعراض أوقات العمل المتاحة للطبيب]
+                ViewSchedule --> SelectSlot[المريض يختار الوقت المناسب]
+                SelectSlot --> SaveAppt[حفظ الحجز بحالة PENDING]
+                SaveAppt --> NotifyDoctor[إرسال إشعار للطبيب بطلب موعد]
+                
+                NotifyDoctor --> DoctorDecision{قرار الطبيب}
+                
+                DoctorDecision -->|قبول| AcceptAppt[تغيير الحالة إلى ACCEPTED]
+                AcceptAppt --> NotifyPatientAcc[إشعار المريض بالتأكيد]
+                
+                DoctorDecision -->|رفض| RejectAppt[تغيير الحالة إلى REJECTED]
+                RejectAppt --> NotifyPatientRej[إشعار المريض بالرفض لسبب معين]
+                
+                DoctorDecision -->|تم الانتهاء| CompleteAppt[تغيير الحالة إلى COMPLETED بعد الزيارة]
+                
+                NotifyPatientAcc --> End([النهاية])
+                NotifyPatientRej --> End
+                CompleteAppt --> End
+        </div>
+    </div>
+
+    <!-- المخطط الثالث -->
+    <div class="diagram-container">
+        <div class="header-wrap">
+            <h2>3. عملية طلب استشارة طبية (Consultation Flow)</h2>
+            <button class="btn" onclick="downloadSVG(2, 'Consultation_Request_Activity')">حفظ كصورة (SVG)</button>
+        </div>
+        <div class="mermaid">
+            %%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'Cairo', 'primaryColor': '#f4f5f7', 'edgeLabelBackground':'#fff', 'primaryBorderColor': '#4a5568', 'lineColor': '#2b6cb0'}}}%%
+            flowchart TD
+                Start([البدء]) --> SubmitQuestion[المريض يرسل سؤال للطبيب]
+                SubmitQuestion --> SaveCons[حفظ الاستشارة بحالة PENDING]
+                SaveCons --> NotifyDoc[إشعار الطبيب بوجود سؤال جديد]
+                NotifyDoc --> DoctorAnswers[الطبيب يكتب الإجابة]
+                DoctorAnswers --> UpdateCons[تحديث الاستشارة بحالة ANSWERED]
+                UpdateCons --> NotifyPat[إشعار المريض بتوفر الإجابة]
+                NotifyPat --> End([النهاية])
+        </div>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true,
+            flowchart: { htmlLabels: false }
+        });
+    </script>
+    <script>
+        function downloadSVG(index, filename) {
+            // Get the generated SVG element
+            const svgElement = document.querySelectorAll('.mermaid svg')[index];
+            if (!svgElement) {
+                alert("انتظر قليلاً حتى يتم تحميل المخطط");
+                return;
+            }
+            
+            // Serialize SVG to string
+            const serializer = new XMLSerializer();
+            let source = serializer.serializeToString(svgElement);
+
+            // Add namespaces if missing
+            if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+                source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+            }
+            if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+                source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+            }
+
+            // Create a Blob and download link
+            const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = url;
+            downloadLink.download = filename + ".svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
