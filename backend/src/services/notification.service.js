@@ -49,7 +49,11 @@ const sendPushNotification = async (userId, title, body, data = {}) => {
 const sendBroadcastNotification = async (title, body, type = 'HEALTH_TIP') => {
   try {
     const users = await prisma.user.findMany({
-      where: { is_banned: false, is_active: true },
+      where: { 
+        is_banned: false, 
+        is_active: true,
+        role: { not: 'ADMIN' }
+      },
       select: { id: true, fcm_token: true },
     });
 
